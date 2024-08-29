@@ -1,0 +1,18 @@
+using Domain.Enums;
+
+namespace Domain
+{
+    public class Change
+    {
+        public Guid id { get; set; }
+        public string change { get; set; }
+        public string description { get; set; }
+        public Priority priority { get; set; }
+        public Status status { get; set; }
+        public Approvals approvals { get; set; }
+        public AppUser requestor { get; set; }
+        public Requests requests { get; set; }
+        public Category category { get; set; }
+
+    }
+}
