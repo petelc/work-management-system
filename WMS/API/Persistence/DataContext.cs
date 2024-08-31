@@ -1,8 +1,6 @@
 using Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Persistence
 {
@@ -19,6 +17,8 @@ namespace Persistence
         public DbSet<Project> Projects { get; set; }
 
         public DbSet<ProjectManager> ProjectManagers { get; set; }
+        public DbSet<ChangeManager> ChangeManagers { get; set; }
+        public DbSet<Assignee> Assignees { get; set; }
 
         public DbSet<Change> Changes { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -46,32 +46,81 @@ namespace Persistence
                 .WithMany(r => r.Requestors)
                 .HasForeignKey(r => r.RequestId);
 
+            builder.Entity<ProjectManager>(p => p.HasKey(pp => new { pp.AppUserId, pp.ProjectId }));
             // LEC Project Manager to Project
             builder.Entity<ProjectManager>()
                 .HasOne(p => p.Projects)
                 .WithMany(p => p.ProjectManagers)
                 .HasForeignKey(p => p.ProjectId);
 
+            builder.Entity<ChangeManager>(c => c.HasKey(cc => new { cc.AppUserId, cc.ChangeId }));
             // LEC Change Manager to Changes
             builder.Entity<ChangeManager>()
                 .HasOne(c => c.Changes)
                 .WithMany(c => c.ChangeManagers)
                 .HasForeignKey(c => c.ChangeId);
 
+            builder.Entity<Assignee>(k => k.HasKey(kk => new { kk.AppUserId, kk.WorkItemId }));
             // LEC Assignee to WorkItem
             builder.Entity<Assignee>()
                 .HasOne(a => a.WorkItems)
                 .WithMany(a => a.Assignees)
                 .HasForeignKey(a => a.WorkItemId);
 
+            // ! Create Primary Keys for Models
+            builder.Entity<Requests>()
+                .HasKey(r => r.RequestId)
+                .HasName("PK_RequestId");
+
+            builder.Entity<Project>()
+                .HasKey(p => p.ProjectId)
+                .HasName("PK_ProjectId");
+
+            builder.Entity<Change>()
+                .HasKey(c => c.ChangeId)
+                .HasName("PK_ChangeId");
+
+            builder.Entity<Work>()
+                .HasKey(w => w.WorkId)
+                .HasName("PK_WorkId");
+
+            builder.Entity<WorkItem>()
+                .HasKey(wi => wi.WorkItemId)
+                .HasName("PK_WorkItemId");
+
             // ! Create Relationships for 
-            // ! Request to Project 
-            // ! Request to Change
-            // ! Project to Category
-            // ! Change to Category
-            // ! Project to Work
-            // ! Change to Work
-            // ! Work to WorkItem
+            // -- Request to Project 
+            // -- Request to Change
+            // -- Project to Category
+            // -- Change to Category
+            // -- Project to Work
+            // -- Change to Work
+            // -- Work to WorkItem
+
+            builder.Entity<Project>()
+                .HasOne(c => c.category)
+                .WithMany(c => c.Projects)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Change>()
+                .HasOne(c => c.category)
+                .WithMany(c => c.Changes)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Work>()
+                .HasOne(p => p.Project)
+                .WithMany(p => p.Works)
+                .HasForeignKey(p => p.WorkId);
+
+            builder.Entity<Work>()
+                .HasOne(p => p.Change)
+                .WithMany(p => p.Works)
+                .HasForeignKey(p => p.WorkId);
+
+            builder.Entity<WorkItem>()
+                .HasOne(p => p.Work)
+                .WithMany(p => p.WorkItems)
+                .HasForeignKey(p => p.WorkItemId);
 
 
 

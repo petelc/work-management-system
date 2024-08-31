@@ -13,5 +13,7 @@ namespace Domain
         public Requests request { get; set; }
         public Category category { get; set; }
         public ICollection<ProjectManager> ProjectManagers { get; set; } = new List<ProjectManager>();
+
+        public ICollection<Work> Works { get; set; }
     }
 }

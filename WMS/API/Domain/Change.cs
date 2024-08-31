@@ -16,5 +16,7 @@ namespace Domain
 
         public ICollection<ChangeManager> ChangeManagers { get; set; } = new List<ChangeManager>();
 
+        public ICollection<Work> Works { get; set; }
+
     }
 }

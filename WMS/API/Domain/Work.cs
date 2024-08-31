@@ -8,7 +8,7 @@ namespace Domain
 {
     public class Work
     {
-        public Guid id { get; set; }
+        public Guid WorkId { get; set; }
         public string Name { get; set; }
         public Project Project { get; set; }
         public Change Change { get; set; }
