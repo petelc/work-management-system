@@ -4,7 +4,7 @@ namespace Domain
 {
     public class Change
     {
-        public Guid id { get; set; }
+        public Guid ChangeId { get; set; }
         public string change { get; set; }
         public string description { get; set; }
         public Priority priority { get; set; }
@@ -13,6 +13,10 @@ namespace Domain
         public AppUser requestor { get; set; }
         public Requests requests { get; set; }
         public Category category { get; set; }
+
+        public ICollection<ChangeManager> ChangeManagers { get; set; } = new List<ChangeManager>();
+
+        public ICollection<Work> Works { get; set; }
 
     }
 }

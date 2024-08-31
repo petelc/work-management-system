@@ -4,7 +4,7 @@ namespace Domain
 {
     public class Project
     {
-        public Guid id { get; set; }
+        public Guid ProjectId { get; set; }
         public string project { get; set; }
         public string description { get; set; }
         public Status status { get; set; }
@@ -12,5 +12,8 @@ namespace Domain
         public AppUser requestor { get; set; }
         public Requests request { get; set; }
         public Category category { get; set; }
+        public ICollection<ProjectManager> ProjectManagers { get; set; } = new List<ProjectManager>();
+
+        public ICollection<Work> Works { get; set; }
     }
 }
