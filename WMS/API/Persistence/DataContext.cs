@@ -12,7 +12,7 @@ namespace Persistence
 
         //public DbSet<Roles> Roles { get; set; }
 
-        public DbSet<Requests> Requests { get; set; }
+        public DbSet<Request> Requests { get; set; }
         public DbSet<Requestor> Requestors { get; set; }
         public DbSet<Project> Projects { get; set; }
 
@@ -68,7 +68,7 @@ namespace Persistence
                 .HasForeignKey(a => a.WorkItemId);
 
             // ! Create Primary Keys for Models
-            builder.Entity<Requests>()
+            builder.Entity<Request>()
                 .HasKey(r => r.RequestId)
                 .HasName("PK_RequestId");
 
@@ -121,9 +121,6 @@ namespace Persistence
                 .HasOne(p => p.Work)
                 .WithMany(p => p.WorkItems)
                 .HasForeignKey(p => p.WorkItemId);
-
-
-
 
         }
     }

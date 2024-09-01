@@ -1,12 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Domain.Enums;
+using Application.Profiles;
 
-namespace Domain
+namespace Application.Requests
 {
-    /**
-    * Defines a request submitted to system
-    */
-
-    public class Requests
+    public class RequestDto
     {
         public Guid RequestId { get; set; }
         public string request { get; set; }
@@ -14,9 +15,7 @@ namespace Domain
         public RequestType type { get; set; }
         public Status status { get; set; }
         public Approvals approvals { get; set; }
-        public ICollection<Requestor> Requestors { get; set; } = new List<Requestor>();
-
-
-
+        public string RequestorUsername { get; set; }
+        public ICollection<RequestorDto> Requestors { get; set; }
     }
 }

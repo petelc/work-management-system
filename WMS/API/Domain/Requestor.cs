@@ -10,7 +10,8 @@ namespace Domain
         public string AppUserId { get; set; }
         public AppUser AppUser { get; set; }
         public Guid RequestId { get; set; }
-        public Requests Requests { get; set; }
+        public Request Requests { get; set; }
+        public bool IsNew { get; set; }
 
     }
 }

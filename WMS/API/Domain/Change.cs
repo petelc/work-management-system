@@ -11,7 +11,7 @@ namespace Domain
         public Status status { get; set; }
         public Approvals approvals { get; set; }
         public AppUser requestor { get; set; }
-        public Requests requests { get; set; }
+        public Request requests { get; set; }
         public Category category { get; set; }
 
         public ICollection<ChangeManager> ChangeManagers { get; set; } = new List<ChangeManager>();

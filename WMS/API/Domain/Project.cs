@@ -10,7 +10,7 @@ namespace Domain
         public Status status { get; set; }
         public Approvals approvals { get; set; }
         public AppUser requestor { get; set; }
-        public Requests request { get; set; }
+        public Request request { get; set; }
         public Category category { get; set; }
         public ICollection<ProjectManager> ProjectManagers { get; set; } = new List<ProjectManager>();
 
