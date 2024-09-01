@@ -13,6 +13,8 @@ namespace Domain
         public AppUser requestor { get; set; }
         public Request requests { get; set; }
         public Category category { get; set; }
+        public Guid RequestId { get; set; }
+        public Request Request { get; set; }
 
         public ICollection<ChangeManager> ChangeManagers { get; set; } = new List<ChangeManager>();
 

@@ -10,7 +10,11 @@ namespace Persistence
         {
         }
 
-        //public DbSet<Roles> Roles { get; set; }
+        /**
+        * TODO - Create a relationship between Request and Project 
+        * TODO - Create a relationship betwwn Request and Change 
+        */
+
 
         public DbSet<Request> Requests { get; set; }
         public DbSet<Requestor> Requestors { get; set; }
@@ -96,6 +100,16 @@ namespace Persistence
             // -- Project to Work
             // -- Change to Work
             // -- Work to WorkItem
+
+            builder.Entity<Request>()
+                .HasOne(e => e.Project)
+                .WithOne(e => e.Request)
+                .HasForeignKey<Project>(e => e.ProjectId);
+
+            builder.Entity<Request>()
+                .HasOne(e => e.Change)
+                .WithOne(e => e.Request)
+                .HasForeignKey<Change>(e => e.ChangeId);
 
             builder.Entity<Project>()
                 .HasOne(c => c.category)

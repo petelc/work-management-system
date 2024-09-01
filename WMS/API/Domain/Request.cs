@@ -16,6 +16,9 @@ namespace Domain
         public Approvals approvals { get; set; }
         public ICollection<Requestor> Requestors { get; set; } = new List<Requestor>();
 
+        public Project? Project { get; set; }
+
+        public Change? Change { get; set; }
 
 
     }
