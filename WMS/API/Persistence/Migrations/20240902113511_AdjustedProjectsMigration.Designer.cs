@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240902113511_AdjustedProjectsMigration")]
+    partial class AdjustedProjectsMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -125,13 +128,15 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Change", b =>
                 {
                     b.Property<Guid>("ChangeId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("CategoryId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("approvals")
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("approvals")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("change")
@@ -140,12 +145,40 @@ namespace Persistence.Migrations
                     b.Property<string>("description")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("priority")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("requestorId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("status")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ChangeId")
                         .HasName("PK_ChangeId");
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("RequestId");
+
+                    b.HasIndex("requestorId");
+
                     b.ToTable("Changes");
+                });
+
+            modelBuilder.Entity("Domain.ChangeManager", b =>
+                {
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ChangeId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("AppUserId", "ChangeId");
+
+                    b.HasIndex("ChangeId");
+
+                    b.ToTable("ChangeManagers");
                 });
 
             modelBuilder.Entity("Domain.Icon", b =>
@@ -165,11 +198,16 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Project", b =>
                 {
                     b.Property<Guid>("ProjectId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("CategoryId")
                         .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("approvals")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("description")
                         .HasColumnType("TEXT");
@@ -177,12 +215,32 @@ namespace Persistence.Migrations
                     b.Property<string>("project")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("status")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ProjectId")
                         .HasName("PK_ProjectId");
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("RequestId");
+
                     b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("Domain.ProjectManager", b =>
+                {
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("AppUserId", "ProjectId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectManagers");
                 });
 
             modelBuilder.Entity("Domain.Request", b =>
@@ -194,11 +252,8 @@ namespace Persistence.Migrations
                     b.Property<string>("AppUserId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ChangeId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("ProjectId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("approvals")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("description")
                         .HasColumnType("TEXT");
@@ -206,14 +261,16 @@ namespace Persistence.Migrations
                     b.Property<string>("request")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("type")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("RequestId")
                         .HasName("PK_RequestId");
 
                     b.HasIndex("AppUserId");
-
-                    b.HasIndex("ChangeId");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("Requests");
                 });
@@ -462,18 +519,96 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.Category", "category")
                         .WithMany("Changes")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Domain.Request", "Request")
+                        .WithOne("Change")
+                        .HasForeignKey("Domain.Change", "ChangeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Request", "requests")
+                        .WithMany()
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.AppUser", "requestor")
+                        .WithMany()
+                        .HasForeignKey("requestorId");
+
+                    b.Navigation("Request");
 
                     b.Navigation("category");
+
+                    b.Navigation("requestor");
+
+                    b.Navigation("requests");
+                });
+
+            modelBuilder.Entity("Domain.ChangeManager", b =>
+                {
+                    b.HasOne("Domain.AppUser", "AppUser")
+                        .WithMany("ChangeManagers")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Change", "Changes")
+                        .WithMany("ChangeManagers")
+                        .HasForeignKey("ChangeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Changes");
                 });
 
             modelBuilder.Entity("Domain.Project", b =>
                 {
                     b.HasOne("Domain.Category", "category")
                         .WithMany("Projects")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Domain.Request", "Request")
+                        .WithOne("Project")
+                        .HasForeignKey("Domain.Project", "ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Request", "request")
+                        .WithMany()
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Request");
 
                     b.Navigation("category");
+
+                    b.Navigation("request");
+                });
+
+            modelBuilder.Entity("Domain.ProjectManager", b =>
+                {
+                    b.HasOne("Domain.AppUser", "AppUser")
+                        .WithMany("ProjectManagers")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Project", "Projects")
+                        .WithMany("ProjectManagers")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Projects");
                 });
 
             modelBuilder.Entity("Domain.Request", b =>
@@ -481,18 +616,6 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.AppUser", null)
                         .WithMany("Requests")
                         .HasForeignKey("AppUserId");
-
-                    b.HasOne("Domain.Change", "Change")
-                        .WithMany()
-                        .HasForeignKey("ChangeId");
-
-                    b.HasOne("Domain.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
-
-                    b.Navigation("Change");
-
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("Domain.Requestor", b =>
@@ -618,6 +741,10 @@ namespace Persistence.Migrations
                 {
                     b.Navigation("Assignees");
 
+                    b.Navigation("ChangeManagers");
+
+                    b.Navigation("ProjectManagers");
+
                     b.Navigation("Requestors");
 
                     b.Navigation("Requests");
@@ -634,16 +761,24 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Change", b =>
                 {
+                    b.Navigation("ChangeManagers");
+
                     b.Navigation("Works");
                 });
 
             modelBuilder.Entity("Domain.Project", b =>
                 {
+                    b.Navigation("ProjectManagers");
+
                     b.Navigation("Works");
                 });
 
             modelBuilder.Entity("Domain.Request", b =>
                 {
+                    b.Navigation("Change");
+
+                    b.Navigation("Project");
+
                     b.Navigation("Requestors");
                 });
 

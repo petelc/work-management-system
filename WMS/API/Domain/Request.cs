@@ -11,14 +11,14 @@ namespace Domain
         public Guid RequestId { get; set; }
         public string request { get; set; }
         public string description { get; set; }
-        public RequestType type { get; set; }
-        public Status status { get; set; }
-        public Approvals approvals { get; set; }
+        //public RequestType type { get; set; }
+        //public Status status { get; set; }
+        //public Approvals approvals { get; set; }
         public ICollection<Requestor> Requestors { get; set; } = new List<Requestor>();
 
-        public Project? Project { get; set; }
+        public Project Project { get; set; }
 
-        public Change? Change { get; set; }
+        public Change Change { get; set; }
 
 
     }

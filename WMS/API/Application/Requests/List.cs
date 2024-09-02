@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.Core;
 using Application.Interfaces;
 using AutoMapper;
@@ -35,6 +31,7 @@ namespace Application.Requests
                 var query = _context.Requests
                     .OrderBy(x => x.request)
                     .ProjectTo<RequestDto>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername() }).AsQueryable();
+
 
                 return Result<PagedList<RequestDto>>.Success(
                     await PagedList<RequestDto>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize));

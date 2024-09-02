@@ -7,6 +7,7 @@ namespace Application.Requests
         public bool IsNew { get; set; }
         public bool IsSubmitted { get; set; }
         public bool IsComplete { get; set; }
+        public bool IsProject { get; set; }
         public DateTime RequestedDate { get; set; } = DateTime.Now;
     }
 }

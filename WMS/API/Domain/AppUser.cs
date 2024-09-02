@@ -12,10 +12,8 @@ public class AppUser : IdentityUser
     public ICollection<Role> Roles { get; set; }
     public ICollection<Request> Requests { get; set; }
     public ICollection<Requestor> Requestors { get; set; }
-    //public ICollection<Project> ProjectManager { get; set; }
-    //public ICollection<Change> ChangeManager { get; set; }
-    //public ICollection<WorkItem> Assignee { get; set; }
+
     public ICollection<Assignee> Assignees { get; set; }
-    public ICollection<ProjectManager> ProjectManagers { get; set; }
-    public ICollection<ChangeManager> ChangeManagers { get; set; }
+    //public ICollection<ProjectManager> ProjectManagers { get; set; }
+    //public ICollection<ChangeManager> ChangeManagers { get; set; }
 }
