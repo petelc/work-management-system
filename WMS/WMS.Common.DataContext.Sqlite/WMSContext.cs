@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WMS.Common.EntityModels.Sqlite;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace WMS.Common.DataContext.Sqlite
 {
@@ -29,7 +30,22 @@ namespace WMS.Common.DataContext.Sqlite
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            base.OnConfiguring(optionsBuilder);
+            if (!optionsBuilder.IsConfigured)
+            {
+                string dir = Environment.CurrentDirectory;
+                string path = string.Empty;
+
+                if (dir.EndsWith("net8.0"))
+                {
+                    path = Path.Combine("..", "..", "..", "..", "WMS.db");
+                }
+                else
+                {
+                    path = Path.Combine("..", "WMS.db");
+                }
+
+                optionsBuilder.UseSqlite($"Filename={path}");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

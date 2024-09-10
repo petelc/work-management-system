@@ -23,6 +23,7 @@ namespace WMS.Common.DataContext.Sqlite
 
             },
             contextLifetime: ServiceLifetime.Transient, optionsLifetime: ServiceLifetime.Transient);
+
             return services;
         }
     }
