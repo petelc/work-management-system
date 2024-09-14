@@ -50,7 +50,15 @@ namespace WMS.Common.DataContext.Sqlite
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            // ! Requests
+            builder.Entity<Request>(entity =>
+            {
+                entity.HasKey(e => new { e.StatusId, e.RequestTypeId, e.ApprovalStatusId });
 
+                entity.HasMany(d => d.Requestors);
+            });
+
+            //builder.Entity
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
