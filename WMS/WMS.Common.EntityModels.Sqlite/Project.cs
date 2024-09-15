@@ -9,11 +9,13 @@ namespace WMS.Common.EntityModels.Sqlite
     [Index("EmployeeId", Name = "RequestorProjects")]
     [Index("RequestId", Name = "RequestProjects")]
     [Index("CategoryId", Name = "CategoryProjects")]
+    [Index("PriorityId", Name = "PriorityProjects")]
     public partial class Project
     {
         public Project()
         {
             Works = new HashSet<Work>();
+            ProjectManagers = new HashSet<Employee>();
         }
 
         [Key]
@@ -41,6 +43,9 @@ namespace WMS.Common.EntityModels.Sqlite
         [InverseProperty("Projects")]
         public Employee? Requestor { get; set; }
 
+        [Column(TypeName = "Guid")]
+        public Guid? RequestId { get; set; }
+
         [ForeignKey("RequestId")]
         [InverseProperty("Projects")]
         public Request? Request { get; set; }
@@ -49,9 +54,14 @@ namespace WMS.Common.EntityModels.Sqlite
         [InverseProperty("Projects")]
         public Category? Category { get; set; }
 
-        // TODO - Need to define an Employee that has the role of Project Manager
+        [ForeignKey("PriorityId")]
+        [InverseProperty("Projects")]
+        public Priority? Priority { get; set; }
 
         [InverseProperty("Projects")]
-        public virtual ICollection<Work>? Works { get; set; }
+        public ICollection<Employee>? ProjectManagers { get; set; }
+
+        [InverseProperty("Projects")]
+        public virtual ICollection<Work> Works { get; set; }
     }
 }

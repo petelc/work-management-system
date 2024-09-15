@@ -22,6 +22,9 @@ namespace WMS.Common.EntityModels.Sqlite
         [Column(TypeName = "ntext")]
         public string? Description { get; set; }
 
+        [Column(TypeName = "image")]
+        public byte[]? Picture { get; set; }
+
         [InverseProperty("Category")]
         public virtual ICollection<Project> Projects { get; set; }
 
