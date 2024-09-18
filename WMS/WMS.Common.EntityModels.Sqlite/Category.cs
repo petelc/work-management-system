@@ -1,34 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-namespace WMS.Common.EntityModels.Sqlite
+namespace WMS.Shared;
+
+[Index("CategoryName", Name = "CategoryName")]
+public partial class Category
 {
-    public partial class Category
-    {
-        public Category()
-        {
-            Projects = new HashSet<Project>();
-            Changes = new HashSet<Change>();
-        }
+    [Key]
+    [Column(TypeName = "GUID")]
+    public Guid CategoryId { get; set; }
 
-        [Key]
-        public Guid CategoryId { get; set; }
+    [Column(TypeName = "nvarchar (15)")]
+    [StringLength(15)]
+    public string CategoryName { get; set; } = null!;
 
-        [Required]
-        [Column(TypeName = "nvarchar (15)")]
-        [StringLength(15)]
-        public string CategoryName { get; set; } = null!;
+    [Column(TypeName = "ntext")]
+    public string? Description { get; set; }
 
-        [Column(TypeName = "ntext")]
-        public string? Description { get; set; }
+    [Column(TypeName = "image")]
+    public byte[]? Picture { get; set; }
 
-        [Column(TypeName = "image")]
-        public byte[]? Picture { get; set; }
+    [InverseProperty("Category")]
+    public virtual ICollection<Change> Changes { get; set; } = new List<Change>();
 
-        [InverseProperty("Category")]
-        public virtual ICollection<Project> Projects { get; set; }
-
-        [InverseProperty("Category")]
-        public virtual ICollection<Change> Changes { get; set; }
-    }
+    [InverseProperty("Category")]
+    public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
 }

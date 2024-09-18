@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WMS.Common.EntityModels.Sqlite
+namespace WMS.Shared
 {
-    public class Icon
+    public class Statuses
     {
-        
+
     }
 }

@@ -1,22 +1,20 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
-namespace WMS.Common.EntityModels.Sqlite
+namespace WMS.Shared;
+
+[Index("RoleName", Name = "EmployeeRole")]
+public partial class Role
 {
-    /// <summary>
-    /// Provides a way to define what role an employee plays within the organization
-    /// Roles are: Staff, Project Manager, Change Manager, Supervisor, Developer, Technician 
-    /// </summary>
-    public partial class Role
-    {
-        [Key]
-        public Guid RoleId { get; set; }
+    [Key]
+    [Column(TypeName = "GUID")]
+    public Guid RoleId { get; set; }
 
-        [Required]
-        [Column(TypeName = "nvarchar(25)")]
-        [StringLength(25)]
-        public string RoleName { get; set; } = null!;
+    [Column(TypeName = "NVARCHAR (25)")]
+    [StringLength(25)]
+    public string RoleName { get; set; } = null!;
 
-        // TODO - Define relationships with Employee Class
-    }
+    [InverseProperty("RoleNavigation")]
+    public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
 }

@@ -1,60 +1,57 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace WMS.Common.EntityModels.Sqlite
+namespace WMS.Shared;
+
+[Index("EmployeeId", Name = "EmployeeId")]
+[Index("EmployeeId", Name = "EmployeesRequests")]
+public partial class Request
 {
-    [Index("RequestTypeId", Name = "RequestType")]
-    [Index("RequestTypeId", Name = "RequestTypeId")]
-    [Index("StatusId", Name = "StatusRequest")]
-    [Index("StatusId", Name = "StatusId")]
-    [Index("ApprovalStatusId", Name = "ApprovalStatusRequest")]
-    [Index("ApprovalStatusId", Name = "ApprovalStatusId")]
-    public partial class Request
-    {
-        public Request()
-        {
-            Requestors = new HashSet<Employee>();
-        }
+    [Key]
+    [Column(TypeName = "GUID")]
+    public Guid RequestId { get; set; }
 
-        [Key]
-        public Guid RequestId { get; set; }
+    [Column(TypeName = "GUID")]
+    public Guid? RequestTypeId { get; set; }
 
-        [Column(TypeName = "Guid")]
-        public Guid? RequestTypeId { get; set; }
+    [Column(TypeName = "GUID")]
+    public Guid? StatusId { get; set; }
 
-        [Column(TypeName = "Guid")]
-        public Guid? StatusId { get; set; }
+    [Column(TypeName = "GUID")]
+    public Guid? ApprovalStatusId { get; set; }
 
-        [Column(TypeName = "Guid")]
-        public Guid? ApprovalStatusId { get; set; }
+    [Column(TypeName = "GUID")]
+    public Guid? EmployeeId { get; set; }
 
-        [Required]
-        [Column(TypeName = "nvarchar (40)")]
-        [StringLength(40)]
-        public string RequestTitle { get; set; } = null!;
+    [Column(TypeName = "NVARCHAR (40)")]
+    public string RequestTitle { get; set; } = null!;
 
-        [Required]
-        [Column(TypeName = "ntext")]
-        [StringLength(1000)]
-        public string Description { get; set; } = null!;
+    [Column(TypeName = "NTEXT")]
+    public string? Description { get; set; }
 
-        [Column(TypeName = "bit")]
-        public bool IsNew { get; set; }
+    [Column(TypeName = "BIT")]
+    public bool? IsNew { get; set; }
 
-        [ForeignKey("RequestTypeId")]
-        [InverseProperty("Requests")]
-        public virtual RequestType? Type { get; set; }
+    [InverseProperty("RequestNavigation")]
+    public virtual ICollection<Change> Changes { get; set; } = new List<Change>();
 
-        [ForeignKey("StatusId")]
-        [InverseProperty("Requests")]
-        public virtual Status? Status { get; set; }
+    [ForeignKey("EmployeeId")]
+    [InverseProperty("Requests")]
+    public virtual Employee? Employee { get; set; }
 
-        [ForeignKey("ApprovalStatusId")]
-        [InverseProperty("Requests")]
-        public virtual ApprovalStatus? ApprovalStatus { get; set; }
+    [InverseProperty("RequestNavigation")]
+    public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
 
-        [InverseProperty("Requests")]
-        public virtual ICollection<Employee> Requestors { get; set; }
-    }
+    [ForeignKey("RequestTypeId")]
+    [InverseProperty("Requests")]
+    public virtual RequestType? RequestType { get; set; }
+
+    [ForeignKey("ApprovalStatusId")]
+    [InverseProperty("Requests")]
+    public virtual ApprovalStatus? ApprovalStatus { get; set; }
+
+    [ForeignKey("StatusId")]
+    [InverseProperty("Requests")]
+    public virtual Statuses? Status { get; set; }
 }

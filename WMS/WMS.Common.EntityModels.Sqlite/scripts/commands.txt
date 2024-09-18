@@ -1,0 +1,1 @@
+dotnet ef dbcontext scaffold "Filename=../WMS.db" Microsoft.EntityFrameworkCore.Sqlite --table ApprovalStatuses --table Categories --table Changes --table Employees --table Priorities --table Projects --table Requests --table RequestTypes --table Roles --table Works --namespace WMS.Shared --data-annotations

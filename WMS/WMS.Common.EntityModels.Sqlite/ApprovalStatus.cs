@@ -1,20 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace WMS.Common.EntityModels.Sqlite
+namespace WMS.Shared;
+
+public partial class ApprovalStatus
 {
-    public class ApprovalStatus
-    {
-        [Key]
-        public Guid ApprovalStatusId { get; set; }
+    [Key]
+    [Column(TypeName = "GUID")]
+    public Guid AprovalStatusId { get; set; }
 
-        [Required]
-        [Column(TypeName = "nvarchar(25)")]
-        [StringLength(25)]
-        public string ApprovalStatusName { get; set; } = null!;
-    }
+    [Column(TypeName = "nvarchar(25)")]
+    [StringLength(25)]
+    public string ApprovalStatusName { get; set; } = null!;
 }

@@ -1,24 +1,18 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
-namespace WMS.Common.EntityModels.Sqlite
+namespace WMS.Shared;
+
+public partial class RequestType
 {
-    /**
-    * TODO - Implement this class similiar to the Territory Class
-    */
-    [Keyless]
-    public partial class RequestType
-    {
-        [Required]
-        [Column(TypeName = "nvarchar")]
-        public string RequestTypeId { get; set; } = null!;
+    [Key]
+    [Column(TypeName = "GUID")]
+    public Guid RequestTypeId { get; set; }
 
-        [Required]
-        [Column(TypeName = "nvarchar")]
-        public string RequestTypeName { get; set; } = null!;
+    [Column(TypeName = "NVARCHAR (25)")]
+    [StringLength(25)]
+    public string RequestTypeName { get; set; } = null!;
 
-        [Column(TypeName = "int")]
-        public int TypeId { get; set; }
-    }
+    [InverseProperty("RequestType")]
+    public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 }

@@ -1,18 +1,21 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
-namespace WMS.Common.EntityModels.Sqlite
+namespace WMS.Shared;
+
+public partial class Priority
 {
-    [Keyless]
-    public partial class Priority
-    {
-        [Required]
-        [Column(TypeName = "nvarchar")]
-        public string PriorityId { get; set; } = null!;
+    [Key]
+    [Column(TypeName = "GUID")]
+    public Guid PriorityId { get; set; }
 
-        [Required]
-        [Column(TypeName = "nvarchar")]
-        public string PriorityName { get; set; } = null!;
-    }
+    [Column(TypeName = "nvarchar (20)")]
+    [StringLength(20)]
+    public string PriorityName { get; set; } = null!;
+
+    [InverseProperty("Priority")]
+    public virtual ICollection<Change> Changes { get; set; } = new List<Change>();
+
+    [InverseProperty("Priority")]
+    public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
 }

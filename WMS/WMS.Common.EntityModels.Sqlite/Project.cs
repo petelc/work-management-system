@@ -1,67 +1,72 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace WMS.Common.EntityModels.Sqlite
+namespace WMS.Shared;
+
+[Index("CategoryId", Name = "CategoriesProjects")]
+[Index("CategoryId", Name = "CategoryId")]
+[Index("Requestor", Name = "EmployeesProjects")]
+[Index("Request", Name = "RequestsProjects")]
+[Index("Work", Name = "WorksProjects")]
+public partial class Project
 {
-    [Index("StatusId", Name = "StatusProjects")]
-    [Index("ApprovalStatusId", Name = "ApprovalStatusProjects")]
-    [Index("EmployeeId", Name = "RequestorProjects")]
-    [Index("RequestId", Name = "RequestProjects")]
-    [Index("CategoryId", Name = "CategoryProjects")]
-    [Index("PriorityId", Name = "PriorityProjects")]
-    public partial class Project
-    {
-        public Project()
-        {
-            Works = new HashSet<Work>();
-            ProjectManagers = new HashSet<Employee>();
-        }
+    [Key]
+    [Column(TypeName = "GUID")]
+    public Guid ProjectId { get; set; }
 
-        [Key]
-        public Guid ProjectId { get; set; }
+    [Column(TypeName = "GUID")]
+    public Guid? StatusId { get; set; }
 
-        [Required]
-        [Column(TypeName = "nvarchar (50)")]
-        [StringLength(50)]
-        public string ProjectName { get; set; } = null!;
+    [Column(TypeName = "GUID")]
+    public Guid? ApprovalStatusId { get; set; }
 
-        [Required]
-        [Column(TypeName = "ntext")]
-        [StringLength(1000)]
-        public string Description { get; set; } = null!;
+    [Column(TypeName = "GUID")]
+    public Guid? Requestor { get; set; }
 
-        [ForeignKey("StatusId")]
-        [InverseProperty("Projects")]
-        public Status? Status { get; set; }
+    [Column(TypeName = "GUID")]
+    public Guid? Request { get; set; }
 
-        [ForeignKey("ApprovalStatusId")]
-        [InverseProperty("Projects")]
-        public ApprovalStatus? ApprovalStatus { get; set; }
+    [Column(TypeName = "GUID")]
+    public Guid? CategoryId { get; set; }
 
-        [ForeignKey("EmployeeId")]
-        [InverseProperty("Projects")]
-        public Employee? Requestor { get; set; }
+    [Column(TypeName = "GUID")]
+    public Guid? PriorityId { get; set; }
 
-        [Column(TypeName = "Guid")]
-        public Guid? RequestId { get; set; }
+    [Column(TypeName = "GUID")]
+    public Guid? Work { get; set; }
 
-        [ForeignKey("RequestId")]
-        [InverseProperty("Projects")]
-        public Request? Request { get; set; }
+    [Column(TypeName = "NVARCHAR (50)")]
+    [StringLength(50)]
+    public string ProjectName { get; set; } = null!;
 
-        [ForeignKey("CategoryId")]
-        [InverseProperty("Projects")]
-        public Category? Category { get; set; }
+    [Column(TypeName = "NTEXT")]
+    public string? Description { get; set; }
 
-        [ForeignKey("PriorityId")]
-        [InverseProperty("Projects")]
-        public Priority? Priority { get; set; }
+    [ForeignKey("StatusId")]
+    [InverseProperty("Projects")]
+    public Statuses? Status { get; set; }
 
-        [InverseProperty("Projects")]
-        public ICollection<Employee>? ProjectManagers { get; set; }
+    [ForeignKey("CategoryId")]
+    [InverseProperty("Projects")]
+    public virtual Category? Category { get; set; }
 
-        [InverseProperty("Projects")]
-        public virtual ICollection<Work> Works { get; set; }
-    }
+    [ForeignKey("PriorityId")]
+    [InverseProperty("Projects")]
+    public virtual Priority? Priority { get; set; }
+
+    [ForeignKey("Request")]
+    [InverseProperty("Projects")]
+    public virtual Request? RequestNavigation { get; set; }
+
+    [ForeignKey("Requestor")]
+    [InverseProperty("Projects")]
+    public virtual Employee? RequestorNavigation { get; set; }
+
+    [ForeignKey("Work")]
+    [InverseProperty("Projects")]
+    public virtual Work? WorkNavigation { get; set; }
+
+    [InverseProperty("ProjectNavigation")]
+    public virtual ICollection<Work> Works { get; set; } = new List<Work>();
 }

@@ -1,16 +1,4 @@
-DROP TABLE IF EXISTS "ApprovalStatuses";
-DROP TABLE IF EXISTS "Categories";
-DROP TABLE IF EXISTS "Changes";
-DROP TABLE IF EXISTS "Employees";
-DROP TABLE IF EXISTS "Icons";
-DROP TABLE IF EXISTS "Priorities";
-DROP TABLE IF EXISTS "Projects";
-DROP TABLE IF EXISTS "Requests";
-DROP TABLE IF EXISTS "RequestTypes";
-DROP TABLE IF EXISTS "Roles";
-DROP TABLE IF EXISTS "Statuses";
-DROP TABLE IF EXISTS "Works";
-DROP TABLE IF EXISTS "WorkItems";
+
 
 -- Employee Table
 CREATE TABLE "Employees"
@@ -40,7 +28,7 @@ CREATE TABLE "Categories"
     "CategoryId" GUID PRIMARY KEY,
     "CategoryName" nvarchar (15) NOT NULL,
     "Description" ntext NULL,
-    "Picture" "image" NULL,
+    "Picture" "image" NULL
 );
 CREATE INDEX "CategoryName" ON "Categories"("CategoryName");
 
@@ -49,25 +37,25 @@ CREATE INDEX "CategoryName" ON "Categories"("CategoryName");
 CREATE TABLE "ApprovalStatuses"
 (
     "AprovalStatusId" GUID PRIMARY KEY,
-    "ApprovalStatusName" nvarchar(25) NOT NULL,
+    "ApprovalStatusName" nvarchar(25) NOT NULL
 );
-
+--CREATE INDEX "ApprovalStatusName" ON "ApprovalStatus"("ApprovalStatusName");
 
 -- Priorities Table
 -- Stand alone table to store set values (low, standard, high, emergency)
 CREATE TABLE "Priorities"
 (
     "PriorityId" GUID PRIMARY KEY,
-    "PriorityName" nvarchar (20) NOT NULL,
+    "PriorityName" nvarchar (20) NOT NULL
 );
-
+--CREATE INDEX "PriorityName" ON "Priorities"("PriorityName");
 
 --Request Type
 -- Stand alone table to store set values (change request, project request)
 CREATE TABLE "RequestTypes"
 (
     "RequestTypeId" GUID PRIMARY KEY,
-    "RequestTypeName" NVARCHAR (25) NOT NULL,
+    "RequestTypeName" NVARCHAR (25) NOT NULL
 );
 
 --Roles 
@@ -76,7 +64,7 @@ CREATE TABLE "RequestTypes"
 CREATE TABLE "Roles"
 (
     "RoleId" GUID PRIMARY KEY,
-    "RoleName" NVARCHAR (25) NOT NULL,
+    "RoleName" NVARCHAR (25) NOT NULL
 );
 CREATE INDEX "EmployeeRole" ON "Roles"("RoleName");
 
@@ -85,7 +73,7 @@ CREATE INDEX "EmployeeRole" ON "Roles"("RoleName");
 CREATE TABLE "Statuses"
 (
     "StatusId" GUID PRIMARY KEY,
-    "StatusName" NVARCHAR (25) NOT NULL,
+    "StatusName" NVARCHAR (25) NOT NULL
 );
 
 --Request
@@ -252,7 +240,7 @@ CREATE INDEX "WorksChanges" ON "Changes"("Work");
 
 CREATE TABLE "Works"
 (
-    "WorkId" GUID PRIMARY KEY
+    "WorkId" GUID PRIMARY KEY,
     "Project" GUID NULL,
     "Change" GUID NULL,
     "Name" NVARCHAR (50),
@@ -271,38 +259,37 @@ CREATE TABLE "Works"
 );
 CREATE INDEX "WorksProjects" ON "Works"("Project");
 CREATE INDEX "WorksChanges" ON "Works"("Change");
+--CREATE INDEX "WorksWorkItems" ON "Works"("WorkItems");
 
-
-CREATE TABLE "WorkItems"
-(
-    "WorkItemId" GUID PRIMARY KEY,
-    "WorkId" GUID NULL,
-    "PriorityId" GUID NULL,
-    "EmployeeId" GUID NULL,
-    "CardIDNum" NVARCHAR (10) NULL,
-    "Header" NVARCHAR (25) NULL,
-    "Title" NVARCHAR (25) NULL,
-    "Description" NTEXT NULL,
-    "StartDate" DATETIME2 NULL,
-    "EndDatae" DATETIME2 NULL,
-    CONSTRAINT "FK_WorkItems_Priorities" FOREIGN KEY
-    (
-        "PriorityId"
-    ) REFERENCES "Priorities" (
-        "PriorityId"
-    ),
-    CONSTRAINT "FK_WorkItems_Employee" FOREIGN KEY
-    (
-        "EmployeeId"
-    ) REFERENCES "Employees" (
-        "EmployeeId"
-    ),
-    CONSTRAINT "FK_WorkItems_ Works" FOREIGN KEY
-    (
-        "WorkId"
-    ) REFERENCES "Works" (
-        "WorkId"
-    )
-);
-CREATE INDEX "WorkItemsWork" ON "WorkItems"("WorkId");
-
+-- CREATE TABLE "WorkItems"
+-- (
+--     "WorkItemId" GUID PRIMARY KEY,
+--     "WorkId" GUID NULL,
+--     "PriorityId" GUID NULL,
+--     "Assignee" GUID NULL,
+--     "CardIDNum" NVARCHAR (10) NULL,
+--     "Header" NVARCHAR (25) NULL,
+--     "Title" NVARCHAR (25) NULL,
+--     "Description" NTEXT NULL,
+--     "StartDate" DATETIME2 NULL,
+--     "EndDatae" DATETIME2 NULL,
+--     CONSTRAINT "FK_WorkItems_Priorities" FOREIGN KEY
+--     (
+--         "PriorityId"
+--     ) REFERENCES "Priorities" (
+--         "PriorityId"
+--     ),
+--     CONSTRAINT "FK_WorkItems_Employee" FOREIGN KEY
+--     (
+--         "Assignee"
+--     ) REFERENCES "Employees" (
+--         "EmployeeId"
+--     ),
+--     CONSTRAINT "FK_WorkItems_ Works" FOREIGN KEY
+--     (
+--         "WorkId"
+--     ) REFERENCES "Works" (
+--         "WorkId"
+--     )
+-- );
+-- CREATE INDEX "WorkItemsWork" ON "WorkItems"("WorkId");
