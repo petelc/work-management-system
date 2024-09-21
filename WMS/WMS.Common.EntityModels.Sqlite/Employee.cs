@@ -38,8 +38,8 @@ public partial class Employee
     [Column(TypeName = "GUID")]
     public Guid? ReportsTo { get; set; }
 
-    [Column(TypeName = "GUID")]
-    public Guid? Role { get; set; }
+    // [Column(TypeName = "GUID")]
+    // public Guid? RoleId { get; set; }
 
     [Column(TypeName = "ntext")]
     public string? Notes { get; set; }
@@ -53,7 +53,6 @@ public partial class Employee
     [InverseProperty("Employee")]
     public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 
-    [ForeignKey("Role")]
-    [InverseProperty("Employees")]
-    public virtual Role? RoleNavigation { get; set; }
+    // [InverseProperty("Employee")]
+    // public virtual ICollection<Role> Roles { get; set; } = new List<Role>();
 }

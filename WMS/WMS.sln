@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WMS.Common.EntityModels.Sql
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WMS.WebApi", "WMS.WebApi\WMS.WebApi.csproj", "{EA05A466-9F8C-4F99-B2DC-A593836E6B65}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WMS.Common.UnitTests", "WMS.Common.UnitTests\WMS.Common.UnitTests.csproj", "{024FB431-DF66-45EE-AE10-7B8691DFF85D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{EA05A466-9F8C-4F99-B2DC-A593836E6B65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA05A466-9F8C-4F99-B2DC-A593836E6B65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA05A466-9F8C-4F99-B2DC-A593836E6B65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{024FB431-DF66-45EE-AE10-7B8691DFF85D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{024FB431-DF66-45EE-AE10-7B8691DFF85D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{024FB431-DF66-45EE-AE10-7B8691DFF85D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{024FB431-DF66-45EE-AE10-7B8691DFF85D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

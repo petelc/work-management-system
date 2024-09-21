@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WMS.Shared;
 
-[Index("RoleName", Name = "EmployeeRole")]
+//[Index("RoleId", Name = "EmployeeRole")]
 public partial class Role
 {
     [Key]
@@ -15,6 +15,6 @@ public partial class Role
     [StringLength(25)]
     public string RoleName { get; set; } = null!;
 
-    [InverseProperty("RoleNavigation")]
-    public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
+    // [InverseProperty("Role")]
+    // public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
 }

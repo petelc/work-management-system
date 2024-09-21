@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace WMS.Common.DataContext.Sqlite
+namespace WMS.Shared
 {
     public static class WMSContextExtensions
     {
@@ -13,7 +13,7 @@ namespace WMS.Common.DataContext.Sqlite
         {
             string databasePath = Path.Combine(relativePath, databaseFileName);
 
-            services.AddDbContext<WMSContext>(options =>
+            services.AddDbContext<WmsContext>(options =>
             {
                 options.UseSqlite($"Data Source={databasePath}");
 

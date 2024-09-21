@@ -44,7 +44,7 @@ public partial class Project
     public string? Description { get; set; }
 
     [ForeignKey("StatusId")]
-    [InverseProperty("Projects")]
+    [InverseProperty("Project")]
     public Statuses? Status { get; set; }
 
     [ForeignKey("CategoryId")]
