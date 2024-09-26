@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WMS.Common.DataContext.Sqlite", "WMS.Common.DataContext.Sqlite\WMS.Common.DataContext.Sqlite.csproj", "{C557C11F-8E96-4292-84FC-E3997A8D38D1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WMS.Common.EntityModels.Sqlite", "WMS.Common.EntityModels.Sqlite\WMS.Common.EntityModels.Sqlite.csproj", "{B7B06E79-105F-408B-A634-729E24C763DA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WMS.WebApi", "WMS.WebApi\WMS.WebApi.csproj", "{EA05A466-9F8C-4F99-B2DC-A593836E6B65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{4906EF6D-7F76-487A-9AE7-CA4BA14649E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\Persistence.csproj", "{150FE4D6-CE32-48EC-AC9A-6F123CBFE0F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +30,13 @@ Global
 		{EA05A466-9F8C-4F99-B2DC-A593836E6B65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA05A466-9F8C-4F99-B2DC-A593836E6B65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA05A466-9F8C-4F99-B2DC-A593836E6B65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4906EF6D-7F76-487A-9AE7-CA4BA14649E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4906EF6D-7F76-487A-9AE7-CA4BA14649E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4906EF6D-7F76-487A-9AE7-CA4BA14649E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4906EF6D-7F76-487A-9AE7-CA4BA14649E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{150FE4D6-CE32-48EC-AC9A-6F123CBFE0F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{150FE4D6-CE32-48EC-AC9A-6F123CBFE0F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{150FE4D6-CE32-48EC-AC9A-6F123CBFE0F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{150FE4D6-CE32-48EC-AC9A-6F123CBFE0F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
