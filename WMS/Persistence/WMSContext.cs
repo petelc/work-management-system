@@ -49,7 +49,7 @@ namespace Persistence
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            // !REQUEST
+            // NOTE: REQUEST
             builder.Entity<RequestToRequestors>(x => x.HasKey(rr => new { rr.EmployeeId, rr.RequestId }));
 
             // ! defines a many to many relationship between Employee and Request
@@ -88,7 +88,7 @@ namespace Persistence
                 .WithOne(b => b.Request)
                 .HasForeignKey<ApprovalStatus>(b => b.RequestRef);
 
-            // ! CHANGE
+            // NOTE: CHANGE
             builder.Entity<ChangesToChangeManager>(x => x.HasKey(rr => new { rr.EmployeeId, rr.ChangeId }));
 
             // ! defines a many to many relationship between Employee and Change
@@ -113,13 +113,13 @@ namespace Persistence
             builder.Entity<Change>()
                 .HasOne(a => a.Status)
                 .WithOne(b => b.Change)
-                .HasForeignKey<ApprovalStatus>(b => b.ChangeRef);
+                .HasForeignKey<Status>(b => b.ChangeRef);
 
             // ! defines 1 to 1 relationship between Change and Priority
             builder.Entity<Change>()
                 .HasOne(a => a.Priority)
                 .WithOne(b => b.Change)
-                .HasForeignKey<ApprovalStatus>(b => b.ChangeRef);
+                .HasForeignKey<Priority>(b => b.ChangeRef);
 
             // ! defines 1 to 1 relationship between Change and Category
             builder.Entity<Change>()
@@ -131,6 +131,45 @@ namespace Persistence
             builder.Entity<Work>()
                 .HasOne(a => a.Change)
                 .WithMany(b => b.Works);
+
+            // NOTE: PROJECT
+            builder.Entity<ProjectToProjectManager>(x => x.HasKey(rr => new { rr.EmployeeId, rr.ProjectId }));
+
+            // ! defines 1 to 1 relationship between Project and Status
+            builder.Entity<Project>()
+                .HasOne(a => a.Status)
+                .WithOne(b => b.Project)
+                .HasForeignKey<Status>(b => b.ProjectRef);
+
+            // ! defines 1 to 1 relationship between Project and Approval Status
+            builder.Entity<Project>()
+                .HasOne(a => a.ApprovalStatus)
+                .WithOne(b => b.Project)
+                .HasForeignKey<ApprovalStatus>(b => b.ProjectRef);
+
+            // ! defines 1 to 1 relationship between Project and Priority
+            builder.Entity<Project>()
+                .HasOne(a => a.Priority)
+                .WithOne(b => b.Project)
+                .HasForeignKey<Priority>(b => b.ProjectRef);
+
+            // ! defines 1 to 1 relationship between Project and Category
+            builder.Entity<Project>()
+                .HasOne(a => a.Category)
+                .WithOne(b => b.Project)
+                .HasForeignKey<Category>(b => b.ProjectRef);
+
+            // ! defines a 1 to many relationship between Project and Work
+            builder.Entity<Work>()
+                .HasOne(a => a.Project)
+                .WithMany(b => b.Works);
+
+            // NOTE: Work
+            builder.Entity<Work>(x => x.HasKey(rr => new { rr.WorkId }));
+
+            builder.Entity<Work>()
+                .HasMany(a => a.WorkItems)
+                .WithOne(b => b.Work);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
