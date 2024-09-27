@@ -26,7 +26,7 @@ Initially I am using SQLite to develop application. Eventually I want to use SQL
 
 ## Mediator Design Pattern
 
-### What is the Mediator Design Pattern?
+### What is the Mediator Design Pattern
 
 A mediator design pattern is one of the important and widely used behavioral design patterns. Mediator enables the decoupling of objects by introducing a layer in between so that the interaction between objects happens via the layer. Real Life
 
