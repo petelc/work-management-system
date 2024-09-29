@@ -14,7 +14,7 @@ namespace Domain
         public Guid RequestorRef { get; set; }
         public Employee Requestor { get; set; }
         public Guid RequestRef { get; set; }
-        public Request Requests { get; set; }
+        public Request Request { get; set; }
         public Category Category { get; set; }
         public ICollection<ChangesToChangeManager> ChangeManagers { get; set; } = new List<ChangesToChangeManager>();
         public ICollection<Work> Works { get; set; } = new List<Work>();
