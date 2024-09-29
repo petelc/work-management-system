@@ -1,67 +1,53 @@
 using Microsoft.EntityFrameworkCore;
 using Domain;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Persistence
 {
-    public partial class WMSContext : DbContext
+    public class WMSContext : IdentityDbContext<Employee, Role, int>
     {
-        public WMSContext()
-        { }
-
-        public WMSContext(DbContextOptions<WMSContext> options) : base(options)
+        public WMSContext(DbContextOptions options) : base(options)
         {
-
         }
 
-
-        public virtual DbSet<Employee> Employees { get; set; } = null!;
-        public virtual DbSet<Request> Requests { get; set; } = null!;
-        public virtual DbSet<Category> Categories { get; set; } = null!;
-        public virtual DbSet<Project> Projects { get; set; } = null!;
-        public virtual DbSet<Change> Changes { get; set; } = null!;
-        public virtual DbSet<Priority> Priorities { get; set; } = null!;
-        public virtual DbSet<Status> Statuses { get; set; } = null!;
-        public virtual DbSet<ApprovalStatus> ApprovalStatuses { get; set; } = null!;
-        public virtual DbSet<RequestType> RequestTypes { get; set; } = null!;
-
-        public virtual DbSet<Work> Works { get; set; } = null!;
-        public virtual DbSet<WorkItem> WorkItems { get; set; } = null!;
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                string dir = Environment.CurrentDirectory;
-                string path = string.Empty;
-
-                if (dir.EndsWith("net8.0"))
-                {
-                    path = Path.Combine("..", "..", "..", "..", "WMS.db");
-                }
-                else
-                {
-                    path = Path.Combine("..", "WMS.db");
-                }
-
-                optionsBuilder.UseSqlite($"Filename={path}");
-            }
-        }
+        //public DbSet<Employee> Employees { get; set; } = null!;
+        public DbSet<Request> Requests { get; set; } = null!;
+        public DbSet<Category> Categories { get; set; } = null!;
+        public DbSet<Project> Projects { get; set; } = null!;
+        public DbSet<Change> Changes { get; set; } = null!;
+        public DbSet<Priority> Priorities { get; set; } = null!;
+        public DbSet<Status> Statuses { get; set; } = null!;
+        public DbSet<ApprovalStatus> ApprovalStatuses { get; set; } = null!;
+        public DbSet<RequestType> RequestTypes { get; set; } = null!;
+        public DbSet<Work> Works { get; set; } = null!;
+        public DbSet<WorkItem> WorkItems { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Role>()
+                .HasData(
+                    new Role { Id = 1, Name = "Staff", NormalizedName = "STAFF" },
+                    new Role { Id = 2, Name = "Change Manager", NormalizedName = "CHANGE MANAGER" },
+                    new Role { Id = 3, Name = "Project Manager", NormalizedName = "PROJECT MANAGER" },
+                    new Role { Id = 4, Name = "Board Memeber", NormalizedName = "BOARD MEMBER" },
+                    new Role { Id = 5, Name = "Developer", NormalizedName = "DEVELOPER" },
+                    new Role { Id = 6, Name = "Tech", NormalizedName = "TECH" }
+                );
             // NOTE: REQUEST
-            builder.Entity<RequestToRequestors>(x => x.HasKey(rr => new { rr.EmployeeId, rr.RequestId }));
+            builder.Entity<RequestToRequestors>(x => x.HasKey(rr => new { rr.Id, rr.RequestId }));
 
             // ! defines a many to many relationship between Employee and Request
             builder.Entity<RequestToRequestors>()
                 .HasOne(m => m.Employee)
                 .WithMany(m => m.Requests)
-                .HasForeignKey(rr => rr.EmployeeId);
+                .HasForeignKey(rr => rr.Id);
 
             // ! defines 1 to 1 relationship between Request and Change
             builder.Entity<Request>()
                 .HasOne(a => a.Change)
-                .WithOne(b => b.Requests)
+                .WithOne(b => b.Request)
                 .HasForeignKey<Change>(b => b.RequestRef);
 
             // ! defines 1 to 1 relationship between Request and Project
@@ -80,28 +66,28 @@ namespace Persistence
             builder.Entity<Request>()
                 .HasOne(a => a.Status)
                 .WithOne(b => b.Request)
-                .HasForeignKey<ApprovalStatus>(b => b.RequestRef);
+                .HasForeignKey<Status>(b => b.RequestRef);
 
             // ! defines 1 to 1 relationship between Request and RequestType
             builder.Entity<Request>()
                 .HasOne(a => a.RequestType)
                 .WithOne(b => b.Request)
-                .HasForeignKey<ApprovalStatus>(b => b.RequestRef);
+                .HasForeignKey<RequestType>(b => b.RequestRef);
 
             // NOTE: CHANGE
-            builder.Entity<ChangesToChangeManager>(x => x.HasKey(rr => new { rr.EmployeeId, rr.ChangeId }));
+            builder.Entity<ChangesToChangeManager>(x => x.HasKey(rr => new { rr.Id, rr.ChangeId }));
 
             // ! defines a many to many relationship between Employee and Change
             builder.Entity<ChangesToChangeManager>()
                 .HasOne(m => m.Employee)
                 .WithMany(m => m.Changes)
-                .HasForeignKey(rr => rr.EmployeeId);
+                .HasForeignKey(rr => rr.Id);
 
             // ! defines 1 to 1 relationship between Change and Request
             builder.Entity<Change>()
-                .HasOne(a => a.Requests)
+                .HasOne(a => a.Request)
                 .WithOne(b => b.Change)
-                .HasForeignKey<Project>(b => b.RequestRef);
+                .HasForeignKey<Request>(b => b.RequestId);
 
             // ! defines 1 to 1 relationship between Change and Approval Status
             builder.Entity<Change>()
@@ -133,7 +119,13 @@ namespace Persistence
                 .WithMany(b => b.Works);
 
             // NOTE: PROJECT
-            builder.Entity<ProjectToProjectManager>(x => x.HasKey(rr => new { rr.EmployeeId, rr.ProjectId }));
+            builder.Entity<ProjectToProjectManager>(x => x.HasKey(rr => new { rr.Id, rr.ProjectId }));
+
+            // ! defines a many to many relationship between Employee and Change
+            builder.Entity<ProjectToProjectManager>()
+                .HasOne(m => m.Employee)
+                .WithMany(m => m.Projects)
+                .HasForeignKey(rr => rr.Id);
 
             // ! defines 1 to 1 relationship between Project and Status
             builder.Entity<Project>()
@@ -165,14 +157,20 @@ namespace Persistence
                 .WithMany(b => b.Works);
 
             // NOTE: Work
-            builder.Entity<Work>(x => x.HasKey(rr => new { rr.WorkId }));
+            builder.Entity<WorkToWorkItem>(x => x.HasKey(rr => new { rr.WorkId, rr.WorkItemId }));
 
-            builder.Entity<Work>()
-                .HasMany(a => a.WorkItems)
-                .WithOne(b => b.Work);
+            builder.Entity<WorkToWorkItem>()
+                .HasOne(a => a.Work)
+                .WithMany(b => b.WorkItems)
+                .HasForeignKey(rr => rr.WorkId);
+
+            // NOTE: WorkItem
+            builder.Entity<WorkItem>()
+                .HasOne(a => a.Priority)
+                .WithOne(b => b.WorkItem)
+                .HasForeignKey<Priority>(b => b.WorkItemRef);
         }
 
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 
 

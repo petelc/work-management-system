@@ -1,10 +1,12 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain
 {
-
-    public partial class Employee : IdentityUser
+    public class Employee : IdentityUser<int>
     {
+
+        public string DisplayName { get; set; }
         public string LastName { get; set; } = null!;
         public string FirstName { get; set; } = null!;
         public string Region { get; set; }

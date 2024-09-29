@@ -7,7 +7,7 @@ namespace Domain
 {
     public class WorkToWorkItem
     {
-        public string WorkId { get; set; }
+        public Guid WorkId { get; set; }
         public Work Work { get; set; }
         public Guid WorkItemId { get; set; }
         public WorkItem WorkItem { get; set; }
