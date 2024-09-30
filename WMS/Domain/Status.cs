@@ -5,7 +5,7 @@ namespace Domain
     public partial class Status
     {
         [Key]
-        public string StatusId { get; set; } = null!;
+        public Guid StatusId { get; set; }
         public string StatusName { get; set; } = null!;
         public Guid RequestRef { get; set; }
         public Request Request { get; set; }

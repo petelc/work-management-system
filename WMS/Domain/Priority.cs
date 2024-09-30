@@ -5,7 +5,7 @@ namespace Domain
     public class Priority
     {
         [Key]
-        public string PriorityId { get; set; } = null!;
+        public Guid PriorityId { get; set; }
         public string PriorityName { get; set; } = null!;
         public Guid RequestRef { get; set; }
         public Request Request { get; set; }
