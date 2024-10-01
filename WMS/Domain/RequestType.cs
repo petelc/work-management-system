@@ -5,7 +5,7 @@ namespace Domain
     public partial class RequestType
     {
         [Key]
-        public string RequestTypeId { get; set; } = null!;
+        public Guid RequestTypeId { get; set; }
         public string RequestTypeName { get; set; } = null!;
         public Guid RequestRef { get; set; }
         public Request Request { get; set; }

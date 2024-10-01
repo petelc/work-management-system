@@ -5,7 +5,7 @@ namespace Domain
 {
     public class Employee : IdentityUser<int>
     {
-
+        public int EmployeeId { get; set; }
         public string DisplayName { get; set; }
         public string LastName { get; set; } = null!;
         public string FirstName { get; set; } = null!;

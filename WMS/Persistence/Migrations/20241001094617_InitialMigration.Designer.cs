@@ -11,7 +11,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(WMSContext))]
-    [Migration("20240929093408_InitialMigration")]
+    [Migration("20241001094617_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -153,6 +153,9 @@ namespace Persistence.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Extension")
                         .HasColumnType("TEXT");
 
@@ -221,7 +224,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Priority", b =>
                 {
-                    b.Property<string>("PriorityId")
+                    b.Property<Guid>("PriorityId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ChangeRef")
@@ -343,7 +347,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.RequestType", b =>
                 {
-                    b.Property<string>("RequestTypeId")
+                    b.Property<Guid>("RequestTypeId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("ChangeId")
@@ -401,49 +406,12 @@ namespace Persistence.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Staff",
-                            NormalizedName = "STAFF"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Change Manager",
-                            NormalizedName = "CHANGE MANAGER"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Project Manager",
-                            NormalizedName = "PROJECT MANAGER"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Board Memeber",
-                            NormalizedName = "BOARD MEMBER"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Developer",
-                            NormalizedName = "DEVELOPER"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Tech",
-                            NormalizedName = "TECH"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Status", b =>
                 {
-                    b.Property<string>("StatusId")
+                    b.Property<Guid>("StatusId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ChangeRef")

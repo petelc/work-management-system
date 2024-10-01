@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Persistence;
+using Infrastructure.Security;
 
 namespace API.Extensions
 {
@@ -47,6 +44,7 @@ namespace API.Extensions
             });
 
             // TODO - Add services here
+            //services.AddScoped<IUserAccessor, UserAccessor>();
 
             return services;
         }

@@ -26,6 +26,7 @@ namespace Persistence
         {
             base.OnModelCreating(builder);
 
+
             builder.Entity<Role>()
                 .HasData(
                     new Role { Id = 1, Name = "Staff", NormalizedName = "STAFF" },
@@ -35,6 +36,48 @@ namespace Persistence
                     new Role { Id = 5, Name = "Developer", NormalizedName = "DEVELOPER" },
                     new Role { Id = 6, Name = "Tech", NormalizedName = "TECH" }
                 );
+
+            /*
+
+            builder.Entity<ApprovalStatus>()
+                .HasData(
+                    new ApprovalStatus { ApprovalStatusId = Guid.NewGuid(), ApprovalStatusName = "Pending" },
+                    new ApprovalStatus { ApprovalStatusId = Guid.NewGuid(), ApprovalStatusName = "Approved" },
+                    new ApprovalStatus { ApprovalStatusId = Guid.NewGuid(), ApprovalStatusName = "Denied" }
+                );
+
+            builder.Entity<Status>()
+                .HasData(
+                    new Status { StatusId = Guid.NewGuid(), StatusName = "In-Progress" },
+                    new Status { StatusId = Guid.NewGuid(), StatusName = "On-Hold" },
+                    new Status { StatusId = Guid.NewGuid(), StatusName = "Cancelled" },
+                    new Status { StatusId = Guid.NewGuid(), StatusName = "Completed" },
+                    new Status { StatusId = Guid.NewGuid(), StatusName = "Pending" }
+                );
+
+            builder.Entity<Priority>()
+                .HasData(
+                    new Priority { PriorityId = Guid.NewGuid(), PriorityName = "Low" },
+                    new Priority { PriorityId = Guid.NewGuid(), PriorityName = "Standard" },
+                    new Priority { PriorityId = Guid.NewGuid(), PriorityName = "High" },
+                    new Priority { PriorityId = Guid.NewGuid(), PriorityName = "Emergency" }
+                );
+
+            builder.Entity<Category>()
+                .HasData(
+                    new Category { CategoryId = Guid.NewGuid(), CategoryName = "Infrastructure" },
+                    new Category { CategoryId = Guid.NewGuid(), CategoryName = "Application Development" },
+                    new Category { CategoryId = Guid.NewGuid(), CategoryName = "Security" },
+                    new Category { CategoryId = Guid.NewGuid(), CategoryName = "Communications" }
+                );
+
+            builder.Entity<RequestType>()
+                .HasData(
+                    new RequestType { RequestTypeId = Guid.NewGuid(), RequestTypeName = "Project Request" },
+                    new RequestType { RequestTypeId = Guid.NewGuid(), RequestTypeName = "Change Request" }
+                );
+            */
+
             // NOTE: REQUEST
             builder.Entity<RequestToRequestors>(x => x.HasKey(rr => new { rr.Id, rr.RequestId }));
 
