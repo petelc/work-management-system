@@ -5,7 +5,7 @@ namespace Persistence
 {
     public class Seed
     {
-        public static async Task SeeData(WMSContext context, UserManager<Employee> userManager)
+        public static async Task SeedData(WMSContext context, UserManager<Employee> userManager)
         {
             if (!userManager.Users.Any() && !context.Requests.Any())
             {
@@ -151,6 +151,7 @@ namespace Persistence
                 await userManager.CreateAsync(tech, "Pa$$w0rd");
                 await userManager.AddToRoleAsync(tech, "Tech");
 
+                /*
                 // ! Requests
                 var requests = new List<Request>
                 {
@@ -244,6 +245,7 @@ namespace Persistence
                         }
                     }
                 };
+                */
             }
             await context.SaveChangesAsync();
         }

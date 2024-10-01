@@ -4,6 +4,5 @@ namespace Domain
 {
     public class Role : IdentityRole<int>
     {
-
     }
 }

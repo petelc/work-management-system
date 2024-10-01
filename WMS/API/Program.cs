@@ -1,16 +1,33 @@
 using API.Extensions;
 using API.Middleware;
+using Domain;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers(opt =>
+{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    opt.Filters.Add(new AuthorizeFilter(policy));
+});
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+//builder.Services.AddValidatorsFromAssemblyContaining<Create>();
 
 // Add Application Service Extensions services
 builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddIdentityServices(builder.Configuration);
 
-// TODO - Add Identity Extension Service here
 
 // Configure the HTTP request pipeline.
 var app = builder.Build();
@@ -37,7 +54,23 @@ app.UseStaticFiles();
 app.UseCors("CorsPolicy");
 
 
+using var scope = app.Services.CreateScope();
 
+var services = scope.ServiceProvider;
+
+try
+{
+    var context = services.GetRequiredService<WMSContext>();
+    var userManager = services.GetRequiredService<UserManager<Employee>>();
+    var roleManager = services.GetRequiredService<RoleManager<Role>>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedData(context, userManager);
+}
+catch (Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An Error Occurred durring Migration");
+}
 
 
 

@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
@@ -34,6 +32,7 @@ namespace Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    EmployeeId = table.Column<int>(type: "INTEGER", nullable: false),
                     DisplayName = table.Column<string>(type: "TEXT", nullable: true),
                     LastName = table.Column<string>(type: "TEXT", nullable: true),
                     FirstName = table.Column<string>(type: "TEXT", nullable: true),
@@ -373,7 +372,7 @@ namespace Persistence.Migrations
                 name: "Priorities",
                 columns: table => new
                 {
-                    PriorityId = table.Column<string>(type: "TEXT", nullable: false),
+                    PriorityId = table.Column<Guid>(type: "TEXT", nullable: false),
                     PriorityName = table.Column<string>(type: "TEXT", nullable: true),
                     RequestRef = table.Column<Guid>(type: "TEXT", nullable: false),
                     RequestId = table.Column<Guid>(type: "TEXT", nullable: true),
@@ -438,7 +437,7 @@ namespace Persistence.Migrations
                 name: "RequestTypes",
                 columns: table => new
                 {
-                    RequestTypeId = table.Column<string>(type: "TEXT", nullable: false),
+                    RequestTypeId = table.Column<Guid>(type: "TEXT", nullable: false),
                     RequestTypeName = table.Column<string>(type: "TEXT", nullable: true),
                     RequestRef = table.Column<Guid>(type: "TEXT", nullable: false),
                     ProjectRef = table.Column<Guid>(type: "TEXT", nullable: false),
@@ -471,7 +470,7 @@ namespace Persistence.Migrations
                 name: "Statuses",
                 columns: table => new
                 {
-                    StatusId = table.Column<string>(type: "TEXT", nullable: false),
+                    StatusId = table.Column<Guid>(type: "TEXT", nullable: false),
                     StatusName = table.Column<string>(type: "TEXT", nullable: true),
                     RequestRef = table.Column<Guid>(type: "TEXT", nullable: false),
                     ProjectRef = table.Column<Guid>(type: "TEXT", nullable: false),
@@ -548,19 +547,6 @@ namespace Persistence.Migrations
                         principalTable: "Works",
                         principalColumn: "WorkId",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { 1, null, "Staff", "STAFF" },
-                    { 2, null, "Change Manager", "CHANGE MANAGER" },
-                    { 3, null, "Project Manager", "PROJECT MANAGER" },
-                    { 4, null, "Board Memeber", "BOARD MEMBER" },
-                    { 5, null, "Developer", "DEVELOPER" },
-                    { 6, null, "Tech", "TECH" }
                 });
 
             migrationBuilder.CreateIndex(
