@@ -24,6 +24,7 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ApprovalStatusName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ChangeRef")
@@ -56,6 +57,7 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CategoryName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ChangeRef")
@@ -88,9 +90,11 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ChangeName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("RequestRef")
@@ -141,6 +145,7 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DisplayName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
@@ -157,12 +162,14 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Institution")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
@@ -229,6 +236,7 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PriorityName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ProjectRef")
@@ -266,9 +274,11 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProjectName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("RequestRef")
@@ -311,12 +321,14 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsNew")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("RequestTitle")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("RequestId");
@@ -364,6 +376,7 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RequestTypeName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("RequestTypeId");
@@ -459,6 +472,7 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("StatusName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("StatusId");
@@ -481,13 +495,14 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ChangeId")
+                    b.Property<Guid>("ChangeId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ProjectId")
+                    b.Property<Guid>("ProjectId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("WorkId");
@@ -505,25 +520,29 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("AssigneeId")
+                    b.Property<int>("AssigneeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CardIDNum")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Header")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("WorkItemId");
@@ -880,11 +899,15 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.Change", "Change")
                         .WithMany("Works")
-                        .HasForeignKey("ChangeId");
+                        .HasForeignKey("ChangeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Project", "Project")
                         .WithMany("Works")
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Change");
 
@@ -895,7 +918,9 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.Employee", "Assignee")
                         .WithMany()
-                        .HasForeignKey("AssigneeId");
+                        .HasForeignKey("AssigneeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Assignee");
                 });
@@ -1031,7 +1056,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.WorkItem", b =>
                 {
-                    b.Navigation("Priority");
+                    b.Navigation("Priority")
+                        .IsRequired();
 
                     b.Navigation("Work");
                 });

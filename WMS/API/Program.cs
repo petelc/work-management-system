@@ -53,22 +53,24 @@ app.UseStaticFiles();
 
 app.UseCors("CorsPolicy");
 
+app.MapControllers();
+
 
 using var scope = app.Services.CreateScope();
 
 var services = scope.ServiceProvider;
+var context = services.GetRequiredService<WMSContext>();
+var userManager = services.GetRequiredService<UserManager<Employee>>();
+var logger = services.GetRequiredService<ILogger<Program>>();
 
 try
 {
-    var context = services.GetRequiredService<WMSContext>();
-    var userManager = services.GetRequiredService<UserManager<Employee>>();
-    var roleManager = services.GetRequiredService<RoleManager<Role>>();
+    //var roleManager = services.GetRequiredService<RoleManager<Role>>();
     await context.Database.MigrateAsync();
     await Seed.SeedData(context, userManager);
 }
 catch (Exception ex)
 {
-    var logger = services.GetRequiredService<ILogger<Program>>();
     logger.LogError(ex, "An Error Occurred durring Migration");
 }
 
