@@ -151,7 +151,7 @@ namespace Persistence
                 await userManager.CreateAsync(tech, "Pa$$w0rd");
                 await userManager.AddToRoleAsync(tech, "Tech");
 
-                /*
+
                 // ! Requests
                 var requests = new List<Request>
                 {
@@ -245,7 +245,7 @@ namespace Persistence
                         }
                     }
                 };
-                */
+
             }
             await context.SaveChangesAsync();
         }

@@ -3,6 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Persistence;
 using Infrastructure.Security;
+using Application.Core;
+using MediatR;
+using System.Collections.Generic;
+using Application.Requests;
 
 namespace API.Extensions
 {
@@ -44,7 +48,9 @@ namespace API.Extensions
             });
 
             // TODO - Add services here
-            //services.AddScoped<IUserAccessor, UserAccessor>();
+            services.AddMediatR(typeof(List.Handler).Assembly);
+            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            services.AddScoped<IUserAccessor, UserAccessor>();
 
             return services;
         }

@@ -7,11 +7,11 @@ namespace Domain
 {
     public class WorkToWorkItem
     {
-        public Guid WorkId { get; set; }
-        public Work Work { get; set; }
-        public Guid WorkItemId { get; set; }
-        public WorkItem WorkItem { get; set; }
-        public bool IsApproved { get; set; }
-        public bool IsComplete { get; set; }
+        public int? WorkId { get; set; }
+        public Work? Work { get; set; }
+        public int? WorkItemId { get; set; }
+        public WorkItem? WorkItem { get; set; }
+        public bool? IsApproved { get; set; }
+        public bool? IsComplete { get; set; }
     }
 }
