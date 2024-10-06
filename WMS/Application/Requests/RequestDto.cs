@@ -4,7 +4,7 @@ namespace Application.Requests
 {
     public class RequestDto
     {
-        public Guid RequestId { get; set; }
+        public int RequestId { get; set; }
         public string RequestTitle { get; set; } = null!;
         public string Description { get; set; } = null!;
         public bool IsNew { get; set; }

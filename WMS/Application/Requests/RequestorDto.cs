@@ -9,7 +9,7 @@ namespace Application.Requests
         public string Region { get; set; }
         public string Institution { get; set; }
         public string Extension { get; set; }
-        public Guid ReportsTo { get; set; }
+        public int ReportsTo { get; set; }
         public bool IsRequestor { get; set; }
     }
 }

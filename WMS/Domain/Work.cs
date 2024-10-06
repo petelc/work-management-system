@@ -7,10 +7,12 @@ namespace Domain
     public class Work
     {
         [Key]
-        public Guid WorkId { get; set; }
+        public int WorkId { get; set; }
         public string Name { get; set; } = null!;
-        public Project Project { get; set; }
-        public Change Change { get; set; }
+        public int? ProjectRef { get; set; }
+        public Project? Project { get; set; }
+        public int? ChangeRef { get; set; }
+        public Change? Change { get; set; }
 
         public ICollection<WorkToWorkItem> WorkItems { get; set; } = new List<WorkToWorkItem>();
     }

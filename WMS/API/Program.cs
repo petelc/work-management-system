@@ -67,7 +67,7 @@ try
 {
     //var roleManager = services.GetRequiredService<RoleManager<Role>>();
     await context.Database.MigrateAsync();
-    await Seed.SeedData(context, userManager);
+    //await Seed.SeedData(context, userManager);
 }
 catch (Exception ex)
 {

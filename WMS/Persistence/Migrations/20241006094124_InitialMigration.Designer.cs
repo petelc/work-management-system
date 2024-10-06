@@ -11,7 +11,7 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(WMSContext))]
-    [Migration("20241001094617_InitialMigration")]
+    [Migration("20241006094124_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -22,46 +22,44 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.ApprovalStatus", b =>
                 {
-                    b.Property<Guid>("ApprovalStatusId")
+                    b.Property<int>("ApprovalStatusId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ApprovalStatusName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ChangeRef")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ProjectRef")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("RequestRef")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ApprovalStatusId");
 
-                    b.HasIndex("ChangeRef")
-                        .IsUnique();
-
-                    b.HasIndex("ProjectRef")
-                        .IsUnique();
-
-                    b.HasIndex("RequestRef")
-                        .IsUnique();
-
                     b.ToTable("ApprovalStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            ApprovalStatusId = 1,
+                            ApprovalStatusName = "Pending"
+                        },
+                        new
+                        {
+                            ApprovalStatusId = 2,
+                            ApprovalStatusName = "Approved"
+                        },
+                        new
+                        {
+                            ApprovalStatusId = 3,
+                            ApprovalStatusName = "Denied"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Category", b =>
                 {
-                    b.Property<Guid>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CategoryName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ChangeRef")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -70,55 +68,105 @@ namespace Persistence.Migrations
                     b.Property<byte[]>("Picture")
                         .HasColumnType("BLOB");
 
-                    b.Property<Guid>("ProjectRef")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("CategoryId");
 
-                    b.HasIndex("ChangeRef")
-                        .IsUnique();
-
-                    b.HasIndex("ProjectRef")
-                        .IsUnique();
-
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            CategoryName = "Infrastructure"
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            CategoryName = "Application Development"
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            CategoryName = "Security"
+                        },
+                        new
+                        {
+                            CategoryId = 4,
+                            CategoryName = "Communications"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Change", b =>
                 {
-                    b.Property<Guid>("ChangeId")
+                    b.Property<int>("ChangeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ApprovalStatusId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ApprovalStatusRef")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CategoryRef")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ChangeName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("RequestRef")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("EmployeeRef")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PriorityId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PriorityRef")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("RequestRef")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("RequestorId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("RequestorRef")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("StatusRef")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("ChangeId");
 
+                    b.HasIndex("ApprovalStatusId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("PriorityId");
+
+                    b.HasIndex("RequestRef")
+                        .IsUnique();
+
                     b.HasIndex("RequestorId");
+
+                    b.HasIndex("StatusId");
 
                     b.ToTable("Changes");
                 });
 
             modelBuilder.Entity("Domain.ChangesToChangeManager", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("ChangeId")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("ChangeId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsNew")
                         .HasColumnType("INTEGER");
@@ -144,6 +192,7 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DisplayName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
@@ -160,12 +209,14 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Institution")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
@@ -197,8 +248,8 @@ namespace Persistence.Migrations
                     b.Property<string>("Region")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ReportsTo")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("ReportsTo")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");
@@ -224,79 +275,113 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Priority", b =>
                 {
-                    b.Property<Guid>("PriorityId")
+                    b.Property<int>("PriorityId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ChangeRef")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PriorityName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ProjectRef")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("RequestId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("RequestRef")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("WorkItemRef")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("PriorityId");
 
-                    b.HasIndex("ChangeRef")
-                        .IsUnique();
-
-                    b.HasIndex("ProjectRef")
-                        .IsUnique();
-
-                    b.HasIndex("RequestId");
-
-                    b.HasIndex("WorkItemRef")
-                        .IsUnique();
-
                     b.ToTable("Priorities");
+
+                    b.HasData(
+                        new
+                        {
+                            PriorityId = 1,
+                            PriorityName = "Low"
+                        },
+                        new
+                        {
+                            PriorityId = 2,
+                            PriorityName = "Standard"
+                        },
+                        new
+                        {
+                            PriorityId = 3,
+                            PriorityName = "High"
+                        },
+                        new
+                        {
+                            PriorityId = 4,
+                            PriorityName = "Emergency"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Project", b =>
                 {
-                    b.Property<Guid>("ProjectId")
+                    b.Property<int>("ProjectId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ApprovalStatusId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ApprovalStatusRef")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("CategoryRef")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("EmployeeRef")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PriorityId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PriorityRef")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ProjectName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("RequestRef")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("RequestRef")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("RequestorId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("StatusRef")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ProjectId");
+
+                    b.HasIndex("ApprovalStatusId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("PriorityId");
 
                     b.HasIndex("RequestRef")
                         .IsUnique();
 
                     b.HasIndex("RequestorId");
 
+                    b.HasIndex("StatusId");
+
                     b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("Domain.ProjectToProjectManager", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("ProjectId")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsNew")
                         .HasColumnType("INTEGER");
@@ -310,30 +395,48 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Request", b =>
                 {
-                    b.Property<Guid>("RequestId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("RequestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ApprovalStatusId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsNew")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("RequestTitle")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("RequestTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("RequestId");
+
+                    b.HasIndex("ApprovalStatusId");
+
+                    b.HasIndex("RequestTypeId");
+
+                    b.HasIndex("StatusId");
 
                     b.ToTable("Requests");
                 });
 
             modelBuilder.Entity("Domain.RequestToRequestors", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("Id")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("RequestId")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("RequestId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsNew")
                         .HasColumnType("INTEGER");
@@ -347,38 +450,29 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.RequestType", b =>
                 {
-                    b.Property<Guid>("RequestTypeId")
+                    b.Property<int>("RequestTypeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("ChangeId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ChangeRef")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("ProjectId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ProjectRef")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("RequestRef")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("RequestTypeName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("RequestTypeId");
 
-                    b.HasIndex("ChangeId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("RequestRef")
-                        .IsUnique();
-
                     b.ToTable("RequestTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            RequestTypeId = 1,
+                            RequestTypeName = "Project Request"
+                        },
+                        new
+                        {
+                            RequestTypeId = 2,
+                            RequestTypeName = "Change Request"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Role", b =>
@@ -406,54 +500,109 @@ namespace Persistence.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Staff",
+                            NormalizedName = "STAFF"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Change Manager",
+                            NormalizedName = "CHANGE MANAGER"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Project Manager",
+                            NormalizedName = "PROJECT MANAGER"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Board Memeber",
+                            NormalizedName = "BOARD MEMBER"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Developer",
+                            NormalizedName = "DEVELOPER"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Tech",
+                            NormalizedName = "TECH"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Status", b =>
                 {
-                    b.Property<Guid>("StatusId")
+                    b.Property<int>("StatusId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ChangeRef")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ProjectRef")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("RequestRef")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("StatusName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("StatusId");
 
-                    b.HasIndex("ChangeRef")
-                        .IsUnique();
-
-                    b.HasIndex("ProjectRef")
-                        .IsUnique();
-
-                    b.HasIndex("RequestRef")
-                        .IsUnique();
-
                     b.ToTable("Statuses");
+
+                    b.HasData(
+                        new
+                        {
+                            StatusId = 1,
+                            StatusName = "In-Progress"
+                        },
+                        new
+                        {
+                            StatusId = 2,
+                            StatusName = "On-Hold"
+                        },
+                        new
+                        {
+                            StatusId = 3,
+                            StatusName = "Cancelled"
+                        },
+                        new
+                        {
+                            StatusId = 4,
+                            StatusName = "Completed"
+                        },
+                        new
+                        {
+                            StatusId = 5,
+                            StatusName = "Pending"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Work", b =>
                 {
-                    b.Property<Guid>("WorkId")
+                    b.Property<int>("WorkId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ChangeId")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("ChangeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ChangeRef")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ProjectId")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ProjectRef")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("WorkId");
 
@@ -466,50 +615,64 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.WorkItem", b =>
                 {
-                    b.Property<Guid>("WorkItemId")
+                    b.Property<int>("WorkItemId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("AssigneeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CardIDNum")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<int?>("EmployeeRef")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Header")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<int?>("PriorityId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("PriorityRef")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("StartDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("WorkItemId");
 
                     b.HasIndex("AssigneeId");
 
+                    b.HasIndex("PriorityId");
+
                     b.ToTable("WorkItems");
                 });
 
             modelBuilder.Entity("Domain.WorkToWorkItem", b =>
                 {
-                    b.Property<Guid>("WorkId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("WorkItemId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsApproved")
+                    b.Property<int?>("WorkId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsComplete")
+                    b.Property<int?>("WorkItemId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool?>("IsApproved")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool?>("IsComplete")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("WorkId", "WorkItemId");
@@ -618,59 +781,43 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.ApprovalStatus", b =>
-                {
-                    b.HasOne("Domain.Change", "Change")
-                        .WithOne("ApprovalStatus")
-                        .HasForeignKey("Domain.ApprovalStatus", "ChangeRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Project", "Project")
-                        .WithOne("ApprovalStatus")
-                        .HasForeignKey("Domain.ApprovalStatus", "ProjectRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Request", "Request")
-                        .WithOne("ApprovalStatus")
-                        .HasForeignKey("Domain.ApprovalStatus", "RequestRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Change");
-
-                    b.Navigation("Project");
-
-                    b.Navigation("Request");
-                });
-
-            modelBuilder.Entity("Domain.Category", b =>
-                {
-                    b.HasOne("Domain.Change", "Change")
-                        .WithOne("Category")
-                        .HasForeignKey("Domain.Category", "ChangeRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Project", "Project")
-                        .WithOne("Category")
-                        .HasForeignKey("Domain.Category", "ProjectRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Change");
-
-                    b.Navigation("Project");
-                });
-
             modelBuilder.Entity("Domain.Change", b =>
                 {
+                    b.HasOne("Domain.ApprovalStatus", "ApprovalStatus")
+                        .WithMany()
+                        .HasForeignKey("ApprovalStatusId");
+
+                    b.HasOne("Domain.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Domain.Priority", "Priority")
+                        .WithMany()
+                        .HasForeignKey("PriorityId");
+
+                    b.HasOne("Domain.Request", "Request")
+                        .WithOne("Change")
+                        .HasForeignKey("Domain.Change", "RequestRef");
+
                     b.HasOne("Domain.Employee", "Requestor")
                         .WithMany()
                         .HasForeignKey("RequestorId");
 
+                    b.HasOne("Domain.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("ApprovalStatus");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Priority");
+
+                    b.Navigation("Request");
+
                     b.Navigation("Requestor");
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Domain.ChangesToChangeManager", b =>
@@ -692,54 +839,43 @@ namespace Persistence.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("Domain.Priority", b =>
-                {
-                    b.HasOne("Domain.Change", "Change")
-                        .WithOne("Priority")
-                        .HasForeignKey("Domain.Priority", "ChangeRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Project", "Project")
-                        .WithOne("Priority")
-                        .HasForeignKey("Domain.Priority", "ProjectRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Request", "Request")
-                        .WithMany()
-                        .HasForeignKey("RequestId");
-
-                    b.HasOne("Domain.WorkItem", "WorkItem")
-                        .WithOne("Priority")
-                        .HasForeignKey("Domain.Priority", "WorkItemRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Change");
-
-                    b.Navigation("Project");
-
-                    b.Navigation("Request");
-
-                    b.Navigation("WorkItem");
-                });
-
             modelBuilder.Entity("Domain.Project", b =>
                 {
+                    b.HasOne("Domain.ApprovalStatus", "ApprovalStatus")
+                        .WithMany()
+                        .HasForeignKey("ApprovalStatusId");
+
+                    b.HasOne("Domain.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Domain.Priority", "Priority")
+                        .WithMany()
+                        .HasForeignKey("PriorityId");
+
                     b.HasOne("Domain.Request", "Request")
                         .WithOne("Project")
-                        .HasForeignKey("Domain.Project", "RequestRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Domain.Project", "RequestRef");
 
                     b.HasOne("Domain.Employee", "Requestor")
                         .WithMany()
                         .HasForeignKey("RequestorId");
 
+                    b.HasOne("Domain.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("ApprovalStatus");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Priority");
+
                     b.Navigation("Request");
 
                     b.Navigation("Requestor");
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Domain.ProjectToProjectManager", b =>
@@ -763,13 +899,23 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Request", b =>
                 {
-                    b.HasOne("Domain.Change", "Change")
-                        .WithOne("Request")
-                        .HasForeignKey("Domain.Request", "RequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Domain.ApprovalStatus", "ApprovalStatus")
+                        .WithMany()
+                        .HasForeignKey("ApprovalStatusId");
 
-                    b.Navigation("Change");
+                    b.HasOne("Domain.RequestType", "RequestType")
+                        .WithMany()
+                        .HasForeignKey("RequestTypeId");
+
+                    b.HasOne("Domain.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("ApprovalStatus");
+
+                    b.Navigation("RequestType");
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Domain.RequestToRequestors", b =>
@@ -787,56 +933,6 @@ namespace Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Employee");
-
-                    b.Navigation("Request");
-                });
-
-            modelBuilder.Entity("Domain.RequestType", b =>
-                {
-                    b.HasOne("Domain.Change", "Change")
-                        .WithMany()
-                        .HasForeignKey("ChangeId");
-
-                    b.HasOne("Domain.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
-
-                    b.HasOne("Domain.Request", "Request")
-                        .WithOne("RequestType")
-                        .HasForeignKey("Domain.RequestType", "RequestRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Change");
-
-                    b.Navigation("Project");
-
-                    b.Navigation("Request");
-                });
-
-            modelBuilder.Entity("Domain.Status", b =>
-                {
-                    b.HasOne("Domain.Change", "Change")
-                        .WithOne("Status")
-                        .HasForeignKey("Domain.Status", "ChangeRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Project", "Project")
-                        .WithOne("Status")
-                        .HasForeignKey("Domain.Status", "ProjectRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Request", "Request")
-                        .WithOne("Status")
-                        .HasForeignKey("Domain.Status", "RequestRef")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Change");
-
-                    b.Navigation("Project");
 
                     b.Navigation("Request");
                 });
@@ -862,7 +958,13 @@ namespace Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("AssigneeId");
 
+                    b.HasOne("Domain.Priority", "Priority")
+                        .WithMany()
+                        .HasForeignKey("PriorityId");
+
                     b.Navigation("Assignee");
+
+                    b.Navigation("Priority");
                 });
 
             modelBuilder.Entity("Domain.WorkToWorkItem", b =>
@@ -937,17 +1039,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Change", b =>
                 {
-                    b.Navigation("ApprovalStatus");
-
-                    b.Navigation("Category");
-
                     b.Navigation("ChangeManagers");
-
-                    b.Navigation("Priority");
-
-                    b.Navigation("Request");
-
-                    b.Navigation("Status");
 
                     b.Navigation("Works");
                 });
@@ -963,30 +1055,18 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Project", b =>
                 {
-                    b.Navigation("ApprovalStatus");
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Priority");
-
                     b.Navigation("ProjectManagers");
-
-                    b.Navigation("Status");
 
                     b.Navigation("Works");
                 });
 
             modelBuilder.Entity("Domain.Request", b =>
                 {
-                    b.Navigation("ApprovalStatus");
+                    b.Navigation("Change");
 
                     b.Navigation("Project");
 
-                    b.Navigation("RequestType");
-
                     b.Navigation("Requestors");
-
-                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Domain.Work", b =>
@@ -996,8 +1076,6 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.WorkItem", b =>
                 {
-                    b.Navigation("Priority");
-
                     b.Navigation("Work");
                 });
 #pragma warning restore 612, 618
