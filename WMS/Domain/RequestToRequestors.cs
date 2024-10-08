@@ -6,6 +6,6 @@ namespace Domain
         public Employee? Employee { get; set; }
         public int? RequestId { get; set; }
         public Request? Request { get; set; }
-        public bool IsNew { get; set; }
+        public bool? IsNew { get; set; }
     }
 }
