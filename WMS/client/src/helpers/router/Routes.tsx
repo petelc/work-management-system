@@ -1,3 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-export const router = createBrowserRouter([{}]);
+import App from '../../layouts/App';
+
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+  },
+]);
