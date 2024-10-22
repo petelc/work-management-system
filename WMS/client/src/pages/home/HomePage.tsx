@@ -1,15 +1,20 @@
-//import { SliderComponent } from '../../components/slider/SliderComponent';
-
-import { Box, Typography } from '@mui/material';
+import Divider from '@mui/material/Divider';
+import Hero from '../../components/hero/Hero';
+import Features from '../../components/features/Features';
+import FAQ from '../../components/faq/FAQ';
+import Footer from '../../components/footer/Footer';
 
 function HomePage() {
   return (
     <>
-      <Box display='flex' justifyContent='center' sx={{ p: 4 }}>
-        <Typography variant='h2'>
-          This is the applications start page
-        </Typography>
-      </Box>
+      <Hero />
+      <div>
+        <Features />
+        <Divider />
+        <FAQ />
+        <Divider />
+        <Footer />
+      </div>
     </>
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { PaletteMode, styled, alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
@@ -78,6 +79,8 @@ export default function Header({ mode, toggleColorMode }: HeaderProps) {
               </Button>
               <Button
                 variant='text'
+                component={RouterLink}
+                to='request'
                 color='info'
                 size='small'
                 sx={{ minWidth: 0 }}
@@ -93,7 +96,13 @@ export default function Header({ mode, toggleColorMode }: HeaderProps) {
               alignItems: 'center',
             }}
           >
-            <Button color='primary' variant='text' size='small'>
+            <Button
+              color='primary'
+              variant='text'
+              component={RouterLink}
+              to='requestList'
+              size='small'
+            >
               Sign in
             </Button>
             <Button color='primary' variant='contained' size='small'>
