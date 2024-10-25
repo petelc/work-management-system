@@ -11,11 +11,12 @@ interface Props {
 
 export default function RequestLists({ requests }: Props) {
   const { requestsLoaded } = useAppSelector((state) => state.request);
+  console.log(requests);
 
   return (
     <Grid container spacing={4}>
       {requests.map((request) => (
-        <Grid size={{ xs: 4 }} key={request.id}>
+        <Grid size={{ xs: 4 }} key={request.requestId}>
           {!requestsLoaded ? (
             <RequestCardSkeleton />
           ) : (

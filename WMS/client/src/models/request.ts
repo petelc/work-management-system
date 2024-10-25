@@ -1,5 +1,6 @@
 export interface Request {
   id: number;
+  requestId: number;
   requestTitle: string;
   description: string;
   requestType?: string;

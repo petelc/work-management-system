@@ -20,13 +20,11 @@ export default function RequestCard({ request }: Props) {
   //const { status } = useAppSelector((state) => state.request);
   //const dispatch = useAppDispatch();
 
-  const { requestTitle, description, approvalStatus, requestType, status } =
-    request;
+  const { requestTitle, description } = request;
 
-  console.log(requestTitle, description, approvalStatus, requestType, status);
-  const { approvalStatusName } = approvalStatus;
-  const { requestTypeName } = requestType;
-  const { statusName } = status;
+  // const { approvalStatusName } = approvalStatus;
+  // const { requestTypeName } = requestType;
+  // const { statusName } = status;
 
   return (
     <Card>
@@ -52,10 +50,10 @@ export default function RequestCard({ request }: Props) {
           variant='body2'
           component='div'
         >
-          {approvalStatusName}
+          Is this approved
         </Typography>
         <Typography variant='body2' color='text.secondary'>
-          {requestTypeName} / {statusName}
+          Your Request Type / Your Requests status
         </Typography>
       </CardContent>
       <CardActions>

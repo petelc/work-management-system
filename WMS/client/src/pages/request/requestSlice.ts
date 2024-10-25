@@ -19,7 +19,9 @@ interface RequestState {
   metaData: MetaData | null;
 }
 
-const requestAdapter = createEntityAdapter<Request>();
+const requestAdapter = createEntityAdapter({
+  selectId: (e: any) => e.requestId,
+});
 
 function getAxiosParams(requestParams: RequestParams) {
   const params = new URLSearchParams();

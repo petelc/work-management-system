@@ -18,7 +18,7 @@ export default function RadioButtonGroup({
 }: Props) {
   return (
     <FormControl component='fieldset'>
-      <RadioGroup onChange={onChange} value={selectedValue}>
+      <RadioGroup row onChange={onChange} value={selectedValue}>
         {options.map(({ value, label }) => (
           <FormControlLabel
             value={value}

@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { Button, Menu, Fade, MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { signOut } from '../pages/account/accountSlice';
+import { useAppDispatch, useAppSelector } from '../store/configureStore';
 
 export default function SignedInMenu() {
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.account);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -17,7 +21,7 @@ export default function SignedInMenu() {
   return (
     <>
       <Button color='inherit' onClick={handleClick} sx={{ typography: 'h6' }}>
-        Email
+        {user?.email}
       </Button>
       <Menu
         anchorEl={anchorEl}
@@ -29,7 +33,13 @@ export default function SignedInMenu() {
         <MenuItem component={Link} to='/requests'>
           My Requests
         </MenuItem>
-        <MenuItem>Logout</MenuItem>
+        <MenuItem
+          onClick={() => {
+            dispatch(signOut());
+          }}
+        >
+          Logout
+        </MenuItem>
       </Menu>
     </>
   );

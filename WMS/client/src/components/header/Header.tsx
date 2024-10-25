@@ -13,7 +13,8 @@ import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ToggleColorMode from '../toggleColorMode/ToggleColorMode';
-//import Sitemark from './SitemarkIcon';
+import SignedInMenu from '../../layouts/SignedInMenu';
+import { useAppSelector } from '../../store/configureStore';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: 'flex',
@@ -35,17 +36,12 @@ interface HeaderProps {
 }
 
 export default function Header({ mode, toggleColorMode }: HeaderProps) {
+  const { user } = useAppSelector((state) => state.account);
   const [open, setOpen] = useState(false);
-  //const [mode, setMode] = useState<PaletteMode>('light');
+
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
-
-  // const toggleColorMode = () => {
-  //   const newMode = mode === 'dark' ? 'light' : 'dark';
-  //   setMode(newMode);
-  //   localStorage.setItem('themeMode', newMode); // Save the selected mode to localStorage
-  // };
 
   return (
     <AppBar
@@ -63,6 +59,15 @@ export default function Header({ mode, toggleColorMode }: HeaderProps) {
             sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}
           >
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+              <Button
+                component={RouterLink}
+                to='/'
+                variant='text'
+                color='info'
+                size='small'
+              >
+                Home
+              </Button>
               <Button variant='text' color='info' size='small'>
                 Features
               </Button>
@@ -96,18 +101,25 @@ export default function Header({ mode, toggleColorMode }: HeaderProps) {
               alignItems: 'center',
             }}
           >
-            <Button
-              color='primary'
-              variant='text'
-              component={RouterLink}
-              to='requestList'
-              size='small'
-            >
-              Sign in
-            </Button>
-            <Button color='primary' variant='contained' size='small'>
-              Sign up
-            </Button>
+            {user ? (
+              <SignedInMenu />
+            ) : (
+              <>
+                <Button
+                  color='primary'
+                  variant='text'
+                  component={RouterLink}
+                  to='login'
+                  size='small'
+                >
+                  Sign in
+                </Button>
+                <Button color='primary' variant='contained' size='small'>
+                  Sign up
+                </Button>
+              </>
+            )}
+
             <ToggleColorMode
               data-screenshot='toggle-mode'
               mode={mode}

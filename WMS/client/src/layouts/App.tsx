@@ -1,19 +1,36 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { PaletteMode, ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import Container from '@mui/material/Container';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import getMPTheme from '../styles/theme/getMPTheme';
 import Header from '../components/header/Header';
 import LoadingComponent from '../components/loading/LoadingComponent';
 import HomePage from '../pages/home/HomePage';
-import Container from '@mui/material/Container';
+import { useAppDispatch } from '../store/configureStore';
+import { fetchCurrentUser } from '../pages/account/accountSlice';
 
 function App() {
   const location = useLocation();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<PaletteMode>('light');
 
   const MPTheme = createTheme(getMPTheme(mode));
+
+  const initApp = useCallback(async () => {
+    try {
+      await dispatch(fetchCurrentUser());
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    initApp().then(() => setLoading(false));
+  }, [initApp]);
 
   useEffect(() => {
     const savedMode = localStorage.getItem('themeMode') as PaletteMode | null;
@@ -37,6 +54,7 @@ function App() {
 
   return (
     <ThemeProvider theme={MPTheme}>
+      <ToastContainer position='bottom-right' hideProgressBar theme='colored' />
       <CssBaseline enableColorScheme />
       <Header mode={mode} toggleColorMode={toggleColorMode} />
       {loading ? (
