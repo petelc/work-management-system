@@ -1,7 +1,11 @@
 using Application.Requests;
+using AutoMapper;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
+using SQLitePCL;
 
 namespace API.Controllers
 {
@@ -10,6 +14,15 @@ namespace API.Controllers
     [AllowAnonymous]
     public class RequestsController : BaseApiController
     {
+        private readonly WMSContext _context;
+        private readonly IMapper _mapper;
+
+        public RequestsController(WMSContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> GetRequests([FromQuery] RequestParams param)
@@ -27,6 +40,15 @@ namespace API.Controllers
         public async Task<IActionResult> CreateRequest(Request request)
         {
             return HandleResult(await Mediator.Send(new Create.Command { Request = request }));
+        }
+
+        [HttpGet("filters")]
+        public async Task<IActionResult> GetFilters()
+        {
+            var ApprovalStatus = await _context.Requests.Select(p => p.ApprovalStatus).Distinct().ToListAsync();
+            var types = await _context.Requests.Select(p => p.RequestType).Distinct().ToListAsync();
+
+            return Ok(new { ApprovalStatus, types });
         }
     }
 }
