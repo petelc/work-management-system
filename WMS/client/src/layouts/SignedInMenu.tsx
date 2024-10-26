@@ -20,7 +20,12 @@ export default function SignedInMenu() {
 
   return (
     <>
-      <Button color='inherit' onClick={handleClick} sx={{ typography: 'h6' }}>
+      <Button
+        color='info'
+        variant='contained'
+        onClick={handleClick}
+        sx={{ typography: 'h6' }}
+      >
         {user?.email}
       </Button>
       <Menu

@@ -19,9 +19,9 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
   async (data, thunkAPI) => {
     try {
       const userDto = await agent.Account.login(data);
-      console.log(userDto);
+
       const { ...user } = userDto;
-      //console.log({ ...user });
+
       localStorage.setItem('user', JSON.stringify(user));
       return user;
     } catch (error: any) {
@@ -60,12 +60,12 @@ export const accountSlice = createSlice({
       router.navigate('/');
     },
     setUser: (state, action) => {
-      //const claims = JSON.parse(atob(action.payload.token.split('.')[1]));
-      //const roles =
-      //claims['http://schema.microsoft.com/ws/2008/06/identity/claims/role'];
+      const claims = JSON.parse(atob(action.payload.token.split('.')[1]));
+      const roles =
+        claims['http://schema.microsoft.com/ws/2008/06/identity/claims/role'];
       state.user = {
         ...action.payload,
-        //roles: typeof roles === 'string' ? [roles] : roles,
+        roles: typeof roles === 'string' ? [roles] : roles,
       };
     },
   },
@@ -79,12 +79,12 @@ export const accountSlice = createSlice({
     builder.addMatcher(
       isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled),
       (state, action) => {
-        //const claims = JSON.parse(atob(action.payload.token.split('.')[1]));
-        //const roles =
-        //claims['http://schema.microsoft.com/ws/2008/06/identity/claims/role'];
+        const claims = JSON.parse(atob(action.payload.token.split('.')[1]));
+        const roles =
+          claims['http://schema.microsoft.com/ws/2008/06/identity/claims/role'];
         state.user = {
           ...action.payload,
-          //roles: typeof roles === 'string' ? [roles] : roles,
+          roles: typeof roles === 'string' ? [roles] : roles,
         };
       }
     );

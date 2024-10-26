@@ -67,7 +67,7 @@ namespace API.Controllers
             return BadRequest("Problem registering user");
         }
 
-
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {

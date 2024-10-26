@@ -61,12 +61,12 @@ export default function Login() {
         <TextField
           margin='normal'
           fullWidth
-          label='Username'
-          autoComplete='username'
+          label='Email'
+          autoComplete='email'
           autoFocus
-          {...register('username', { required: 'Username is required' })}
-          error={!!errors.username}
-          helperText={errors.username?.message as string}
+          {...register('email', { required: 'Email is required' })}
+          error={!!errors.email}
+          helperText={errors.email?.message as string}
         />
         <TextField
           margin='normal'
