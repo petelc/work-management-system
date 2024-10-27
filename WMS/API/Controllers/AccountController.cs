@@ -54,8 +54,11 @@ namespace API.Controllers
             var user = new Employee
             {
                 DisplayName = registerDto.DisplayName,
+                FirstName = registerDto.FirstName,
+                LastName = registerDto.LastName,
                 Email = registerDto.Email,
             };
+            Console.WriteLine(user);
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 

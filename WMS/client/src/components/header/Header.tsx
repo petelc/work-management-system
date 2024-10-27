@@ -114,7 +114,13 @@ export default function Header({ mode, toggleColorMode }: HeaderProps) {
                 >
                   Sign in
                 </Button>
-                <Button color='primary' variant='contained' size='small'>
+                <Button
+                  color='primary'
+                  variant='contained'
+                  component={RouterLink}
+                  to='register'
+                  size='small'
+                >
                   Sign up
                 </Button>
               </>
