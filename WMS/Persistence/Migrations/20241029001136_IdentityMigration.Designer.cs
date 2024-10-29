@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(WMSContext))]
-    partial class WMSContextModelSnapshot : ModelSnapshot
+    [Migration("20241029001136_IdentityMigration")]
+    partial class IdentityMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -130,8 +133,8 @@ namespace Persistence.Migrations
                     b.Property<int?>("RequestRef")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("RequestorId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("RequestorId")
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("StatusId")
                         .HasColumnType("INTEGER");
@@ -159,8 +162,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.ChangesToChangeManager", b =>
                 {
-                    b.Property<int?>("Id")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("ChangeId")
                         .HasColumnType("INTEGER");
@@ -177,9 +180,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Identity.Employee", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
@@ -270,11 +272,55 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Identity.EmployeeRole", b =>
+            modelBuilder.Entity("Domain.Identity.EmployeeClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Identity.EmployeeLogin", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Identity.EmployeeRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -299,40 +345,100 @@ namespace Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = "1",
                             Name = "Staff",
                             NormalizedName = "STAFF"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = "2",
                             Name = "Change Manager",
                             NormalizedName = "CHANGE MANAGER"
                         },
                         new
                         {
-                            Id = 3,
+                            Id = "3",
                             Name = "Project Manager",
                             NormalizedName = "PROJECT MANAGER"
                         },
                         new
                         {
-                            Id = 4,
+                            Id = "4",
                             Name = "Board Memeber",
                             NormalizedName = "BOARD MEMBER"
                         },
                         new
                         {
-                            Id = 5,
+                            Id = "5",
                             Name = "Developer",
                             NormalizedName = "DEVELOPER"
                         },
                         new
                         {
-                            Id = 6,
+                            Id = "6",
                             Name = "Tech",
                             NormalizedName = "TECH"
                         });
+                });
+
+            modelBuilder.Entity("Domain.Identity.EmployeeRoleClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Identity.EmployeeToken", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Identity.EmployeeUserRole", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Priority", b =>
@@ -410,8 +516,8 @@ namespace Persistence.Migrations
                     b.Property<int?>("RequestRef")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("RequestorId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("RequestorId")
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("StatusId")
                         .HasColumnType("INTEGER");
@@ -439,8 +545,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.ProjectToProjectManager", b =>
                 {
-                    b.Property<int?>("Id")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("ProjectId")
                         .HasColumnType("INTEGER");
@@ -500,8 +606,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.RequestToRequestors", b =>
                 {
-                    b.Property<int?>("Id")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("RequestId")
                         .HasColumnType("INTEGER");
@@ -622,8 +728,8 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AssigneeId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("AssigneeId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CardIDNum")
                         .IsRequired()
@@ -704,11 +810,10 @@ namespace Persistence.Migrations
                     b.ToTable("EmployeeRole", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("TEXT");
@@ -716,21 +821,12 @@ namespace Persistence.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(34)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("RoleId")
+                    b.Property<int>("Id")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("RoleId");
 
                     b.ToTable("EmployeeRoleClaim", (string)null);
-
-                    b.HasDiscriminator().HasValue("IdentityRoleClaim<int>");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
@@ -785,7 +881,7 @@ namespace Persistence.Migrations
                     b.ToTable("Employee", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -797,142 +893,67 @@ namespace Persistence.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(34)
+                    b.Property<string>("UserId")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.ToTable("EmployeeClaim", (string)null);
-
-                    b.HasDiscriminator().HasValue("IdentityUserClaim<int>");
-
-                    b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasMaxLength(34)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.ToTable("EmployeeLogin", (string)null);
-
-                    b.HasDiscriminator().HasValue("IdentityUserLogin<int>");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Discriminator")
+                    b.Property<string>("ProviderKey")
                         .IsRequired()
-                        .HasMaxLength(21)
                         .HasColumnType("TEXT");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.HasKey("UserId");
 
-                    b.ToTable("EmployeeUserRole", (string)null);
-
-                    b.HasDiscriminator().HasValue("IdentityUserRole<int>");
-
-                    b.UseTphMappingStrategy();
+                    b.ToTable("EmployeeLogin", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("RoleId");
+
+                    b.ToTable("EmployeeUserRole", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasMaxLength(34)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                    b.HasKey("UserId");
 
                     b.ToTable("EmployeeToken", (string)null);
-
-                    b.HasDiscriminator().HasValue("IdentityUserToken<int>");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Domain.Identity.EmployeeRoleClaim", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasDiscriminator().HasValue("EmployeeRoleClaim");
-                });
-
-            modelBuilder.Entity("Domain.Identity.EmployeeClaim", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>");
-
-                    b.HasIndex("UserId");
-
-                    b.HasDiscriminator().HasValue("EmployeeClaim");
-                });
-
-            modelBuilder.Entity("Domain.Identity.EmployeeLogin", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>");
-
-                    b.HasIndex("UserId");
-
-                    b.HasDiscriminator().HasValue("EmployeeLogin");
-                });
-
-            modelBuilder.Entity("Domain.Identity.EmployeeUserRole", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<int>");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasDiscriminator().HasValue("EmployeeUserRole");
-                });
-
-            modelBuilder.Entity("Domain.Identity.EmployeeToken", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserToken<int>");
-
-                    b.HasDiscriminator().HasValue("EmployeeToken");
                 });
 
             modelBuilder.Entity("Domain.Change", b =>
@@ -991,6 +1012,69 @@ namespace Persistence.Migrations
                     b.Navigation("Change");
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Domain.Identity.EmployeeClaim", b =>
+                {
+                    b.HasOne("Domain.Identity.Employee", "User")
+                        .WithMany("Claims")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Identity.EmployeeLogin", b =>
+                {
+                    b.HasOne("Domain.Identity.Employee", "User")
+                        .WithMany("Logins")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Identity.EmployeeRoleClaim", b =>
+                {
+                    b.HasOne("Domain.Identity.EmployeeRole", "Role")
+                        .WithMany("RoleClaims")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Domain.Identity.EmployeeToken", b =>
+                {
+                    b.HasOne("Domain.Identity.Employee", "User")
+                        .WithMany("Tokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Identity.EmployeeUserRole", b =>
+                {
+                    b.HasOne("Domain.Identity.EmployeeRole", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Identity.Employee", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Project", b =>
@@ -1138,69 +1222,6 @@ namespace Persistence.Migrations
                     b.Navigation("Work");
 
                     b.Navigation("WorkItem");
-                });
-
-            modelBuilder.Entity("Domain.Identity.EmployeeRoleClaim", b =>
-                {
-                    b.HasOne("Domain.Identity.EmployeeRole", "Role")
-                        .WithMany("RoleClaims")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("Domain.Identity.EmployeeClaim", b =>
-                {
-                    b.HasOne("Domain.Identity.Employee", "User")
-                        .WithMany("Claims")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.Identity.EmployeeLogin", b =>
-                {
-                    b.HasOne("Domain.Identity.Employee", "User")
-                        .WithMany("Logins")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.Identity.EmployeeUserRole", b =>
-                {
-                    b.HasOne("Domain.Identity.EmployeeRole", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Identity.Employee", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.Identity.EmployeeToken", b =>
-                {
-                    b.HasOne("Domain.Identity.Employee", "User")
-                        .WithMany("Tokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Change", b =>

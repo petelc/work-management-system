@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Domain.Identity;
 
 namespace Domain
 {
