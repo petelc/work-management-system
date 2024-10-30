@@ -6,6 +6,7 @@ import Request from '../../pages/request/Request';
 //import RequireAuth from './RequiredAuth';
 import Login from '../../pages/account/Login';
 import RequireAuth from './RequiredAuth';
+import Register from '../../pages/account/Register';
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ export const router = createBrowserRouter([
       },
       { path: 'request', element: <RequestPage /> },
       { path: '/login', element: <Login /> },
+      { path: '/register', element: <Register /> },
     ],
   },
 ]);
