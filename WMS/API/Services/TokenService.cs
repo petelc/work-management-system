@@ -1,8 +1,9 @@
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using Domain;
+using Domain.Identity;
 using System.Text;
+
 
 namespace API.Services
 {

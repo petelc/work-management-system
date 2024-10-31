@@ -1,6 +1,6 @@
 using System.Text;
 using API.Services;
-using Domain;
+using Domain.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +20,7 @@ namespace API.Extensions
             });
             builder = new IdentityBuilder(builder.UserType, builder.Services);
             builder.AddSignInManager<SignInManager<Employee>>();
-            builder.AddRoles<Role>();
+            builder.AddRoles<EmployeeRole>();
             builder.AddEntityFrameworkStores<WMSContext>();
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));

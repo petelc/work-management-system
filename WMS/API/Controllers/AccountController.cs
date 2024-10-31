@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using API.DTOs;
 using API.Services;
-using Domain;
+using Domain.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -55,6 +55,9 @@ namespace API.Controllers
             {
                 DisplayName = registerDto.DisplayName,
                 Email = registerDto.Email,
+                UserName = registerDto.UserName,
+                LastName = registerDto.LastName,
+                FirstName = registerDto.FirstName,
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
@@ -82,7 +85,9 @@ namespace API.Controllers
                 DisplayName = user.DisplayName,
                 Token = _tokenService.CreateToken(user),
                 Email = user.Email,
-                Username = user.UserName
+                Username = user.UserName,
+                LastName = user.LastName,
+                FirstName = user.FirstName,
             };
         }
     }

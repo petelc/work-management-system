@@ -1,3 +1,5 @@
+using Domain.Identity;
+
 namespace Domain
 {
     public class ChangesToChangeManager

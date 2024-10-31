@@ -1,12 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using Domain;
+using Domain.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Persistence
 {
-    public class WMSContext : IdentityDbContext<Employee, Role, int>
+    public class WMSContext : IdentityDbContext<
+        Employee,
+        EmployeeRole,
+        int>
     {
-        public WMSContext(DbContextOptions options) : base(options)
+        public WMSContext(DbContextOptions<WMSContext> options) : base(options)
         {
         }
 
@@ -26,15 +31,60 @@ namespace Persistence
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<IdentityUser>(b => { b.ToTable("Employee"); });
+            builder.Entity<IdentityRole>(b => { b.ToTable("EmployeeRole"); });
+            builder.Entity<IdentityUserClaim<int>>(b => { b.ToTable("EmployeeClaim"); });
+            builder.Entity<IdentityUserLogin<int>>(b => { b.ToTable("EmployeeLogin"); });
+            builder.Entity<IdentityUserToken<int>>(b => { b.ToTable("EmployeeToken"); });
+            builder.Entity<IdentityRoleClaim<int>>(b => { b.ToTable("EmployeeRoleClaim"); });
+            builder.Entity<IdentityUserRole<int>>(b => { b.ToTable("EmployeeUserRole"); });
 
-            builder.Entity<Role>()
+            // NOTE: IDENTITY Navigation Properties
+            builder.Entity<Employee>(b =>
+            {
+                b.HasMany(e => e.Claims)
+                    .WithOne(e => e.User)
+                    .HasForeignKey(e => e.UserId)
+                    .IsRequired();
+
+                b.HasMany(e => e.Logins)
+                    .WithOne(e => e.User)
+                    .HasForeignKey(ul => ul.UserId)
+                    .IsRequired();
+
+                b.HasMany(e => e.Tokens)
+                    .WithOne(e => e.User)
+                    .HasForeignKey(ut => ut.UserId)
+                    .IsRequired();
+
+                b.HasMany(e => e.UserRoles)
+                    .WithOne(e => e.User)
+                    .HasForeignKey(ur => ur.UserId)
+                    .IsRequired();
+            });
+
+            builder.Entity<EmployeeRole>(b =>
+            {
+                b.HasMany(e => e.UserRoles)
+                    .WithOne(e => e.Role)
+                    .HasForeignKey(ur => ur.RoleId)
+                    .IsRequired();
+
+                b.HasMany(e => e.RoleClaims)
+                 .WithOne(e => e.Role)
+                 .HasForeignKey(rc => rc.RoleId)
+                 .IsRequired();
+            });
+
+
+            builder.Entity<EmployeeRole>()
                 .HasData(
-                    new Role { Id = 1, Name = "Staff", NormalizedName = "STAFF" },
-                    new Role { Id = 2, Name = "Change Manager", NormalizedName = "CHANGE MANAGER" },
-                    new Role { Id = 3, Name = "Project Manager", NormalizedName = "PROJECT MANAGER" },
-                    new Role { Id = 4, Name = "Board Memeber", NormalizedName = "BOARD MEMBER" },
-                    new Role { Id = 5, Name = "Developer", NormalizedName = "DEVELOPER" },
-                    new Role { Id = 6, Name = "Tech", NormalizedName = "TECH" }
+                    new EmployeeRole { Id = 1, Name = "Staff", NormalizedName = "STAFF" },
+                    new EmployeeRole { Id = 2, Name = "Change Manager", NormalizedName = "CHANGE MANAGER" },
+                    new EmployeeRole { Id = 3, Name = "Project Manager", NormalizedName = "PROJECT MANAGER" },
+                    new EmployeeRole { Id = 4, Name = "Board Memeber", NormalizedName = "BOARD MEMBER" },
+                    new EmployeeRole { Id = 5, Name = "Developer", NormalizedName = "DEVELOPER" },
+                    new EmployeeRole { Id = 6, Name = "Tech", NormalizedName = "TECH" }
                 );
 
             // NOTE: REQUEST

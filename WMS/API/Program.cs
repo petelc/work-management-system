@@ -1,6 +1,6 @@
 using API.Extensions;
 using API.Middleware;
-using Domain;
+using Domain.Identity;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
