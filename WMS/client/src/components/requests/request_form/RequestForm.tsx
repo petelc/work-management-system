@@ -12,6 +12,12 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { styled } from '@mui/material/styles';
+import { InputAdornment } from '@mui/material';
+import { Description, Title } from '@mui/icons-material';
+
+import useFetchRequestTypes from '../../../hooks/useFetchRequestTypes';
+import RequestTypeSelect from '../../requesttypeselect/RequestTypeSelect';
+//import { useAppDispatch, useAppSelector } from '../../../store/configureStore';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -32,18 +38,30 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 export default function RequestForm() {
+  const { types } = useFetchRequestTypes();
   // ! handle state and functions here
   const [titleError, setTitleError] = useState(false);
   const [titleErrorMessage, setTitleErrorMessage] = useState('');
+  const [descriptionError, setDescriptionError] = useState(false);
+  const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('');
 
   const validateInputs = () => {
     const title = document.getElementById('title') as HTMLInputElement;
+    const description = document.getElementById(
+      'description'
+    ) as HTMLInputElement;
 
     let isValid = true;
 
     if (!title.value) {
       setTitleError(true);
-      setTitleErrorMessage('Request Title is Required');
+      setTitleErrorMessage('Request title is required');
+      isValid = false;
+    }
+
+    if (!description.value) {
+      setDescriptionError(true);
+      setDescriptionErrorMessage('Request description is required!');
       isValid = false;
     }
 
@@ -71,20 +89,55 @@ export default function RequestForm() {
         <FormControl>
           <FormLabel htmlFor='requestTitle'>Request Title</FormLabel>
           <TextField
+            margin='normal'
             error={titleError}
             helperText={titleErrorMessage}
             id='title'
             type='text'
             name='title'
-            placeholder='title of request'
             autoFocus
             required
             fullWidth
-            variant='outlined'
+            variant='filled'
             color={titleError ? 'error' : 'primary'}
             sx={{ ariaLabel: 'title' }}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Title />
+                  </InputAdornment>
+                ),
+              },
+            }}
           />
         </FormControl>
+        <FormControl>
+          <FormLabel htmlFor='description'>Description</FormLabel>
+          <TextField
+            margin='normal'
+            id='description'
+            name='description'
+            type='text'
+            multiline
+            variant='filled'
+            fullWidth
+            error={descriptionError}
+            helperText={descriptionErrorMessage}
+            color={descriptionError ? 'error' : 'primary'}
+            sx={{ ariaLabel: 'description' }}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Description />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+        </FormControl>
+        <RequestTypeSelect items={types} />
         <Button
           type='submit'
           fullWidth

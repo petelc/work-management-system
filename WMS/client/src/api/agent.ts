@@ -82,6 +82,10 @@ const requests = {
       .then(responseBody),
 };
 
+const requestTypes = {
+  get: (url: string) => axios.get(url).then(responseBody),
+};
+
 function createFormData(item: any) {
   const formData = new FormData();
   for (const key in item) {
@@ -105,9 +109,14 @@ const Account = {
   fetchAddress: () => requests.get('account/savedAddress'),
 };
 
+const Type = {
+  fetchTypes: () => requestTypes.get('requests/types'),
+};
+
 const agent = {
   UserRequest,
   Account,
+  Type,
 };
 
 export default agent;
