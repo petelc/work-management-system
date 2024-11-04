@@ -86,18 +86,19 @@ const requestTypes = {
   get: (url: string) => axios.get(url).then(responseBody),
 };
 
-function createFormData(item: any) {
-  const formData = new FormData();
-  for (const key in item) {
-    formData.append(key, item[key]);
-  }
-  return formData;
-}
+// function createFormData(item: any) {
+//   const formData = new FormData();
+//   for (const key in item) {
+//     formData.append(key, item[key]);
+//   }
+//   return formData;
+// }
 
 const UserRequest = {
   list: (params: URLSearchParams) => requests.get('requests', params),
-  create: (request: any) =>
-    requests.postForm('request', createFormData(request)),
+  create: (request: any) => requests.post('requests/create', request),
+  // create: (request: any) =>
+  //   requests.postForm('requests/create', createFormData(request)),
   details: (id: number) => requests.get(`request/${id}`),
   fetchFilters: () => requests.get('requests/filters'),
 };

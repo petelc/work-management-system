@@ -31,7 +31,7 @@ export default function Request() {
         pb: { xs: 8, sm: 12 },
       }}
     >
-      <Grid container columnSpacing={4}>
+      <Grid container columnSpacing={3}>
         <Grid size={{ xs: 12 }}>
           <Paper sx={{ mb: 2 }}>
             <RequestSearch />
@@ -64,7 +64,7 @@ export default function Request() {
           /> */}
           </Paper>
         </Grid>
-        <Grid size={{ xs: 9 }}>
+        <Grid size={{ xs: 12 }}>
           <RequestLists requests={requests} />
         </Grid>
         <Grid size={{ xs: 3 }} />

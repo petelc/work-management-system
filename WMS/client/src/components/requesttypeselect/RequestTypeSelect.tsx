@@ -16,11 +16,9 @@ interface Props {
 }
 
 export default function RequestTypeSelect({ items }: Props) {
-  //const [checkedItems, setCheckedItems] = useState(checked || []);
   const [requestTypeName, setRequestTypeName] = useState<string[]>([]);
 
   function handleChange(event: SelectChangeEvent<typeof requestTypeName>) {
-    //const currentIndex = checkedItems.findIndex((item) => item == value);
     const {
       target: { value },
     } = event;
@@ -28,16 +26,19 @@ export default function RequestTypeSelect({ items }: Props) {
   }
 
   return (
-    <FormControl>
-      <InputLabel htmlFor='requestType'>Type of Request</InputLabel>
+    <FormControl variant='filled'>
+      <InputLabel id='type'>Type of Request</InputLabel>
       <Select
+        labelId='type'
         id='requestType'
         name='requestType'
         fullWidth
-        variant='filled'
         value={requestTypeName}
         onChange={handleChange}
       >
+        <MenuItem value=''>
+          <em>None</em>
+        </MenuItem>
         {items.map((name) => (
           <MenuItem key={name} value={name}>
             <Checkbox checked={requestTypeName.includes(name)} />

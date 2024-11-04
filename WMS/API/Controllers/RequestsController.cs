@@ -36,7 +36,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Details.Query { RequestId = id }));
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateRequest(Request request)
         {
             return HandleResult(await Mediator.Send(new Create.Command { Request = request }));
