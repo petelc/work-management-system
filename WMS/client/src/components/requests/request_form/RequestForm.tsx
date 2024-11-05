@@ -1,6 +1,6 @@
-import { useState } from 'react';
+//import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import MuiCard from '@mui/material/Card';
 //import Checkbox from '@mui/material/Checkbox';
 //import Divider from '@mui/material/Divider';
@@ -10,8 +10,23 @@ import FormControl from '@mui/material/FormControl';
 //import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-
 import { styled } from '@mui/material/styles';
+import {
+  InputAdornment,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  Select,
+} from '@mui/material';
+import { Description, Title } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+
+import useFetchRequestTypes from '../../../hooks/useFetchRequestTypes';
+//import RequestTypeSelect from '../../requesttypeselect/RequestTypeSelect';
+import agent from '../../../api/agent';
+//import { useAppDispatch, useAppSelector } from '../../../store/configureStore';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -32,25 +47,32 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 export default function RequestForm() {
-  // ! handle state and functions here
-  const [titleError, setTitleError] = useState(false);
-  const [titleErrorMessage, setTitleErrorMessage] = useState('');
+  const { types } = useFetchRequestTypes();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    setValue,
+    formState: { errors, isValid },
+  } = useForm({ mode: 'onTouched' });
+  const navigate = useNavigate();
 
-  const validateInputs = () => {
-    const title = document.getElementById('title') as HTMLInputElement;
+  // TODO - figure out how to handle errors for the request type select list
 
-    let isValid = true;
-
-    if (!title.value) {
-      setTitleError(true);
-      setTitleErrorMessage('Request Title is Required');
-      isValid = false;
+  function handleApiErrors(errors: any) {
+    console.log(errors);
+    if (errors) {
+      errors.forEach((error: string) => {
+        if (error.includes('requestTitle')) {
+          setError('requestTitle', { message: error });
+        } else if (error.includes('description')) {
+          setError('description', { message: error });
+        } else if (error.includes('requestType')) {
+          setError('requestType', { message: error });
+        }
+      });
     }
-
-    return isValid;
-  };
-
-  const handleSubmit = () => {};
+  }
 
   return (
     <Card variant='outlined'>
@@ -64,35 +86,104 @@ export default function RequestForm() {
       </Typography>
       <Box
         component='form'
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit((data) =>
+          agent.UserRequest.create(data)
+            .then(() => {
+              toast.success('Request submitted successfully!');
+              navigate('/');
+            })
+            .catch((error) => handleApiErrors(error))
+        )}
         noValidate
         sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
       >
         <FormControl>
           <FormLabel htmlFor='requestTitle'>Request Title</FormLabel>
           <TextField
-            error={titleError}
-            helperText={titleErrorMessage}
-            id='title'
+            margin='normal'
+            id='requestTitle'
             type='text'
-            name='title'
-            placeholder='title of request'
             autoFocus
             required
             fullWidth
-            variant='outlined'
-            color={titleError ? 'error' : 'primary'}
-            sx={{ ariaLabel: 'title' }}
+            variant='filled'
+            {...register('requestTitle', {
+              required: 'Request title is required!',
+            })}
+            error={!!errors.requestTitle}
+            color={errors.requestTitle ? 'error' : 'primary'}
+            sx={{ ariaLabel: 'requestTitle' }}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Title />
+                  </InputAdornment>
+                ),
+              },
+            }}
           />
         </FormControl>
-        <Button
+        <FormControl>
+          <FormLabel htmlFor='description'>Description</FormLabel>
+          <TextField
+            margin='normal'
+            id='description'
+            type='text'
+            multiline
+            variant='filled'
+            fullWidth
+            {...register('description', {
+              required: 'Request description is required!',
+            })}
+            error={!!errors.description}
+            color={errors.description ? 'error' : 'primary'}
+            sx={{ ariaLabel: 'description' }}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Description />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+        </FormControl>
+        <FormControl variant='filled'>
+          <InputLabel id='type'>Type of Request</InputLabel>
+
+          <Select
+            labelId='type'
+            id='requestType'
+            fullWidth
+            defaultValue=''
+            onChange={(event) => {
+              setValue('requestTypeName', event.target.value);
+            }}
+            {...register}
+            error={!!errors.requestType}
+          >
+            <MenuItem value=''>
+              <em>None</em>
+            </MenuItem>
+            {types.map((name) => (
+              <MenuItem key={name} value={name}>
+                <ListItemText primary={name} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <LoadingButton
+          // loading={isSubmitting}
+          disabled={!isValid}
           type='submit'
           fullWidth
           variant='contained'
-          onClick={validateInputs}
+          color='secondary'
         >
           Submit Request
-        </Button>
+        </LoadingButton>
       </Box>
     </Card>
   );

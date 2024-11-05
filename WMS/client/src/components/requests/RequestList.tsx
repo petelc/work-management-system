@@ -14,9 +14,9 @@ export default function RequestLists({ requests }: Props) {
   console.log(requests);
 
   return (
-    <Grid container spacing={4}>
+    <Grid container spacing={2}>
       {requests.map((request) => (
-        <Grid size={{ xs: 4 }} key={request.requestId}>
+        <Grid size={6} key={request.requestId}>
           {!requestsLoaded ? (
             <RequestCardSkeleton />
           ) : (

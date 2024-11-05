@@ -77,6 +77,18 @@ export const fetchFilters = createAsyncThunk(
   }
 );
 
+// ! Fetch request types for select control
+export const fetchTypes = createAsyncThunk(
+  'request/types',
+  async (_, thunkAPI) => {
+    try {
+      return agent.Type.fetchTypes();
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+
 function initParams(): RequestParams {
   return {
     pageNumber: 1,
@@ -162,10 +174,19 @@ export const requestSlice = createSlice({
     builder.addCase(fetchFilters.rejected, (state) => {
       state.status = 'idle';
     });
+    builder.addCase(fetchTypes.pending, (state) => {
+      state.status = 'pendingFetchTypes';
+    });
+    builder.addCase(fetchTypes.fulfilled, (state, action) => {
+      state.types = action.payload.types;
+      state.status = 'idle';
+    });
+    builder.addCase(fetchTypes.rejected, (state) => {
+      state.status = 'idle';
+    });
   },
 });
 
-// TODO - I need to add in the extraReducers code
 // TODO - I need to add in more set properties for the requests (reducers)
 
 export const { setRequestParams, setPageNumber, setMetaData } =

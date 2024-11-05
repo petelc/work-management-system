@@ -36,10 +36,17 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Details.Query { RequestId = id }));
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateRequest(Request request)
         {
             return HandleResult(await Mediator.Send(new Create.Command { Request = request }));
+        }
+
+        [HttpGet("types")]
+        public async Task<IActionResult> GetRequestTypes()
+        {
+            var types = await _context.RequestTypes.Select(p => p.RequestTypeName).Distinct().ToListAsync();
+            return Ok(new { types });
         }
 
         [HttpGet("filters")]

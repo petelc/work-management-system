@@ -3,7 +3,6 @@ import {
   Card,
   CardActions,
   CardContent,
-  CardHeader,
   Typography,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -14,34 +13,24 @@ import { Request } from '../../models/request';
 
 interface Props {
   request: Request;
+  requestTypeName?: string;
 }
 
 export default function RequestCard({ request }: Props) {
-  //const { status } = useAppSelector((state) => state.request);
-  //const dispatch = useAppDispatch();
-
   const { requestTitle, description } = request;
-
-  // const { approvalStatusName } = approvalStatus;
-  // const { requestTypeName } = requestType;
-  // const { statusName } = status;
+  console.log(request);
 
   return (
     <Card>
-      <CardHeader
-        // avatar={
-        //   <Avatar sx={{ bgColor: 'secondary.main' }}>
-        //     {request.requestTitle.charAt(0).toUpperCase()}
-        //   </Avatar>
-        // }
-        title={requestTitle}
-        titleTypographyProps={{
-          sx: { fontWeight: 'bold', color: 'primary.main' },
-        }}
-      />
-
-      <CardContent>
-        <Typography variant='h5' color='text.light'>
+      <CardContent sx={{ p: 4 }}>
+        <Typography
+          variant='h4'
+          color='primary'
+          sx={{ mb: 4, textAlign: 'center' }}
+        >
+          {requestTitle}
+        </Typography>
+        <Typography variant='h6' color='text.light' sx={{ mb: 4 }}>
           {description}
         </Typography>
         <Typography
@@ -53,7 +42,7 @@ export default function RequestCard({ request }: Props) {
           Is this approved
         </Typography>
         <Typography variant='body2' color='text.secondary'>
-          Your Request Type / Your Requests status
+          / Your Requests status
         </Typography>
       </CardContent>
       <CardActions>
