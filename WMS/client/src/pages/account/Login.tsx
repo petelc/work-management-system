@@ -28,7 +28,7 @@ export default function Login() {
     console.log(data);
     try {
       await dispatch(signInUser(data));
-      navigate(location.state?.from || '/requests');
+      navigate(location.state?.from || '/dashboard');
     } catch (error) {
       console.log(error);
     }
