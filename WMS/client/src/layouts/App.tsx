@@ -9,10 +9,12 @@ import getMPTheme from '../styles/theme/getMPTheme';
 import Header from '../components/header/Header';
 import LoadingComponent from '../components/loading/LoadingComponent';
 import HomePage from '../pages/home/HomePage';
-import { useAppDispatch } from '../store/configureStore';
+import { useAppDispatch, useAppSelector } from '../store/configureStore';
 import { fetchCurrentUser } from '../pages/account/accountSlice';
+import AppLayout from './AppLayout';
 
 function App() {
+  const { user } = useAppSelector((state) => state.account);
   const location = useLocation();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
@@ -52,22 +54,30 @@ function App() {
 
   if (loading) setLoading(true);
 
-  return (
-    <ThemeProvider theme={MPTheme}>
-      <ToastContainer position='bottom-right' hideProgressBar theme='colored' />
-      <CssBaseline enableColorScheme />
-      <Header mode={mode} toggleColorMode={toggleColorMode} />
-      {loading ? (
-        <LoadingComponent message='Initializing app ...' />
-      ) : location.pathname === '/' ? (
-        <HomePage />
-      ) : (
-        <Container sx={{ mt: 4 }}>
-          <Outlet />
-        </Container>
-      )}
-    </ThemeProvider>
-  );
+  if (user) {
+    return <AppLayout />;
+  } else {
+    return (
+      <ThemeProvider theme={MPTheme}>
+        <ToastContainer
+          position='bottom-right'
+          hideProgressBar
+          theme='colored'
+        />
+        <CssBaseline enableColorScheme />
+        <Header mode={mode} toggleColorMode={toggleColorMode} />
+        {loading ? (
+          <LoadingComponent message='Initializing app ...' />
+        ) : location.pathname === '/' ? (
+          <HomePage />
+        ) : (
+          <Container sx={{ mt: 4 }}>
+            <Outlet />
+          </Container>
+        )}
+      </ThemeProvider>
+    );
+  }
 }
 
 export default App;

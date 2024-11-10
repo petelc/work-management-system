@@ -18,11 +18,11 @@ interface Props {
 
 export default function RequestCard({ request }: Props) {
   const { requestTitle, description } = request;
-  console.log(request);
+  console.log(requestTitle, description);
 
   return (
     <Card>
-      <CardContent sx={{ p: 4 }}>
+      <CardContent sx={{ p: 2 }}>
         <Typography
           variant='h4'
           color='primary'
