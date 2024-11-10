@@ -57,6 +57,8 @@ export default function RequestForm() {
   } = useForm({ mode: 'onTouched' });
   const navigate = useNavigate();
 
+  console.log(types);
+
   // TODO - figure out how to handle errors for the request type select list
 
   function handleApiErrors(errors: any) {
