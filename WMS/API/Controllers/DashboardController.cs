@@ -1,5 +1,3 @@
-using Application.Dashboard.ChangeCount;
-using Application.Dashboard.ProjectCount;
 using Application.Dashboard.RequestCount;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -29,18 +27,5 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new List.Query{ }));
         }
 
-        [HttpGet("change_count")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetChangeRequestCounts()
-        {
-            return HandleResult(await Mediator.Send( new ChangeCounts.Query{}));
-        }
-
-        [HttpGet("project_count")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetProjectRequestCounts()
-        {
-            return HandleResult(await Mediator.Send( new ProjectCounts.Query{}));
-        }
     }
 }
