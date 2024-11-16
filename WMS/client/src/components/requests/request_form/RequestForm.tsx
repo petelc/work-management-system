@@ -64,7 +64,7 @@ export default function RequestForm() {
   function handleApiErrors(errors: any) {
     console.log(errors);
     if (errors) {
-      errors.forEach((error: string) => {
+      errors.foreach((error: string) => {
         if (error.includes('requestTitle')) {
           setError('requestTitle', { message: error });
         } else if (error.includes('description')) {

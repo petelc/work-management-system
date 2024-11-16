@@ -86,6 +86,10 @@ const requestTypes = {
   get: (url: string) => axios.get(url).then(responseBody),
 };
 
+const requestCounts = {
+  get: (url: string) => axios.get(url).then(responseBody),
+};
+
 // function createFormData(item: any) {
 //   const formData = new FormData();
 //   for (const key in item) {
@@ -106,7 +110,7 @@ const UserRequest = {
 const Account = {
   login: (values: any) => requests.post('account/login', values),
   register: (values: any) => requests.post('account/register', values),
-  currentUser: () => requests.get('account/currentUser'),
+  currentUser: () => requests.get('account/fetchCurrentUser'),
   fetchAddress: () => requests.get('account/savedAddress'),
 };
 
@@ -114,10 +118,15 @@ const Type = {
   fetchTypes: () => requestTypes.get('requests/types'),
 };
 
+const RequestCounts = {
+  list: () => requestCounts.get('dashboard/req_count'),
+};
+
 const agent = {
   UserRequest,
   Account,
   Type,
+  RequestCounts,
 };
 
 export default agent;

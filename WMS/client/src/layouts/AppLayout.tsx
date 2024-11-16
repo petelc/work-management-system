@@ -9,8 +9,8 @@ import SideMenu from '../components/sidemenu/SideMenu';
 import AppNaveBar from '../components/appnavbar/AppNavBar';
 import { alpha, Box, Stack } from '@mui/material';
 import AppHeader from '../components/appheader/AppHeader';
-import MainGrid from '../components/maingrid/MainGrid';
 import LoadingComponent from '../components/loading/LoadingComponent';
+import Dashboard from '../pages/dashboard/Dashboard';
 
 function AppLayout() {
   const location = useLocation();
@@ -69,7 +69,7 @@ function AppLayout() {
             {loading ? (
               <LoadingComponent message='Initializing app ...' />
             ) : location.pathname === '/dashboard' ? (
-              <MainGrid />
+              <Dashboard />
             ) : (
               <Outlet />
             )}

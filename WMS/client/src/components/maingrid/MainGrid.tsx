@@ -3,36 +3,18 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import StatCard, { StatCardProps } from './StatCard';
+import StatCard from './StatCard';
 import CustomDataGrid from '../charts/base/CustomDataGrid';
-
-const data: StatCardProps[] = [
-  {
-    title: 'Requests',
-    value: 167,
-    startAngle: -110,
-    endAngle: 110,
-    data: [167],
-  },
-  {
-    title: 'Changes',
-    value: 123,
-    startAngle: -110,
-    endAngle: 110,
-    data: [123],
-  },
-  {
-    title: 'Projects',
-    value: 146,
-    startAngle: -110,
-    endAngle: 110,
-    data: [146],
-  },
-];
+import useRequestCounts from '../../hooks/useRequestCounts';
+import LoadingComponent from '../loading/LoadingComponent';
 
 // TODO - Setup dispatch and appselector to retrieve the data for the statcard
 
 export default function MainGrid() {
+  const { requestCounts, countsLoaded } = useRequestCounts();
+
+  if (!countsLoaded) return <LoadingComponent message='Loading counts...' />;
+
   return (
     <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
       {/* cards */}
@@ -45,12 +27,14 @@ export default function MainGrid() {
         columns={12}
         sx={{ mb: (theme) => theme.spacing(2) }}
       >
-        {data.map((card, index) => (
+        {requestCounts.map((count, index) => (
           <Grid key={index} size={{ xs: 12, sm: 6, lg: 3 }}>
-            <StatCard {...card} />
+            <StatCard requestCounts={count} />
           </Grid>
         ))}
-        <Grid size={{ xs: 12, sm: 6, lg: 3 }}>{/* <HighlightedCard /> */}</Grid>
+        <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
+          {/* <RequestCountCard /> */}
+        </Grid>
         <Grid size={{ sm: 12, md: 6 }}>{/* <SessionsChart /> */}</Grid>
         <Grid size={{ sm: 12, md: 6 }}>{/* <PageViewsBarChart /> */}</Grid>
       </Grid>

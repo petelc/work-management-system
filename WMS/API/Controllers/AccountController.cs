@@ -71,7 +71,7 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpGet]
+        [HttpGet("fetchCurrentUser")]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));

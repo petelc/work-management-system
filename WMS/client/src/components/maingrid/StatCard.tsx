@@ -10,14 +10,11 @@ import {
   GaugeReferenceArc,
   useGaugeState,
 } from '@mui/x-charts/Gauge';
+import { RequestCount } from '../../models/requestCounts';
 
-export type StatCardProps = {
-  title: string;
-  value: number;
-  startAngle: number;
-  endAngle: number;
-  data: number[];
-};
+interface Props {
+  requestCounts: RequestCount;
+}
 
 function GaugePointer() {
   const { valueAngle, outerRadius, cx, cy } = useGaugeState();
@@ -28,7 +25,7 @@ function GaugePointer() {
 
   const target = {
     x: cx + outerRadius * Math.sin(valueAngle),
-    y: cy + outerRadius * Math.cos(valueAngle),
+    y: cy - outerRadius * Math.cos(valueAngle),
   };
 
   return (
@@ -43,17 +40,12 @@ function GaugePointer() {
   );
 }
 
-export default function StatCard({
-  title,
-  value,
-  startAngle,
-  endAngle,
-}: StatCardProps) {
+export default function StatCard({ requestCounts }: Props) {
   return (
     <Card variant='outlined' sx={{ height: '100%', flexGrow: 1 }}>
       <CardContent>
         <Typography component='h2' variant='h4' gutterBottom>
-          {title}
+          {requestCounts.title}
         </Typography>
         <Stack
           direction='column'
@@ -73,7 +65,7 @@ export default function StatCard({
               }}
             >
               <Typography variant='h5' component='p'>
-                {value}
+                {requestCounts.value}
               </Typography>
             </Stack>
             <Typography variant='caption' sx={{ color: 'text.secondary' }}>
@@ -84,9 +76,10 @@ export default function StatCard({
             <GaugeContainer
               width={200}
               height={240}
-              startAngle={startAngle}
-              endAngle={endAngle}
-              value={value}
+              startAngle={requestCounts.startAngle}
+              endAngle={requestCounts.endAngle}
+              value={requestCounts.value}
+              valueMax={requestCounts.valueMax}
               sx={{ m: 'auto' }}
             >
               <GaugeReferenceArc />
