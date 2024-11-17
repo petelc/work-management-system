@@ -8,6 +8,7 @@ import Request from '../../pages/request/Request';
 import Login from '../../pages/account/Login';
 import RequireAuth from './RequiredAuth';
 import Register from '../../pages/account/Register';
+import RequestDetails from '../../components/requests/RequestDetails';
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
         children: [
           { path: 'dashboard', element: <AppLayout /> },
           { path: 'requests', element: <Request /> },
+          { path: 'requests/:id', element: <RequestDetails /> },
         ],
       },
       { path: 'request', element: <RequestPage /> },

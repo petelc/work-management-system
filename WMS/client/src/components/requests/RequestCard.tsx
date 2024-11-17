@@ -47,7 +47,11 @@ export default function RequestCard({ request }: Props) {
       </CardContent>
       <CardActions>
         <LoadingButton size='small'>Submit to Board</LoadingButton>
-        <Button component={Link} to={`/request/${request.id}`} size='small'>
+        <Button
+          component={Link}
+          to={`/requests/${request.requestId}`}
+          size='small'
+        >
           View
         </Button>
       </CardActions>
