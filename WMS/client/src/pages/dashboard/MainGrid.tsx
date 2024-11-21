@@ -3,12 +3,10 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import StatCard from './StatCard';
-import CustomDataGrid from '../charts/base/CustomDataGrid';
+import StatCard from '../../components/maingrid/StatCard';
+import CustomDataGrid from '../../components/charts/base/CustomDataGrid';
 import useRequestCounts from '../../hooks/useRequestCounts';
-import LoadingComponent from '../loading/LoadingComponent';
-
-// TODO - Setup dispatch and appselector to retrieve the data for the statcard
+import LoadingComponent from '../../components/loading/LoadingComponent';
 
 export default function MainGrid() {
   const { requestCounts, countsLoaded } = useRequestCounts();

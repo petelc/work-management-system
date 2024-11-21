@@ -1,7 +1,6 @@
 import Grid from '@mui/material/Grid2';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import RequestLists from '../../components/requests/RequestList';
 import AppPagination from '../../components/pagination/AppPagination';
 import useRequests from '../../hooks/useRequests';
@@ -36,9 +35,6 @@ export default function Request() {
     //   }}
     // >
     <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
-      <Typography component='h2' variant='h6' sx={{ mb: 2 }}>
-        Submitted Requests
-      </Typography>
       <Grid container columnSpacing={3}>
         <Grid size={{ xs: 12 }}>
           <Paper sx={{ mb: 2 }}>
