@@ -23,7 +23,7 @@ export default function Request() {
   const { requestParams } = useAppSelector((state) => state.request);
   const dispatch = useAppDispatch();
 
-  console.log(requests);
+  //console.log(requests);
 
   if (!filtersLoaded) return <LoadingComponent message='Loading requests...' />;
 
