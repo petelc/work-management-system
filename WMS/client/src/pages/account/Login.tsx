@@ -7,6 +7,7 @@ import {
   Box,
   TextField,
 } from '@mui/material';
+
 import Grid from '@mui/material/Grid2';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
@@ -28,7 +29,7 @@ export default function Login() {
     console.log(data);
     try {
       await dispatch(signInUser(data));
-      navigate(location.state?.from || '/dashboard');
+      navigate(location.state?.from || '/');
     } catch (error) {
       console.log(error);
     }
@@ -46,7 +47,7 @@ export default function Login() {
         mt: { xs: 14, sm: 20 },
       }}
     >
-      <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+      <Avatar sx={{ m: 1, bgcolor: 'primary.dark' }}>
         <LockOutlined />
       </Avatar>
       <Typography component='h1' variant='h5'>
@@ -61,6 +62,7 @@ export default function Login() {
         <TextField
           margin='normal'
           fullWidth
+          variant='filled'
           label='Email'
           autoComplete='email'
           autoFocus
@@ -71,6 +73,7 @@ export default function Login() {
         <TextField
           margin='normal'
           fullWidth
+          variant='filled'
           label='Password'
           type='password'
           autoComplete='current-password'
@@ -83,8 +86,7 @@ export default function Login() {
           disabled={!isValid}
           type='submit'
           fullWidth
-          variant='contained'
-          color='secondary'
+          variant='outlined'
           sx={{
             mt: 3,
             mb: 2,

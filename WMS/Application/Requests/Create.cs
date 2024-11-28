@@ -38,14 +38,14 @@ namespace Application.Requests
                 var user = await _context.Users.FirstOrDefaultAsync(x =>
                     x.UserName == _userAccessor.GetUserName());
 
-                // var requestor = new RequestToRequestors
-                // {
-                //     Employee = user,
-                //     Request = request.Request,
-                //     IsNew = true,
-                // };
+                var requestor = new RequestToRequestors
+                {
+                    Employee = user,
+                    Request = request.Request,
+                    IsNew = true,
+                };
 
-                //request.Request.Requestors.Add(requestor);
+                request.Request.Requestors.Add(requestor);
 
                 _context.Requests.Add(request.Request);
 

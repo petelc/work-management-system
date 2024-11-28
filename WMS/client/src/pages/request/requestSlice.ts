@@ -92,7 +92,7 @@ export const fetchTypes = createAsyncThunk(
 function initParams(): RequestParams {
   return {
     pageNumber: 1,
-    pageSize: 6,
+    pageSize: 9,
     orderBy: 'title',
     approvalStatus: [],
     types: [],

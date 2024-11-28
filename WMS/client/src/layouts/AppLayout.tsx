@@ -10,7 +10,7 @@ import AppNaveBar from '../components/appnavbar/AppNavBar';
 import { alpha, Box, Stack } from '@mui/material';
 import AppHeader from '../components/appheader/AppHeader';
 import LoadingComponent from '../components/loading/LoadingComponent';
-import Dashboard from '../pages/dashboard/Dashboard';
+import Dashboard from './Dashboard';
 
 function AppLayout() {
   const location = useLocation();
