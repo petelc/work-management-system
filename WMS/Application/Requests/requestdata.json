@@ -1,0 +1,35 @@
+{
+  "requestId": 0,
+  "requestTitle": "Daily Developer Log",
+  "description": "An Application that allows developers to enter a log of what they worked on, notes and any tasks accomplished",
+  "isNew": true,
+  "requestTypeId": 1,
+  "requestType": {
+    "requestTypeId": 1,
+    "requestTypeName": "Project"
+  },
+  "statusId": 5,
+  "status": {
+    "statusId": 5,
+    "statusName": "Pending"
+  },
+  "approvalStatusId": 1,
+  "requestors": [
+    {
+      "id": 6,
+      "employee": {
+        "id": 6,
+        "userName": "sang",
+        "normalizedUserName": "SANG",
+        "email": "sang@example.com",
+        "normalizedEmail": "SANG@EXAMPLE.COM",
+        "phoneNumber": "555-555-5560",
+        "employeeId": 0,
+        "displayName": "Sang Holmes",
+        "lastName": "Holmes",
+        "firstName": "Sang",
+        "extension": "23650"
+      }
+    }
+  ]
+}

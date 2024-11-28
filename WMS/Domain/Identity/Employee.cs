@@ -8,8 +8,6 @@ namespace Domain.Identity
     /// </summary>
     public class Employee : IdentityUser<int>
     {
-
-
         public int EmployeeId { get; set; }
         public string DisplayName { get; set; } = null!;
         public string LastName { get; set; } = null!;

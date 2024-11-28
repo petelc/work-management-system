@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 
 import { router } from '../helpers/router/Routes';
 import { PaginatedResponse } from '../models/pagination';
-import { store } from '../store/configureStore';
+//import { store } from '../store/configureStore';
 
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -13,7 +13,7 @@ axios.defaults.withCredentials = true;
 const responseBody = (response: AxiosResponse) => response.data;
 
 axios.interceptors.request.use((config) => {
-  const token = store.getState().account.user?.token;
+  const token = localStorage.getItem('user');
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
@@ -100,9 +100,7 @@ const requestCounts = {
 
 const UserRequest = {
   list: (params: URLSearchParams) => requests.get('requests', params),
-  create: (request: any) => requests.post('requests/create', request),
-  // create: (request: any) =>
-  //   requests.postForm('requests/create', createFormData(request)),
+  create: (values: any) => requests.post('requests/create', values),
   details: (id: number) => requests.get(`request/${id}`),
   fetchFilters: () => requests.get('requests/filters'),
 };
@@ -111,6 +109,7 @@ const Account = {
   login: (values: any) => requests.post('account/login', values),
   register: (values: any) => requests.post('account/register', values),
   currentUser: () => requests.get('account/fetchCurrentUser'),
+  //allUsers: () => requests.get('account/fetchAllUsers'),
   fetchAddress: () => requests.get('account/savedAddress'),
 };
 
@@ -122,11 +121,16 @@ const RequestCounts = {
   list: () => requestCounts.get('dashboard/req_count'),
 };
 
+const Requestor = {
+  allUsers: () => requests.get('account/fetchAllUsers'),
+};
+
 const agent = {
   UserRequest,
   Account,
   Type,
   RequestCounts,
+  Requestor,
 };
 
 export default agent;

@@ -18,7 +18,7 @@ interface Props {
 
 export default function RequestCard({ request }: Props) {
   const { requestTitle, description } = request;
-  console.log(requestTitle, description);
+  // console.log(requestTitle, description);
 
   return (
     <Card>
@@ -30,7 +30,7 @@ export default function RequestCard({ request }: Props) {
         >
           {requestTitle}
         </Typography>
-        <Typography variant='h6' color='text.light' sx={{ mb: 4 }}>
+        <Typography variant='h6' color='text.light' sx={{ mb: 4 }} noWrap>
           {description}
         </Typography>
         <Typography
@@ -38,16 +38,16 @@ export default function RequestCard({ request }: Props) {
           color='text.secondary'
           variant='body2'
           component='div'
-        >
-          Is this approved
-        </Typography>
-        <Typography variant='body2' color='text.secondary'>
-          / Your Requests status
-        </Typography>
+        ></Typography>
+        <Typography variant='body2' color='text.secondary'></Typography>
       </CardContent>
       <CardActions>
         <LoadingButton size='small'>Submit to Board</LoadingButton>
-        <Button component={Link} to={`/request/${request.id}`} size='small'>
+        <Button
+          component={Link}
+          to={`/requests/${request.requestId}`}
+          size='small'
+        >
           View
         </Button>
       </CardActions>
