@@ -1,18 +1,34 @@
-import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+import {
+  createAsyncThunk,
+  createEntityAdapter,
+  createSlice,
+  isAnyOf,
+} from '@reduxjs/toolkit';
 import { FieldValues } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import agent from '../../api/agent';
 import { router } from '../../helpers/router/Routes';
 import { User } from '../../models/user';
+import { RootState } from '../../store/configureStore';
 
 interface AccountState {
+  usersLoaded: boolean;
   user: User | null;
+  users: string[];
+  status: string;
 }
 
-const initialState: AccountState = {
-  user: null,
-};
+// const initialState: AccountState = {
+//   usersLoaded: false,
+//   user: null,
+//   users: [],
+// };
+
+const accountAdapter = createEntityAdapter({
+  selectId: (e: any) => e.id,
+});
 
 export const signInUser = createAsyncThunk<User, FieldValues>(
   'account/signInUser',
@@ -50,14 +66,31 @@ export const fetchCurrentUser = createAsyncThunk<User>(
   }
 );
 
+export const fetchAllUsers = createAsyncThunk(
+  'account/fetchAllUsers',
+  async (_, thunkAPI) => {
+    try {
+      const users = agent.Requestor.allUsers();
+      return users;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.data });
+    }
+  }
+);
+
 export const accountSlice = createSlice({
   name: 'account',
-  initialState,
+  initialState: accountAdapter.getInitialState<AccountState>({
+    usersLoaded: false,
+    user: null,
+    users: [],
+    status: 'idle',
+  }),
   reducers: {
     signOut: (state) => {
       state.user = null;
       localStorage.removeItem('user');
-      router.navigate('/');
+      router.navigate('/login');
     },
     setUser: (state, action) => {
       const claims = JSON.parse(atob(action.payload.token.split('.')[1]));
@@ -76,6 +109,17 @@ export const accountSlice = createSlice({
       toast.error('Session expired - please login again');
       router.navigate('/');
     });
+    builder.addCase(fetchAllUsers.pending, (state) => {
+      state.status = 'pendingFetchAllUsers';
+    });
+    builder.addCase(fetchAllUsers.fulfilled, (state, action) => {
+      state.users = action.payload.users;
+      (state.status = 'idle'), (state.usersLoaded = true);
+    });
+    builder.addCase(fetchAllUsers.rejected, (state, action) => {
+      console.log(action.payload);
+      state.status = 'idle';
+    });
     builder.addMatcher(
       isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled),
       (state, action) => {
@@ -92,3 +136,7 @@ export const accountSlice = createSlice({
 });
 
 export const { signOut, setUser } = accountSlice.actions;
+
+export const accountSelectors = accountAdapter.getSelectors(
+  (state: RootState) => state.account
+);

@@ -60,7 +60,7 @@ namespace Application.Dashboard.RequestCount
                     result.startAngle = -110;
                     result.endAngle = 110;
                     if(title == "Request") {
-                        result.Value = countApproved;
+                        result.Value = countAll;
                     } else if(title == "Change") {
                         result.Value = countChange;
                     } else if(title == "Project") {

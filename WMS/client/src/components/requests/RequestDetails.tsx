@@ -14,10 +14,9 @@ import {
 } from '../../pages/request/requestSlice';
 
 import LoadingComponent from '../loading/LoadingComponent';
-import { useTheme, styled } from '@mui/material/styles';
-import { AppProvider, Navigation, PageContainer } from '@toolpad/core';
+import { styled } from '@mui/material/styles';
+import { PageContainer } from '@toolpad/core';
 import { PageToolbar } from '../toolbar/PageToolbar';
-import { Dashboard } from '@mui/icons-material';
 
 const Skeleton = styled('div')<{ height: number }>(({ theme, height }) => ({
   backgroundColor: theme.palette.action.hover,
@@ -26,17 +25,18 @@ const Skeleton = styled('div')<{ height: number }>(({ theme, height }) => ({
   content: '" "',
 }));
 
-const NAVIGATION: Navigation = [
-  {
-    segment: 'requests',
-    title: 'Requests',
-    icon: <Dashboard />,
-  },
-];
+const Section = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.action.hover,
+  borderRadius: theme.shape.borderRadius,
+  width: '100%',
+  height: '100%',
+  padding: theme.spacing(2),
+  ...theme.typography.body1,
+  textAlign: 'left',
+}));
 
 export default function RequestDetails() {
   const [priority, setPriority] = useState('');
-  const theme = useTheme();
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const request = useAppSelector((state) =>
@@ -48,6 +48,8 @@ export default function RequestDetails() {
     if (!request && id) dispatch(fetchRequestAsync(parseInt(id)));
   }, [id, request, dispatch]);
 
+  const { requestTitle, description } = request;
+
   function handlePriorityChange(event) {
     setPriority(event.target.value);
   }
@@ -55,42 +57,42 @@ export default function RequestDetails() {
   if (status.includes('pending'))
     return <LoadingComponent message='Loading request...' />;
 
+  console.log(request);
+
+  /**
+   * Need to show the status, approval status and request type.
+   * Also need a way of showing the "stage" the request is in.
+   *
+   * Need a way of setting the different type of properties.
+   * think change manager getting ready to move to cab board etc
+   */
+
   return (
-    <AppProvider
-      navigation={NAVIGATION}
-      theme={theme}
-      branding={{ title: 'WMS' }}
-    >
-      <Paper sx={{ p: 2, width: '100%' }}>
-        <PageContainer slots={{ toolbar: PageToolbar }}>
-          <Grid container spacing={1}>
-            <Grid size={5} />
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-            <Grid size={12}>
-              <Skeleton height={14} />
-            </Grid>
-            <Grid size={4}>
-              <Skeleton height={100} />
-            </Grid>
-            <Grid size={8}>
-              <Skeleton height={100} />
-            </Grid>
+    <Paper sx={{ p: 2, width: '100%' }}>
+      <PageContainer title={requestTitle} slots={{ toolbar: PageToolbar }}>
+        <Grid container spacing={1}>
+          <Grid size={5} />
+          <Grid size={12}>
+            <Skeleton height={14} />
           </Grid>
-        </PageContainer>
-      </Paper>
-    </AppProvider>
-    // <Grid container spacing={12}>
-    //   <Grid size={12}>
-    //     <Typography variant='h2' sx={{ mb: 4 }}>
-    //       {request.requestTitle}
-    //     </Typography>
-    //     <Typography variant='subtitle2'>{priority}</Typography>
-    //     <Divider sx={{ mb: 2 }} />
-    //     <Typography variant='body2'>{request.description}</Typography>
-    //     <Button onClick={handlePriorityChange}>Priority</Button>
-    //   </Grid>
-    // </Grid>
+          <Grid size={12}>
+            <Skeleton height={14} />
+          </Grid>
+          <Grid size={4}>
+            <Skeleton height={200} />
+          </Grid>
+          <Grid size={8}>
+            {description.length === 0 ? (
+              <Skeleton height={100} />
+            ) : (
+              <Section>
+                <Typography variant='h6'>Request Description</Typography>
+                <Typography variant='body1'>{description}</Typography>
+              </Section>
+            )}
+          </Grid>
+        </Grid>
+      </PageContainer>
+    </Paper>
   );
 }

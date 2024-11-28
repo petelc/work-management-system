@@ -78,6 +78,14 @@ namespace API.Controllers
             return CreateUserObject(user);
         }
 
+        [Authorize]
+        [HttpGet("fetchAllUsers")]
+        public async Task<ActionResult> GetAllUsers()
+        {
+            var users =  await _userManager.Users.Select(u => new { u.DisplayName, u.UserName, u.Email, u.FirstName, u.LastName}).Distinct().ToListAsync();
+            return Ok(new { users });
+        }
+
         private UserDto CreateUserObject(Employee user)
         {
             return new UserDto

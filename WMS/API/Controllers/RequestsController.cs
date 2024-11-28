@@ -65,7 +65,7 @@ namespace API.Controllers
         [HttpGet("types")]
         public async Task<IActionResult> GetRequestTypes()
         {
-            var types = await _context.RequestTypes.Select(p => p.RequestTypeName).Distinct().ToListAsync();
+            var types = await _context.RequestTypes.Select(p => new {p.RequestTypeId, p.RequestTypeName}).Distinct().ToListAsync();
             return Ok(new { types });
         }
 
