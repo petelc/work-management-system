@@ -1,0 +1,32 @@
+{
+  "requestTitle": "Biotech detector",
+  "description": "a test submission",
+  "requestors": [
+    {
+      "Id": 3,
+      "id": 10020203,
+      "employeeId": 10020203,
+      "userName": "stella",
+      "label": "Stella Holt"
+    }
+  ],
+  "isNew": true,
+  "requestType": {
+    "id": 1,
+    "RequestTypeId": 1,
+    "RequestTypeName": "Project Request",
+    "label": "Project Request"
+  },
+  "status": {
+    "id": 5,
+    "StatusId": 5,
+    "StatusName": "Pending",
+    "label": "Pending"
+  },
+  "approvalStatus": {
+    "id": 3,
+    "ApprovalStatusId": 3,
+    "ApprovalStatusName": "Pending",
+    "label": "Pending"
+  }
+}

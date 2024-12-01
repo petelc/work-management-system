@@ -10,7 +10,7 @@ namespace Application.Requests
             RuleFor(x => x.RequestTitle).NotEmpty().WithMessage("Request Title cannot be empty");
             RuleFor(x => x.Description).NotEmpty().WithMessage("Description cannot be empty");
             RuleFor(x => x.RequestType).NotEmpty().WithMessage("Please provide a request type");
-            RuleFor(x => x.Requestors).NotEmpty().WithMessage("Please provide who is making this request");
+            RuleFor(x => x.Requestor).NotEmpty().WithMessage("Please provide who is making this request");
         }
     }
 }

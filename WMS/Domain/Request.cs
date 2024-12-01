@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Domain.Identity;
 
 namespace Domain
 {
@@ -19,6 +20,9 @@ namespace Domain
         public Change? Change { get; set; }
         public int? ProjectId { get; set; }
         public Project? Project { get; set; }
-        public ICollection<RequestToRequestors>? Requestors { get; set; } = new List<RequestToRequestors>();
+        public int? EmployeeId { get; set; }
+        public Employee? Requestor { get; set; }
+        //public ICollection<Employee>? Requestors { get; set; } = new List<Employee>();
+        //public ICollection<RequestToRequestors>? Requestors { get; set; } = new List<RequestToRequestors>();
     }
 }

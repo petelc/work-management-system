@@ -161,27 +161,39 @@ namespace Persistence
                         RequestTitle = "Request 1",
                         Description = "Request to get something changed",
                         IsNew = true,
-                        Requestors = new List<RequestToRequestors>
-                        {
-                            new RequestToRequestors
+                        Requestor = new Employee
                             {
-                                Employee = board[0],
-                                IsNew = true,
+                                EmployeeId = board[0].EmployeeId,
+                                DisplayName = board[0].DisplayName,
+                                LastName = board[0].LastName,
+                                FirstName = board[0].FirstName,
+                                Region = board[0].Region,
+                                Institution = board[0].Institution,
+                                Extension = board[0].Extension,
+                                Notes = board[0].Notes,
+                                UserName = board[0].UserName,
+                                Email = board[0].Email,
+                                PhoneNumber = board[0].PhoneNumber
                             }
-                        }
                     },
                     new Request
                     {
                         RequestTitle = "Request 2",
                         Description = "Request to get new project",
                         IsNew = true,
-                        Requestors = new List<RequestToRequestors>
+                        Requestor = new Employee
                         {
-                            new RequestToRequestors
-                            {
-                                Employee = board[2],
-                                IsNew = true,
-                            }
+                            EmployeeId = board[2].EmployeeId,
+                            DisplayName = board[2].DisplayName,
+                            LastName = board[2].LastName,
+                            FirstName = board[2].FirstName,
+                            Region = board[2].Region,
+                            Institution = board[2].Institution,
+                            Extension = board[2].Extension,
+                            Notes = board[2].Notes,
+                            UserName = board[2].UserName,
+                            Email = board[2].Email,
+                            PhoneNumber = board[2].PhoneNumber
                         }
                     }
                 };

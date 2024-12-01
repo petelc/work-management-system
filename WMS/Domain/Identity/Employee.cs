@@ -29,7 +29,7 @@ namespace Domain.Identity
         }
 
 
-        public ICollection<RequestToRequestors>? Requests { get; set; }
+        public ICollection<Request>? Requests { get; set; }
         public ICollection<ChangesToChangeManager>? Changes { get; set; }
         public ICollection<ProjectToProjectManager>? Projects { get; set; }
 
