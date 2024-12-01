@@ -14,6 +14,7 @@ namespace Persistence
                 {
                     new Employee
                     {
+                        EmployeeId = 10120101,
                         DisplayName = "Salvador Hodges",
                         LastName = "Hodges",
                         FirstName = "Salvador",
@@ -27,6 +28,7 @@ namespace Persistence
                     },
                     new Employee
                     {
+                        EmployeeId = 10120102,
                         DisplayName = "Sandy Patrick",
                         LastName = "Patrick",
                         FirstName = "Sandy",
@@ -50,6 +52,7 @@ namespace Persistence
                 {
                     new Employee
                     {
+                        EmployeeId = 10120103,
                         DisplayName = "Stella Holt",
                         LastName = "Holt",
                         FirstName = "Stella",
@@ -63,6 +66,7 @@ namespace Persistence
                     },
                     new Employee
                     {
+                        EmployeeId = 10120104,
                         DisplayName = "Beatriz Edwards",
                         LastName = "Edwards",
                         FirstName = "Beatriz",
@@ -86,6 +90,7 @@ namespace Persistence
                 {
                     new Employee
                     {
+                        EmployeeId = 10120105,
                         DisplayName = "Christian Reeves",
                         LastName = "Reeves",
                         FirstName = "Christian",
@@ -99,6 +104,7 @@ namespace Persistence
                     },
                     new Employee
                     {
+                        EmployeeId = 10120106,
                         DisplayName = "Sang Holmes",
                         LastName = "Holmes",
                         FirstName = "Sang",
@@ -120,6 +126,7 @@ namespace Persistence
 
                 var dev = new Employee
                 {
+                    EmployeeId = 10120107,
                     DisplayName = "Glenn Russell",
                     LastName = "Russell",
                     FirstName = "Glenn",
@@ -137,6 +144,7 @@ namespace Persistence
 
                 var tech = new Employee
                 {
+                    EmployeeId = 10120108,
                     DisplayName = "Yvette Harrison",
                     LastName = "Harrison",
                     FirstName = "Yvette",
@@ -161,40 +169,14 @@ namespace Persistence
                         RequestTitle = "Request 1",
                         Description = "Request to get something changed",
                         IsNew = true,
-                        Requestor = new Employee
-                            {
-                                EmployeeId = board[0].EmployeeId,
-                                DisplayName = board[0].DisplayName,
-                                LastName = board[0].LastName,
-                                FirstName = board[0].FirstName,
-                                Region = board[0].Region,
-                                Institution = board[0].Institution,
-                                Extension = board[0].Extension,
-                                Notes = board[0].Notes,
-                                UserName = board[0].UserName,
-                                Email = board[0].Email,
-                                PhoneNumber = board[0].PhoneNumber
-                            }
+                        Requestor = board[0],
                     },
                     new Request
                     {
                         RequestTitle = "Request 2",
                         Description = "Request to get new project",
                         IsNew = true,
-                        Requestor = new Employee
-                        {
-                            EmployeeId = board[2].EmployeeId,
-                            DisplayName = board[2].DisplayName,
-                            LastName = board[2].LastName,
-                            FirstName = board[2].FirstName,
-                            Region = board[2].Region,
-                            Institution = board[2].Institution,
-                            Extension = board[2].Extension,
-                            Notes = board[2].Notes,
-                            UserName = board[2].UserName,
-                            Email = board[2].Email,
-                            PhoneNumber = board[2].PhoneNumber
-                        }
+                        Requestor = board[1],
                     }
                 };
 

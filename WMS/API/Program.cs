@@ -1,3 +1,4 @@
+using System.Data;
 using API.Extensions;
 using API.Middleware;
 using Domain.Identity;
@@ -68,9 +69,9 @@ var logger = services.GetRequiredService<ILogger<Program>>();
 
 try
 {
-    //var roleManager = services.GetRequiredService<RoleManager<Role>>();
-    //await context.Database.MigrateAsync();
-    //await Seed.SeedData(context, userManager);
+    var roleManager = services.GetRequiredService<RoleManager<EmployeeRole>>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedData(context, userManager);
 }
 catch (Exception ex)
 {
