@@ -1,4 +1,5 @@
 using Domain;
+using Domain.Identity;
 
 namespace Application.Requests
 {
@@ -14,6 +15,7 @@ namespace Application.Requests
         public ApprovalStatus ApprovalStatus { get; set; } // one to one relationship
         public Change Change { get; set; }
         public Project Project { get; set; }
-        public ICollection<RequestToRequestors> Requestors { get; set; } = new List<RequestToRequestors>();
+        public Employee Requestor { get; set; }
+        
     }
 }

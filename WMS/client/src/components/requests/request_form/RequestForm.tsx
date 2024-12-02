@@ -1,34 +1,109 @@
 //import { useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import TextField from '@mui/material/TextField';
+// import FormLabel from '@mui/material/FormLabel';
+// import FormControl from '@mui/material/FormControl';
+// import TextField from '@mui/material/TextField';
 //import Typography from '@mui/material/Typography';
-import { Autocomplete, Chip, InputAdornment, Paper } from '@mui/material';
+import { InputAdornment, Paper, Stack } from '@mui/material';
 import { Description, Title } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
+import { TextFieldElement, AutocompleteElement } from 'react-hook-form-mui';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { PageContainer } from '@toolpad/core';
 
-import useFetchRequestTypes from '../../../hooks/useFetchRequestTypes';
+//import useFetchRequestTypes from '../../../hooks/useFetchRequestTypes';
 import agent from '../../../api/agent';
 import useFetchRequestors from '../../../hooks/useFetchRequestors';
 //import { User } from '../../../models/user';
+// import { types } from '../../../models/types';
+
+const types = [
+  {
+    id: 1,
+    RequestTypeId: 1,
+    RequestTypeName: 'Project Request',
+    label: 'Project Request',
+  },
+  {
+    id: 2,
+    RequestTypeId: 2,
+    RequestTypeName: 'Change Request',
+    label: 'Change Request',
+  },
+];
+
+const statuses = [
+  { id: 1, StatusId: 1, StatusName: 'In Progress', label: 'In Progress' },
+  { id: 2, StatusId: 2, StatusName: 'On Hold', label: 'On Hold' },
+  { id: 3, StatusId: 3, StatusName: 'Cancelled', label: 'Cancelled' },
+  { id: 4, StatusId: 4, StatusName: 'Completed', label: 'Completed' },
+  { id: 5, StatusId: 5, StatusName: 'Pending', label: 'Pending' },
+];
+
+const approvals = [
+  {
+    id: 1,
+    ApprovalStatusId: 1,
+    ApprovalStatusName: 'Approved',
+    label: 'Approved',
+  },
+  {
+    id: 2,
+    ApprovalStatusId: 2,
+    ApprovalStatusName: 'Rejected',
+    label: 'Rejected',
+  },
+  {
+    id: 3,
+    ApprovalStatusId: 3,
+    ApprovalStatusName: 'Pending',
+    label: 'Pending',
+  },
+];
 
 export default function RequestForm() {
-  const { types } = useFetchRequestTypes();
+  //const { types } = useFetchRequestTypes();
   const { users } = useFetchRequestors();
   const {
-    register,
+    control,
     handleSubmit,
     setError,
     formState: { errors, isValid },
-  } = useForm({ mode: 'onTouched' });
+  } = useForm<{
+    requestTitle: string;
+    description: string;
+    requestType: string;
+    requestor: {};
+    isNew: boolean;
+    status?: {};
+    approvalStatus?: {};
+  }>({
+    defaultValues: {
+      requestTitle: '',
+      description: '',
+      requestor: {},
+      isNew: true,
+    },
+  });
   const navigate = useNavigate();
+  console.log(users);
 
-  console.log(types);
+  const requestors = users.map(
+    (user: any) =>
+      new Object({
+        id: user.id,
+        label: user.displayName,
+        displayName: user.displayName,
+        lastName: user.lastName,
+        firstName: user.firstName,
+        user: user,
+      })
+  );
+
+  console.log(requestors);
 
   function handleApiErrors(errors: any) {
     console.log(errors);
@@ -40,8 +115,6 @@ export default function RequestForm() {
           setError('description', { message: error });
         } else if (error.includes('requestType')) {
           setError('requestType', { message: error });
-        } else if (error.includes('displayName')) {
-          setError('requestor', { message: error });
         }
       });
     }
@@ -52,138 +125,113 @@ export default function RequestForm() {
       <PageContainer>
         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>WMS</Box>
         <Box
-          component='form'
-          onSubmit={handleSubmit((data) =>
-            agent.UserRequest.create(data)
-              .then((response) => {
-                const token = response.data.token;
-                localStorage.setItem('authToken', token);
-                toast.success('Request submitted successfully!');
-                navigate('/');
-              })
-              .catch((error) => handleApiErrors(error))
-          )}
-          noValidate
           sx={{
             display: 'flex',
             flexDirection: 'column',
             width: '100%',
-            gap: 2,
+            gap: 4,
           }}
         >
-          <FormControl>
-            <FormLabel htmlFor='requestTitle'>Request Title</FormLabel>
-            <TextField
-              margin='normal'
-              id='requestTitle'
-              type='text'
-              autoFocus
-              required
-              fullWidth
-              variant='outlined'
-              {...register('requestTitle', {
-                required: 'Request title is required!',
-              })}
-              error={!!errors.requestTitle}
-              color={errors.requestTitle ? 'error' : 'primary'}
-              sx={{ ariaLabel: 'requestTitle' }}
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position='start'>
-                      <Title />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel htmlFor='description'>Description</FormLabel>
-            <TextField
-              margin='normal'
-              id='description'
-              type='text'
-              multiline
-              variant='outlined'
-              fullWidth
-              {...register('description', {
-                required: 'Request description is required!',
-              })}
-              error={!!errors.description}
-              color={errors.description ? 'error' : 'primary'}
-              sx={{ ariaLabel: 'description' }}
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position='start'>
-                      <Description />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
-          </FormControl>
-          {/* <FormControl>
-            <Autocomplete
-              freeSolo
-              id='requestType'
-              options={types.map((type: any) => type)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label='Type of Request'
-                  margin='normal'
-                  variant='outlined'
-                  {...register('requestType')}
-                  sx={{ ariaLabel: 'requestType' }}
-                />
-              )}
-            />
-          </FormControl> */}
-          <FormControl>
-            {/* <FormLabel htmlFor='requestors'>Requestors</FormLabel> */}
-            <Autocomplete
-              multiple
-              freeSolo
-              size='medium'
-              id='requestors'
-              options={users.map((user: any) => user.displayName)}
-              renderTags={(value: readonly string[], getTagProps) =>
-                value.map((option: string, index: number) => {
-                  const { key, ...tagProps } = getTagProps({ index });
-                  return (
-                    <Chip
-                      variant='filled'
-                      label={option}
-                      key={key}
-                      {...tagProps}
-                    />
-                  );
+          <form
+            onSubmit={handleSubmit((data) =>
+              agent.UserRequest.create(data)
+                .then((response) => {
+                  const token = response.data.token;
+                  localStorage.setItem('authToken', token);
+                  toast.success('Request submitted successfully!');
+                  navigate('/');
                 })
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label='Requestors'
-                  margin='normal'
-                  variant='outlined'
-                  {...register('requestors')}
-                  sx={{ ariaLabel: 'requestors' }}
-                />
-              )}
-            />
-          </FormControl>
-          <LoadingButton
-            // loading={isSubmitting}
-            disabled={!isValid}
-            type='submit'
-            fullWidth
-            variant='contained'
-            color='secondary'
+                .catch((error) => handleApiErrors(error))
+            )}
           >
-            Submit Request
-          </LoadingButton>
+            <Stack spacing={2}>
+              <TextFieldElement
+                margin='normal'
+                id='requestTitle'
+                type='text'
+                name={'requestTitle'}
+                label={'Request Title'}
+                autoFocus
+                required
+                fullWidth
+                control={control}
+                variant='outlined'
+                error={!!errors.requestTitle}
+                color={errors.requestTitle ? 'error' : 'primary'}
+                sx={{ ariaLabel: 'requestTitle' }}
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <Title />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+
+              <TextFieldElement
+                margin='normal'
+                id='description'
+                type='text'
+                name={'description'}
+                label={'Description'}
+                control={control}
+                multiline
+                variant='outlined'
+                fullWidth
+                sx={{ ariaLabel: 'description' }}
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <Description />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+
+              <AutocompleteElement
+                name={'requestType'}
+                label={'Type of Request'}
+                options={types}
+                control={control}
+              />
+
+              <AutocompleteElement
+                name={'requestor'}
+                label={'Requestor'}
+                options={requestors}
+                control={control}
+              />
+
+              <AutocompleteElement
+                name={'status'}
+                label={'Status'}
+                options={statuses}
+                control={control}
+              />
+
+              <AutocompleteElement
+                name={'approvalStatus'}
+                label={'Approval Status'}
+                options={approvals}
+                control={control}
+              />
+
+              <LoadingButton
+                // loading={isSubmitting}
+                disabled={!isValid}
+                type={'submit'}
+                fullWidth
+                variant='contained'
+                color={'secondary'}
+              >
+                Submit Request
+              </LoadingButton>
+            </Stack>
+          </form>
         </Box>
       </PageContainer>
     </Paper>

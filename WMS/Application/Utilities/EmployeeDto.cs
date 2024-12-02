@@ -1,7 +1,8 @@
-namespace API.DTOs
+namespace Application.Utilities
 {
-    public class UserDto
+    public class EmployeeDto
     {
+        public int Id { get; set; }
         public int EmployeeId { get; set; }
         public string DisplayName { get; set; }
         public string Token { get; set; }

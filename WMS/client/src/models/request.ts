@@ -7,7 +7,7 @@ export interface Request {
   approvalStatus?: string;
   status?: string;
   isNew?: boolean;
-  requestors?: string[];
+  requestor?: string;
 }
 
 export interface RequestParams {

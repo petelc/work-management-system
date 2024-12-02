@@ -88,13 +88,12 @@ namespace Persistence
                 );
 
             // NOTE: REQUEST
-            builder.Entity<RequestToRequestors>(x => x.HasKey(rr => new { rr.Id, rr.RequestId }));
+            //builder.Entity<Request>(x => x.HasKey(rr => new { rr.RequestId, rr.Requestors }));
 
             // ! defines a many to many relationship between Employee and Request
-            builder.Entity<RequestToRequestors>()
-                .HasOne(m => m.Employee)
-                .WithMany(m => m.Requests)
-                .HasForeignKey(rr => rr.Id);
+            builder.Entity<Request>()
+                .HasOne(m => m.Requestor)
+                .WithMany(n => n.Requests);
 
             // ! defines 1 to 1 relationship between Request and Change
             builder.Entity<Request>()

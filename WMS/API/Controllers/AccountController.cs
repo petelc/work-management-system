@@ -82,7 +82,7 @@ namespace API.Controllers
         [HttpGet("fetchAllUsers")]
         public async Task<ActionResult> GetAllUsers()
         {
-            var users =  await _userManager.Users.Select(u => new { u.DisplayName, u.UserName, u.Email, u.FirstName, u.LastName}).Distinct().ToListAsync();
+            var users =  await _userManager.Users.Select(u => new { u.Id, u.EmployeeId, u.DisplayName, u.UserName, u.Email, u.FirstName, u.LastName}).Distinct().ToListAsync();
             return Ok(new { users });
         }
 
@@ -90,6 +90,7 @@ namespace API.Controllers
         {
             return new UserDto
             {
+                EmployeeId = user.EmployeeId,
                 DisplayName = user.DisplayName,
                 Token = _tokenService.CreateToken(user),
                 Email = user.Email,

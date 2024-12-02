@@ -471,6 +471,9 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<bool>("IsNew")
                         .HasColumnType("INTEGER");
 
@@ -491,29 +494,13 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ApprovalStatusId");
 
+                    b.HasIndex("EmployeeId");
+
                     b.HasIndex("RequestTypeId");
 
                     b.HasIndex("StatusId");
 
                     b.ToTable("Requests");
-                });
-
-            modelBuilder.Entity("Domain.RequestToRequestors", b =>
-                {
-                    b.Property<int?>("Id")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("RequestId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool?>("IsNew")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id", "RequestId");
-
-                    b.HasIndex("RequestId");
-
-                    b.ToTable("RequestToRequestors");
                 });
 
             modelBuilder.Entity("Domain.RequestType", b =>
@@ -1057,6 +1044,10 @@ namespace Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("ApprovalStatusId");
 
+                    b.HasOne("Domain.Identity.Employee", "Requestor")
+                        .WithMany("Requests")
+                        .HasForeignKey("EmployeeId");
+
                     b.HasOne("Domain.RequestType", "RequestType")
                         .WithMany()
                         .HasForeignKey("RequestTypeId");
@@ -1069,26 +1060,9 @@ namespace Persistence.Migrations
 
                     b.Navigation("RequestType");
 
+                    b.Navigation("Requestor");
+
                     b.Navigation("Status");
-                });
-
-            modelBuilder.Entity("Domain.RequestToRequestors", b =>
-                {
-                    b.HasOne("Domain.Identity.Employee", "Employee")
-                        .WithMany("Requests")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Request", "Request")
-                        .WithMany("Requestors")
-                        .HasForeignKey("RequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("Request");
                 });
 
             modelBuilder.Entity("Domain.Work", b =>
@@ -1246,8 +1220,6 @@ namespace Persistence.Migrations
                     b.Navigation("Change");
 
                     b.Navigation("Project");
-
-                    b.Navigation("Requestors");
                 });
 
             modelBuilder.Entity("Domain.Work", b =>

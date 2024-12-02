@@ -1,9 +1,23 @@
 {
-  "requestId": 0,
-  "requestTitle": "Request 2",
-  "description": "This is the second initial Request (Change Request)",
+  "requestTitle": "Another test",
+  "description": "asdgasgf",
+  "requestors": [
+    {
+      "EmployeeId": 10020203,
+      "UserName": "stella"
+    }
+  ],
   "isNew": true,
-  "requestTypeId": 2,
-  "statusId": 5,
-  "approvalStatusId": 1
+  "requestType": {
+    "RequestTypeId": 2,
+    "RequestTypeName": "Change Request"
+  },
+  "status": {
+    "StatusId": 5,
+    "StatusName": "Pending"
+  },
+  "approvalStatus": {
+    "ApprovalStatusId": 3,
+    "ApprovalStatusName": "Pending"
+  }
 }
