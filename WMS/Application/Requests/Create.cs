@@ -45,52 +45,12 @@ namespace Application.Requests
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-
-                // Find the user that is part of the request object
-                // var userInRequest = await _userManager.FindByNameAsync(request.Request.Requestors.FirstOrDefault().Employee.UserName);
-
                 var p = request.Request;
+                
 
-                // var user = await _userManager.Users.FirstOrDefaultAsync(x => x.EmployeeId == p.Requestors.First()
-                // .EmployeeId);
+                var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == p.Requestor.Id);
+                request.Request.Requestor = user;
 
-                // if (user == null)
-                // {
-                //     return Result<Unit>.Failure("User not found");
-                // }
-
-                // var emp = _utilities.CreateUserObject(user);
-
-                // Employee employee = new Employee
-                // {
-                    
-                //     EmployeeId = emp.EmployeeId,
-                //     DisplayName = emp.DisplayName,
-                //     Email = emp.Email,
-                //     UserName = emp.Username,
-                //     LastName = emp.LastName,
-                //     FirstName = emp.FirstName,
-                // };
-
-                // var requestor = new RequestToRequestors
-                // {
-                //     Employee = employee,
-                //     Request = request.Request,
-                //     IsNew = true,
-                // };
-
-                // if (userInRequest == null)
-                // {
-                //     return Result<Unit>.Failure("User not found");
-                // }
-
-                // var requestor = new RequestToRequestors
-                // {
-                //     Employee = userInRequest,
-                //     Request = request.Request,
-                //     IsNew = true,
-                // };
-                //request.Request.Requestors.Add(requestor);
 
                 var type = await _context.RequestTypes.FirstOrDefaultAsync(x => x.RequestTypeId == request.Request.RequestType.RequestTypeId);
                 request.Request.RequestType = type;

@@ -16,6 +16,6 @@ namespace Application.Requests
         public Change Change { get; set; }
         public Project Project { get; set; }
         public Employee Requestor { get; set; }
-        //public ICollection<RequestToRequestors> Requestors { get; set; } = new List<RequestToRequestors>();
+        
     }
 }

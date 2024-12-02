@@ -1,21 +1,27 @@
 {
-  "requestTitle": "Biotech detector",
-  "description": "a test submission",
-  "requestors": [
-    {
-      "Id": 3,
-      "id": 10020203,
-      "employeeId": 10020203,
-      "userName": "stella",
-      "label": "Stella Holt"
+  "requestTitle": "What",
+  "description": "Why",
+  "requestors": {
+    "id": 10120102,
+    "employeeId": 10120102,
+    "userName": "sandy",
+    "label": "Sandy Patrick",
+    "user": {
+      "id": 2,
+      "employeeId": 10120102,
+      "displayName": "Sandy Patrick",
+      "userName": "sandy",
+      "email": "sandy@example.com",
+      "firstName": "Sandy",
+      "lastName": "Patrick"
     }
-  ],
+  },
   "isNew": true,
   "requestType": {
-    "id": 1,
-    "RequestTypeId": 1,
-    "RequestTypeName": "Project Request",
-    "label": "Project Request"
+    "id": 2,
+    "RequestTypeId": 2,
+    "RequestTypeName": "Change Request",
+    "label": "Change Request"
   },
   "status": {
     "id": 5,

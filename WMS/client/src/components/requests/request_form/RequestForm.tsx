@@ -76,7 +76,7 @@ export default function RequestForm() {
     requestTitle: string;
     description: string;
     requestType: string;
-    requestors: string[];
+    requestor: {};
     isNew: boolean;
     status?: {};
     approvalStatus?: {};
@@ -84,7 +84,7 @@ export default function RequestForm() {
     defaultValues: {
       requestTitle: '',
       description: '',
-      requestors: [],
+      requestor: {},
       isNew: true,
     },
   });
@@ -94,11 +94,12 @@ export default function RequestForm() {
   const requestors = users.map(
     (user: any) =>
       new Object({
-        id: user.employeeId,
-        Id: user.Id,
-        employeeId: user.employeeId,
-        userName: user.userName,
+        id: user.id,
         label: user.displayName,
+        displayName: user.displayName,
+        lastName: user.lastName,
+        firstName: user.firstName,
+        user: user,
       })
   );
 
@@ -114,8 +115,6 @@ export default function RequestForm() {
           setError('description', { message: error });
         } else if (error.includes('requestType')) {
           setError('requestType', { message: error });
-        } else if (error.includes('displayName')) {
-          setError('requestors', { message: error });
         }
       });
     }
@@ -201,9 +200,8 @@ export default function RequestForm() {
               />
 
               <AutocompleteElement
-                multiple
-                name={'requestors'}
-                label={'Requestors'}
+                name={'requestor'}
+                label={'Requestor'}
                 options={requestors}
                 control={control}
               />
