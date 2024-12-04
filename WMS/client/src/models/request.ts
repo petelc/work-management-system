@@ -13,8 +13,8 @@ export interface Request {
 export interface RequestParams {
   orderBy: string;
   searchTerm?: string;
-  types: string[];
-  approvalStatus: string[];
+  types: string;
+  approvalStatus: string;
   pageNumber: number;
   pageSize: number;
 }

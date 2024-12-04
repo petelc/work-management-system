@@ -13,8 +13,8 @@ interface RequestState {
   requestsLoaded: boolean;
   filtersLoaded: boolean;
   status: string;
-  approvalStatus: string[];
-  types: string[];
+  approvalStatus: string;
+  types: string;
   requestParams: RequestParams;
   metaData: MetaData | null;
 }
@@ -94,8 +94,8 @@ function initParams(): RequestParams {
     pageNumber: 1,
     pageSize: 9,
     orderBy: 'title',
-    approvalStatus: [],
-    types: [],
+    approvalStatus: '',
+    types: '',
   };
 }
 
@@ -105,8 +105,8 @@ export const requestSlice = createSlice({
     requestsLoaded: false,
     filtersLoaded: false,
     status: 'idle',
-    approvalStatus: [],
-    types: [],
+    approvalStatus: '',
+    types: '',
     requestParams: initParams(),
     metaData: null,
   }),

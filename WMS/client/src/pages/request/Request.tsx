@@ -1,7 +1,7 @@
 import Grid from '@mui/material/Grid2';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import RequestLists from '../../components/requests/RequestList';
+//import RequestLists from '../../components/requests/RequestList';
 import AppPagination from '../../components/pagination/AppPagination';
 import useRequests from '../../hooks/useRequests';
 import { setPageNumber, setRequestParams } from './requestSlice';
@@ -10,6 +10,7 @@ import LoadingComponent from '../../components/loading/LoadingComponent';
 // import { Container } from '@mui/material';
 import RequestSearch from '../../components/requests/RequestSearch';
 import RadioButtonGroup from '../../components/radiobuttongroup/RadioButtonGroup';
+import RequestTable from '../../components/requests/RequestTable';
 //import CheckboxButtons from '../../components/checkboxbuttons/CheckboxButtons';
 
 const sortOptions = [
@@ -51,7 +52,7 @@ export default function Request() {
           </Paper>
         </Grid>
         <Grid size={{ xs: 12 }}>
-          <RequestLists requests={requests} />
+          <RequestTable requests={requests} />
         </Grid>
         <Grid size={{ xs: 3 }} />
         <Grid size={{ xs: 9 }} sx={{ mb: 2 }}>

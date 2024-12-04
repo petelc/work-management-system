@@ -9,16 +9,19 @@ namespace Application.Core
         {
             //string currentUsername = null;
             CreateMap<Request, Request>();
-            CreateMap<Request, RequestDto>();
-            // CreateMap<RequestToRequestors, RequestorDto>()
-            //     .ForMember(x => x.DisplayName, o => o.MapFrom(s => s.Employee.DisplayName))
-            //     .ForMember(x => x.Username, o => o.MapFrom(s => s.Employee.UserName))
-            //     .ForMember(x => x.LastName, o => o.MapFrom(s => s.Employee.LastName))
-            //     .ForMember(x => x.FirstName, o => o.MapFrom(s => s.Employee.FirstName))
-            //     .ForMember(x => x.Region, o => o.MapFrom(s => s.Employee.Region))
-            //     .ForMember(x => x.Institution, o => o.MapFrom(s => s.Employee.Institution))
-            //     .ForMember(x => x.Extension, o => o.MapFrom(s => s.Employee.Extension))
-            //     .ForMember(x => x.ReportsTo, o => o.MapFrom(s => s.Employee.ReportsTo));
+            CreateMap<RequestDto, Request>();
+            CreateMap<Request, RequestDto>()
+                .ForMember(d => d.RequestorUsername, o => o.MapFrom(s => s.Requestor.UserName))
+                .ForMember(d => d.RequestTypeName, o => o.MapFrom(s => s.RequestType.RequestTypeName))
+                .ForMember(d => d.RequestType, o => o.MapFrom(s => s.RequestType))
+                .ForMember(d => d.StatusName, o => o.MapFrom(s => s.Status.StatusName))
+                .ForMember(d => d.Status, o => o.MapFrom(s => s.Status))
+                .ForMember(d => d.ApprovalStatusName, o => o.MapFrom(s => s.ApprovalStatus.ApprovalStatusName))
+                .ForMember(d => d.ApprovalStatus, o => o.MapFrom(s => s.ApprovalStatus))
+                .ForMember(d => d.Change, o => o.MapFrom(s => s.Change))
+                .ForMember(d => d.Project, o => o.MapFrom(s => s.Project))
+                .ForMember(d => d.Requestor, o => o.MapFrom(s => s.Requestor));
+                
         }
     }
 }
