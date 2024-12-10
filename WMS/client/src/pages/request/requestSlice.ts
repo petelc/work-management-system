@@ -3,6 +3,7 @@ import {
   createAsyncThunk,
   createEntityAdapter,
   createSlice,
+  isAnyOf,
 } from '@reduxjs/toolkit';
 import agent from '../../api/agent';
 import { RootState } from '../../store/configureStore';
@@ -88,6 +89,17 @@ export const fetchTypes = createAsyncThunk(
     }
   }
 );
+
+export const addApprovalStatus = createAsyncThunk<
+  Request,
+  { requestId: string; approvalStatusName?: string }
+>('request/approve', async (approvalStatus, thunkAPI) => {
+  try {
+    return agent.UserRequest.approve(approvalStatus);
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({ error: error.message });
+  }
+});
 
 function initParams(): RequestParams {
   return {
@@ -184,6 +196,16 @@ export const requestSlice = createSlice({
     builder.addCase(fetchTypes.rejected, (state) => {
       state.status = 'idle';
     });
+    builder.addCase(addApprovalStatus.pending, (state, action) => {
+      state.status = 'pendingApprove' + action.meta.requestId;
+    });
+    builder.addMatcher(
+      isAnyOf(addApprovalStatus.fulfilled),
+      (state, action) => {
+        state.approvalStatus = action.payload.approvalStatusName;
+        state.status = 'idle';
+      }
+    );
   },
 });
 

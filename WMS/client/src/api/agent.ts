@@ -101,6 +101,7 @@ const requestCounts = {
 const UserRequest = {
   list: (params: URLSearchParams) => requests.get('requests', params),
   create: (values: any) => requests.post('requests/create', values),
+  approve: (values: any) => requests.put('requests/approve', values),
   details: (id: number) => requests.get(`request/${id}`),
   fetchFilters: () => requests.get('requests/filters'),
 };
