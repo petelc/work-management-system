@@ -94,8 +94,6 @@ export default function RequestForm() {
       })
   );
 
-  console.log(requestors);
-
   function handleApiErrors(errors: any) {
     console.log(errors);
     if (errors) {

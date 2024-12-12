@@ -13,9 +13,6 @@ import RequestTableHead from './RequestTableHead';
 import RequestTableToolbar from './RequestTableToolbar';
 import { Box, Checkbox, TablePagination } from '@mui/material';
 import { getComparator, Order } from '../../helpers/utils/Comparators';
-//import { MetaData } from '../../models/pagination';
-//import AppPagination from '../pagination/AppPagination';
-//import { setPageNumber } from '../../pages/request/requestSlice';
 
 interface Props {
   requests: Request[];
@@ -82,9 +79,14 @@ export default function RequestTable({ requests }: Props) {
     setSelected(newSelected);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    if (event) {
+      event.preventDefault();
+    }
     setPage(newPage);
-    //dispatch(setPageNumber({ pageNumber: newPage }));
   };
 
   const handleChangeRowsPerPage = (

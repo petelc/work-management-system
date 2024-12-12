@@ -29,11 +29,7 @@ namespace Application.Requests
 
                 if (approval == null) return null;
 
-                var requestApproval = await _context.ApprovalStatuses.FirstAsync(x => x.ApprovalStatusName == request.Request.ApprovalStatus.ApprovalStatusName);
-
-                if(requestApproval == null) return null;
-
-                approval.ApprovalStatus = requestApproval; 
+                approval.ApprovalStatus = request.Request.ApprovalStatus; 
 
                 _context.Requests.Update(approval);
 

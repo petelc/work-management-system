@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import {
   requestSelectors,
-  fetchRequestsAsync,
   fetchFilters,
+  fetchRequestsAsync,
 } from '../pages/request/requestSlice';
 import { useAppSelector, useAppDispatch } from '../store/configureStore';
 //import { Request } from '../models/request';
@@ -29,8 +29,6 @@ export default function useRequests(): RequestState {
   const { requestsLoaded, filtersLoaded, approvalStatus, types, metaData } =
     useAppSelector((state) => state.request);
   const dispatch = useAppDispatch();
-
-  console.log(requests);
 
   const approvalStatusName =
     typeof approvalStatus === 'string' ? approvalStatus : approvalStatus;
