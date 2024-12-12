@@ -11,6 +11,7 @@ import { alpha, Box, Stack } from '@mui/material';
 import AppHeader from '../components/appheader/AppHeader';
 import LoadingComponent from '../components/loading/LoadingComponent';
 import Dashboard from './Dashboard';
+import { ToastContainer } from 'react-toastify';
 
 function AppLayout() {
   const location = useLocation();
@@ -42,6 +43,7 @@ function AppLayout() {
 
   return (
     <ThemeProvider theme={LPTheme}>
+      <ToastContainer position='bottom-right' hideProgressBar theme='colored' />
       <CssBaseline enableColorScheme />
       <Box sx={{ display: 'flex' }}>
         <SideMenu />

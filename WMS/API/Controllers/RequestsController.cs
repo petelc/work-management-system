@@ -82,5 +82,11 @@ namespace API.Controllers
 
             return Ok(new { ApprovalStatus, types });
         }
+
+        [HttpPut("approve")]
+        public async Task<IActionResult> ApproveRequest(Request request)
+        {
+            return HandleResult(await Mediator.Send(new Approve.Command { Request = request }));
+        }
     }
 }

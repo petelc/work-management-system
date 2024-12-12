@@ -3,13 +3,10 @@ using Application.Interfaces;
 using Domain;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Microsoft.AspNetCore.Identity;
 using Domain.Identity;
-using Application.Utilities;
-using System.Security.Claims;
 
 namespace Application.Requests
 {

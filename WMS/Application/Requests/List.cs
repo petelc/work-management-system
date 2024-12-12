@@ -29,10 +29,16 @@ namespace Application.Requests
             public async Task<Result<PagedList<RequestDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var query = _context.Requests
+                
                     .OrderBy(d => d.RequestTitle)
                     .ProjectTo<RequestDto>(_mapper.ConfigurationProvider,
                         new { currentUsername = _userAccessor.GetUserName() })
                     .AsQueryable();
+
+                // var query = _context.Requests
+                // .Select(r => new { r.RequestId, r.RequestTitle, r.Description, r.IsNew,  r.RequestType.RequestTypeName, r.Status.StatusName, r.ApprovalStatus.ApprovalStatusName, r.Change, r.Project, r.Requestor })
+                //     .OrderBy(d => d.RequestTitle)
+                //     .AsQueryable();
 
                 return Result<PagedList<RequestDto>>.Success(
                     await PagedList<RequestDto>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize)

@@ -3,6 +3,7 @@ import {
   createAsyncThunk,
   createEntityAdapter,
   createSlice,
+  isAnyOf,
 } from '@reduxjs/toolkit';
 import agent from '../../api/agent';
 import { RootState } from '../../store/configureStore';
@@ -13,8 +14,8 @@ interface RequestState {
   requestsLoaded: boolean;
   filtersLoaded: boolean;
   status: string;
-  approvalStatus: string[];
-  types: string[];
+  approvalStatus: string;
+  types: string;
   requestParams: RequestParams;
   metaData: MetaData | null;
 }
@@ -89,13 +90,24 @@ export const fetchTypes = createAsyncThunk(
   }
 );
 
+export const addApprovalStatus = createAsyncThunk<
+  Request,
+  { requestId: string; approvalStatusName?: string }
+>('request/approve', async (approvalStatus, thunkAPI) => {
+  try {
+    return agent.UserRequest.approve(approvalStatus);
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({ error: error.message });
+  }
+});
+
 function initParams(): RequestParams {
   return {
     pageNumber: 1,
     pageSize: 9,
     orderBy: 'title',
-    approvalStatus: [],
-    types: [],
+    approvalStatus: '',
+    types: '',
   };
 }
 
@@ -105,8 +117,8 @@ export const requestSlice = createSlice({
     requestsLoaded: false,
     filtersLoaded: false,
     status: 'idle',
-    approvalStatus: [],
-    types: [],
+    approvalStatus: '',
+    types: '',
     requestParams: initParams(),
     metaData: null,
   }),
@@ -184,6 +196,16 @@ export const requestSlice = createSlice({
     builder.addCase(fetchTypes.rejected, (state) => {
       state.status = 'idle';
     });
+    builder.addCase(addApprovalStatus.pending, (state, action) => {
+      state.status = 'pendingApprove' + action.meta.requestId;
+    });
+    builder.addMatcher(
+      isAnyOf(addApprovalStatus.fulfilled),
+      (state, action) => {
+        state.approvalStatus = action.payload.approvalStatusName;
+        state.status = 'idle';
+      }
+    );
   },
 });
 
