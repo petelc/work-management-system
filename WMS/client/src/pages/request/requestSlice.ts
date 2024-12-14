@@ -3,7 +3,6 @@ import {
   createAsyncThunk,
   createEntityAdapter,
   createSlice,
-  isAnyOf,
 } from '@reduxjs/toolkit';
 import agent from '../../api/agent';
 import { RootState } from '../../store/configureStore';
@@ -14,8 +13,14 @@ interface RequestState {
   requestsLoaded: boolean;
   filtersLoaded: boolean;
   status: string;
-  approvalStatus: string;
-  types: string;
+  approvalStatus: {
+    approvalStatusId: number;
+    approvalStatusName: string;
+  };
+  requestType: {
+    requestTypeId: number;
+    requestTypeName: string;
+  };
   requestParams: RequestParams;
   metaData: MetaData | null;
 }
@@ -31,10 +36,10 @@ function getAxiosParams(requestParams: RequestParams) {
   params.append('orderBy', requestParams.orderBy);
   if (requestParams.searchTerm)
     params.append('searchTerm', requestParams.searchTerm);
-  if (requestParams.approvalStatus.length > 0)
+  if (requestParams.approvalStatus.approvalStatusName.length > 0)
     params.append('approvalStatus', requestParams.approvalStatus.toString());
-  if (requestParams.types.length > 0)
-    params.append('types', requestParams.types.toString());
+  if (requestParams.requestType.requestTypeName.length > 0)
+    params.append('types', requestParams.requestType.toString());
   return params;
 }
 
@@ -106,8 +111,14 @@ function initParams(): RequestParams {
     pageNumber: 1,
     pageSize: 9,
     orderBy: 'title',
-    approvalStatus: '',
-    types: '',
+    approvalStatus: {
+      approvalStatusId: 0,
+      approvalStatusName: '',
+    },
+    requestType: {
+      requestTypeId: 0,
+      requestTypeName: '',
+    },
   };
 }
 
@@ -117,8 +128,14 @@ export const requestSlice = createSlice({
     requestsLoaded: false,
     filtersLoaded: false,
     status: 'idle',
-    approvalStatus: '',
-    types: '',
+    approvalStatus: {
+      approvalStatusId: 0,
+      approvalStatusName: '',
+    },
+    requestType: {
+      requestTypeId: 0,
+      requestTypeName: '',
+    },
     requestParams: initParams(),
     metaData: null,
   }),
@@ -178,7 +195,7 @@ export const requestSlice = createSlice({
     });
     builder.addCase(fetchFilters.fulfilled, (state, action) => {
       state.approvalStatus = action.payload.approvalStatus.approvalStatusName;
-      state.types = action.payload.types;
+      state.requestType = action.payload.requestType;
       state.status = action.payload.statusName;
       state.status = 'idle';
       state.filtersLoaded = true;
@@ -190,22 +207,23 @@ export const requestSlice = createSlice({
       state.status = 'pendingFetchTypes';
     });
     builder.addCase(fetchTypes.fulfilled, (state, action) => {
-      state.types = action.payload.types;
+      state.requestType = action.payload.types;
       state.status = 'idle';
     });
     builder.addCase(fetchTypes.rejected, (state) => {
       state.status = 'idle';
     });
-    builder.addCase(addApprovalStatus.pending, (state, action) => {
-      state.status = 'pendingApprove' + action.meta.requestId;
+    builder.addCase(addApprovalStatus.pending, (state) => {
+      state.status = 'pendingApprove';
     });
-    builder.addMatcher(
-      isAnyOf(addApprovalStatus.fulfilled),
-      (state, action) => {
-        state.approvalStatus = action.payload.approvalStatusName;
-        state.status = 'idle';
-      }
-    );
+    builder.addCase(addApprovalStatus.fulfilled, (state, action) => {
+      state.approvalStatus = action.payload.approvalStatus;
+      state.requestsLoaded = true;
+      state.status = 'idle';
+    });
+    builder.addCase(addApprovalStatus.rejected, (state) => {
+      state.status = 'idle';
+    });
   },
 });
 

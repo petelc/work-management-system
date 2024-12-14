@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { fetchTypes } from '../pages/request/requestSlice';
-import { useAppSelector, useAppDispatch } from '../store/configureStore';
+import { useAppSelector, useAppDispatch } from '../store/hooks';
 
 export default function useFetchRequestTypes() {
   //const {types} = useAppSelector(requestSelectors.selectAll);

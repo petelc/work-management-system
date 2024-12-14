@@ -4,10 +4,11 @@ import {
   fetchFilters,
   fetchRequestsAsync,
 } from '../pages/request/requestSlice';
-import { useAppSelector, useAppDispatch } from '../store/configureStore';
+import { useAppSelector, useAppDispatch } from '../store/hooks';
 //import { Request } from '../models/request';
 
 type ApprovalStatus = {
+  approvalStatusId: number;
   approvalStatusName: string;
 };
 
@@ -17,7 +18,7 @@ type RequestType = {
 
 type RequestState = {
   requests: any;
-  approvalStatus: ApprovalStatus | string;
+  approvalStatus: ApprovalStatus | {};
   types: RequestType | string;
   requestsLoaded: boolean;
   filtersLoaded: boolean;
@@ -26,13 +27,19 @@ type RequestState = {
 
 export default function useRequests(): RequestState {
   const requests = useAppSelector(requestSelectors.selectAll);
-  const { requestsLoaded, filtersLoaded, approvalStatus, types, metaData } =
-    useAppSelector((state) => state.request);
+  const {
+    requestsLoaded,
+    filtersLoaded,
+    approvalStatus,
+    requestType,
+    metaData,
+  } = useAppSelector((state) => state.request);
   const dispatch = useAppDispatch();
 
   const approvalStatusName =
     typeof approvalStatus === 'string' ? approvalStatus : approvalStatus;
-  const requestTypeName = typeof types === 'string' ? types : types;
+  const requestTypeName =
+    typeof requestType === 'string' ? requestType : requestType;
 
   useEffect(() => {
     if (!requestsLoaded) dispatch(fetchRequestsAsync());

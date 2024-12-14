@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -6,13 +6,13 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 //import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { useAppSelector } from '../../store/configureStore';
+import { useAppSelector } from '../../store/hooks';
 import { Request } from '../../models/request';
 import LoadingComponent from '../loading/LoadingComponent';
 import RequestTableHead from './RequestTableHead';
 import RequestTableToolbar from './RequestTableToolbar';
 import { Box, Checkbox, TablePagination } from '@mui/material';
-import { getComparator, Order } from '../../helpers/utils/Comparators';
+//import { Order } from '../../helpers/utils/Comparators';
 
 interface Props {
   requests: Request[];
@@ -20,19 +20,20 @@ interface Props {
 
 export default function RequestTable({ requests }: Props) {
   //const { currentPage = 1, totalCount = 4, pageSize = 10 } = metaData || {};
-  const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof Request>('requestTitle');
+  //const [order, setOrder] = useState<Order>('asc');
+  //const [orderBy, setOrderBy] = useState<keyof Request>('requestTitle');
   const [selected, setSelected] = useState<number[]>([]);
   const [selectedRequest, setSelectedRequest] = useState<number | null>(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { requestsLoaded } = useAppSelector((state) => state.request);
-  //const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    setOrder('asc');
-    setOrderBy('requestTitle');
-  }, [setOrder, setOrderBy]);
+  //console.log(requests[0].approvalStatus.approvalStatusName);
+
+  // useEffect(() => {
+  //   setOrder('asc');
+  //   setOrderBy('requestTitle');
+  // }, [setOrder, setOrderBy]);
 
   useEffect(() => {
     if (selected.length === 1) {
@@ -100,12 +101,17 @@ export default function RequestTable({ requests }: Props) {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - requests.length) : 0;
 
-  const visibleRows = useMemo(
-    () =>
-      [...requests]
-        .sort(getComparator(order, orderBy))
-        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage, requests]
+  // const visibleRows = useMemo(
+  //   () =>
+  //     [...requests]
+
+  //       // .sort(getComparator(order, orderBy))
+  //       // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+  //   [ requests]
+  // );
+  const visibleRows = requests.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
   );
 
   if (!requestsLoaded)
@@ -160,13 +166,13 @@ export default function RequestTable({ requests }: Props) {
                     </TableCell>
                     {/* <TableCell align='center'>{request.priority}</TableCell> */}
                     <TableCell align='left'>
-                      {request.requestTypeName}
+                      {request.requestType.requestTypeName}
                     </TableCell>
                     <TableCell align='left'>
                       {request.requestorUsername}
                     </TableCell>
                     <TableCell align='left'>
-                      {request.approvalStatusName}
+                      {request.approvalStatus.approvalStatusName}
                     </TableCell>
                     <TableCell align='left'>{request.createDate}</TableCell>
                   </TableRow>

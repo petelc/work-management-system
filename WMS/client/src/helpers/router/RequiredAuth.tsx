@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAppSelector } from '../../store/configureStore';
+import { useAppSelector } from '../../store/hooks';
 import { toast } from 'react-toastify';
 
 interface Props {

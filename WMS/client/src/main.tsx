@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 
 import { store } from './store/configureStore.ts';
 import { router } from './helpers/router/Routes.tsx';
+// import { PersistGate } from 'redux-persist/integration/react';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

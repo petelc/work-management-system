@@ -19,7 +19,7 @@ import { PageContainer } from '@toolpad/core';
 import { PageToolbar } from '../toolbar/PageToolbar';
 //import { toast } from 'react-toastify';
 
-import { useAppDispatch, useAppSelector } from '../../store/configureStore';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {
   addApprovalStatus,
   fetchRequestAsync,

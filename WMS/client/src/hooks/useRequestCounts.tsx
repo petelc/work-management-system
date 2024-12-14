@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../store/configureStore';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
   dashboardSelectors,
   fetchRequestCountsAsync,

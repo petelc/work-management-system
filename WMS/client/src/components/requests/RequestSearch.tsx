@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { TextField, debounce } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '../../store/configureStore';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setRequestParams } from '../../pages/request/requestSlice';
 
 export default function RequestSearch() {

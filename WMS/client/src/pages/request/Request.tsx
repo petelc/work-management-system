@@ -11,7 +11,6 @@ import RequestTable from '../../components/requests/RequestTable';
 
 export default function Request() {
   const { requests, filtersLoaded } = useRequests();
-  //const dispatch = useAppDispatch();
 
   if (!filtersLoaded) return <LoadingComponent message='Loading requests...' />;
 
@@ -27,16 +26,6 @@ export default function Request() {
           <RequestTable requests={requests} />
         </Grid>
         <Grid size={{ xs: 3 }} />
-        {/* <Grid size={{ xs: 9 }} sx={{ mb: 2 }}>
-          {metaData && (
-            <AppPagination
-              metaData={metaData}
-              onPageChange={(page: number) =>
-                dispatch(setPageNumber({ pageNumber: page }))
-              }
-            />
-          )}
-        </Grid> */}
       </Grid>
     </Box>
   );

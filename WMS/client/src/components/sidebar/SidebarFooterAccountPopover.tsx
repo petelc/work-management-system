@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { AccountPopoverFooter, SignOutButton } from '@toolpad/core';
-import { useAppDispatch, useAppSelector } from '../../store/configureStore';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchCurrentUser } from '../../pages/account/accountSlice';
 
 export default function SidebarFooterAccountPopover() {

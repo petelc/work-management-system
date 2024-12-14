@@ -5,16 +5,28 @@ export interface Request {
   priority: string;
   requestTypeName: string;
   requestorUsername: string;
-  approvalStatusName: string;
+  approvalStatus: {
+    approvalStatusId: number;
+    approvalStatusName: string;
+  };
   createDate: string;
-  requestType: string; // Remove optional type
+  requestType: {
+    requestTypeId: number;
+    requestTypeName: string;
+  }; // Remove optional type
 }
 
 export interface RequestParams {
   orderBy: string;
   searchTerm?: string;
-  types: string;
-  approvalStatus: string;
+  requestType: {
+    requestTypeId: number;
+    requestTypeName: string;
+  };
+  approvalStatus: {
+    approvalStatusId: number;
+    approvalStatusName: string;
+  };
   pageNumber: number;
   pageSize: number;
 }

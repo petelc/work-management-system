@@ -12,7 +12,7 @@ import Grid from '@mui/material/Grid2';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
-import { useAppDispatch } from '../../store/configureStore';
+import { useAppDispatch } from '../../store/hooks';
 import { signInUser } from './accountSlice';
 
 export default function Login() {
