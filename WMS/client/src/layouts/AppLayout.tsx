@@ -2,16 +2,16 @@ import { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { PaletteMode, ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { alpha, Box, Stack } from '@mui/material';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import getLPTheme from '../styles/theme/getLPTheme';
-
 import SideMenu from '../components/sidemenu/SideMenu';
 import AppNaveBar from '../components/appnavbar/AppNavBar';
-import { alpha, Box, Stack } from '@mui/material';
 import AppHeader from '../components/appheader/AppHeader';
 import LoadingComponent from '../components/loading/LoadingComponent';
 import Dashboard from './Dashboard';
-import { ToastContainer } from 'react-toastify';
 
 function AppLayout() {
   const location = useLocation();

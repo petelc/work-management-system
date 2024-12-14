@@ -1,11 +1,11 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { AppProvider } from '@toolpad/core/react-router-dom';
 import { Outlet, useNavigate } from 'react-router-dom';
 import type { Navigation, Session } from '@toolpad/core';
 import { Cyclone, Dashboard, HowToReg } from '@mui/icons-material';
 
 import { useAppDispatch, useAppSelector } from './store/hooks';
-import { signOut } from './pages/account/accountSlice';
+import { signOut, fetchCurrentUser } from './pages/account/accountSlice';
 
 const NAVIGATION: Navigation = [
   {
@@ -37,20 +37,17 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem('user');
-    if (token) {
-      setSession({
-        user: {
-          name: user?.displayName,
-          email: user?.email,
-          image: '',
-        },
-      });
-    } else {
-      navigate('/login');
+  const initApp = useCallback(async () => {
+    try {
+      dispatch(fetchCurrentUser());
+    } catch (error) {
+      console.log(error);
     }
-  }, [navigate]);
+  }, [dispatch]);
+
+  useEffect(() => {
+    initApp().then(() => setLoading(false));
+  }, [initApp]);
 
   const [session, setSession] = useState<Session | null>({
     user: {

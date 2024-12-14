@@ -73,10 +73,14 @@ export default function RequestDetails() {
   const { status } = useAppSelector((state) => state.request);
 
   useEffect(() => {
-    if (!request && id) dispatch(fetchRequestAsync(parseInt(id)));
-  }, [id, request, dispatch]);
+    if (!request && id) {
+      dispatch(fetchRequestAsync(parseInt(id)));
+    } else if (!request && !id) {
+      navigate('/requests');
+    }
+  }, [id, request, dispatch, navigate]);
 
-  const { requestTitle, description, requestor } = request;
+  const { requestTitle, description, requestor, approvalStatusName } = request;
 
   const handleSubmit = async (
     e: React.FormEvent<RequestDetailsFormElements>

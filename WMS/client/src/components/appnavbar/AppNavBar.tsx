@@ -26,10 +26,8 @@ const Toolbar = styled(MuiToolbar)({
   },
 });
 
-export default function AppNaveBar() {
+export default function AppNavBar() {
   const [open, setOpen] = useState(false);
-
-  console.log(open);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
