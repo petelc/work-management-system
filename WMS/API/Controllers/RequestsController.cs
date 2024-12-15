@@ -88,5 +88,11 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Approve.Command { Request = request }));
         }
+
+        [HttpPut("set-type")]
+        public async Task<IActionResult> ChangeType(Request request)
+        {
+            return HandleResult(await Mediator.Send(new ChangeType.Command { Request = request }));
+        }
     }
 }

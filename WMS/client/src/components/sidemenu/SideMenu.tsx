@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import MuiDrawer, { drawerClasses } from '@mui/material/Drawer';
@@ -10,6 +11,8 @@ import MenuContent from '../menucontent/MenuContent';
 import SelectContent from '../selectcontent/SelectContent';
 import CardAlert from '../cardalert/CardAlert';
 import OptionsMenu from '../optionsmenu/OptionsMenu';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { fetchCurrentUser } from '../../pages/account/accountSlice';
 
 //import MenuContent from './MenuContent';
 //import CardAlert from './CardAlert';
@@ -29,6 +32,15 @@ const Drawer = styled(MuiDrawer)({
 });
 
 export default function SideMenu() {
+  const { user } = useAppSelector((state) => state.account);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!user) dispatch(fetchCurrentUser());
+  }, [user, dispatch]);
+
+  console.log('SideMenu ', user);
+
   return (
     <Drawer
       variant='permanent'
@@ -69,10 +81,10 @@ export default function SideMenu() {
             variant='body2'
             sx={{ fontWeight: 500, lineHeight: '16px' }}
           >
-            Peter Carroll {/* TODO - get current users information */}
+            {user?.displayName} {/* TODO - get current users information */}
           </Typography>
           <Typography variant='caption' sx={{ color: 'text.secondary' }}>
-            petelc66@gmail.com
+            {user?.email} {/* TODO - get current users information */}
           </Typography>
         </Box>
         <OptionsMenu />

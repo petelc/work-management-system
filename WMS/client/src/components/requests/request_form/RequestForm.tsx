@@ -215,7 +215,7 @@ export default function RequestForm() {
                 type={'submit'}
                 fullWidth
                 variant='contained'
-                color={'secondary'}
+                color={'primary'}
               >
                 Submit Request
               </LoadingButton>
