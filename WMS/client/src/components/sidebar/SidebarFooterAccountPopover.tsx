@@ -21,7 +21,8 @@ export default function SidebarFooterAccountPopover() {
     if (!user) dispatch(fetchCurrentUser());
   }, [user, dispatch]);
 
-  // TODO - Get Current User from redux store
+  console.log('SidebarFooterAccountPopover ', user);
+
   return (
     <Stack direction='column'>
       <Typography variant='body2' mx={2} mt={1}>

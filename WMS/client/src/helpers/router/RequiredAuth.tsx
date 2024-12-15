@@ -9,8 +9,6 @@ interface Props {
 export default function RequireAuth({ roles }: Props) {
   const { user } = useAppSelector((state) => state.account);
 
-  console.log(user);
-
   const location = useLocation();
 
   // if (!user) {

@@ -83,7 +83,7 @@ export const fetchFilters = createAsyncThunk(
   }
 );
 
-// ! Fetch request types for select control
+// ? Fetch request types for select control
 export const fetchTypes = createAsyncThunk(
   'request/types',
   async (_, thunkAPI) => {
@@ -95,12 +95,25 @@ export const fetchTypes = createAsyncThunk(
   }
 );
 
+// ? Approve or deny a request
 export const addApprovalStatus = createAsyncThunk<
   Request,
   { requestId: string; approvalStatusName?: string }
 >('request/approve', async (approvalStatus, thunkAPI) => {
   try {
     return agent.UserRequest.approve(approvalStatus);
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue({ error: error.message });
+  }
+});
+
+// ? Set the request type
+export const setRequestType = createAsyncThunk<
+  Request,
+  { requestId: string; requestTypeName?: string }
+>('request/set-type', async (requestType, thunkAPI) => {
+  try {
+    return agent.UserRequest.setType(requestType);
   } catch (error: any) {
     return thunkAPI.rejectWithValue({ error: error.message });
   }
@@ -222,6 +235,17 @@ export const requestSlice = createSlice({
       state.status = 'idle';
     });
     builder.addCase(addApprovalStatus.rejected, (state) => {
+      state.status = 'idle';
+    });
+    builder.addCase(setRequestType.pending, (state) => {
+      state.status = 'pendingSetType';
+    });
+    builder.addCase(setRequestType.fulfilled, (state, action) => {
+      state.requestType = action.payload.requestType;
+      state.requestsLoaded = true;
+      state.status = 'idle';
+    });
+    builder.addCase(setRequestType.rejected, (state) => {
       state.status = 'idle';
     });
   },

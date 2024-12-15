@@ -24,6 +24,7 @@ import {
   addApprovalStatus,
   fetchRequestAsync,
   requestSelectors,
+  setRequestType,
 } from '../../pages/request/requestSlice';
 
 import LoadingComponent from '../loading/LoadingComponent';
@@ -80,7 +81,27 @@ export default function RequestDetails() {
     }
   }, [id, request, dispatch, navigate]);
 
-  const { requestTitle, description, requestor, approvalStatusName } = request;
+  const {
+    requestTitle,
+    description,
+    requestor,
+    approvalStatusName,
+    requestTypeName,
+  } = request;
+
+  useEffect(() => {
+    if (approvalStatusName === 'Approved') {
+      setApproval(approvalStatusName);
+    } else if (approvalStatusName === 'Denied') {
+      setApproval(approvalStatusName);
+    }
+
+    if (requestTypeName === 'Project Request') {
+      setType(requestTypeName);
+    } else if (requestTypeName === 'Change Request') {
+      setType(requestTypeName);
+    }
+  }, [setApproval, approvalStatusName, setType, requestTypeName]);
 
   const handleSubmit = async (
     e: React.FormEvent<RequestDetailsFormElements>
@@ -88,6 +109,8 @@ export default function RequestDetails() {
     e.preventDefault();
 
     let approveRequest = {};
+
+    let requestType = {};
 
     if (approval === 'Approved') {
       approveRequest = {
@@ -103,15 +126,29 @@ export default function RequestDetails() {
       };
     }
 
-    // const type = e.currentTarget.requestType.value;
+    if (type === 'Project Request') {
+      requestType = {
+        requestTypeId: 1,
+        requestTypeName: 'Project Request',
+      };
+    }
+
+    if (type === 'Change Request') {
+      requestType = {
+        requestTypeId: 2,
+        requestTypeName: 'Change Request',
+      };
+    }
 
     if (id) {
       const updatedRequest = {
         ...request,
         requestId: id,
         approvalStatus: approveRequest,
+        requestType: requestType,
       };
       dispatch(addApprovalStatus(updatedRequest));
+      dispatch(setRequestType(updatedRequest));
       navigate(`/requests/${id}`);
     }
   };
@@ -122,6 +159,16 @@ export default function RequestDetails() {
 
   const handleTypeChange = (e) => {
     setType(e.target.value);
+  };
+
+  const handleCABClick = (e) => {
+    e.preventDefault();
+    // dispatch(sendToCAB());
+  };
+
+  const handleCMClick = (e) => {
+    e.preventDefault();
+    // dispatch(sendToChangeManager());
   };
 
   if (status.includes('pending'))
@@ -206,6 +253,16 @@ export default function RequestDetails() {
                           }
                           label='Denied'
                         />
+                        <FormControlLabel
+                          value='Pending'
+                          control={
+                            <Radio
+                              checked={approval === 'Pending'}
+                              size='small'
+                            />
+                          }
+                          label='Pending'
+                        />
                       </RadioGroup>
                     </FormControl>
                   </Tooltip>
@@ -271,8 +328,24 @@ export default function RequestDetails() {
                   sx={{ justifyContent: 'space-between', alignItems: 'center' }}
                 >
                   <Button type='submit' variant='contained' color='primary'>
-                    Submit
+                    Update
                   </Button>
+                  <Stack direction='row' spacing={2}>
+                    <Button
+                      variant='contained'
+                      color='success'
+                      onClick={handleCABClick}
+                    >
+                      Send to CAB
+                    </Button>
+                    <Button
+                      variant='contained'
+                      color='info'
+                      onClick={handleCMClick}
+                    >
+                      Send to Change Manager
+                    </Button>
+                  </Stack>
                 </Stack>
               </Section>
             </Grid>
