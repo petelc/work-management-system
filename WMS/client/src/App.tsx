@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { AppProvider } from '@toolpad/core/react-router-dom';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import type { Navigation, Session } from '@toolpad/core';
-import { Cyclone, Dashboard, HowToReg } from '@mui/icons-material';
+import { Cyclone, Dashboard, EditRoad, HowToReg } from '@mui/icons-material';
 
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import { signOut, fetchCurrentUser } from './pages/account/accountSlice';
@@ -13,6 +13,17 @@ const NAVIGATION: Navigation = [
     icon: <Dashboard />,
   },
   {
+    kind: 'divider',
+  },
+  {
+    segment: 'request',
+    title: 'Submit Request',
+    icon: <HowToReg />,
+  },
+  {
+    kind: 'divider',
+  },
+  {
     segment: 'requests',
     title: 'Requests',
     icon: <Cyclone />,
@@ -21,9 +32,9 @@ const NAVIGATION: Navigation = [
     kind: 'divider',
   },
   {
-    segment: 'request',
-    title: 'Submit Request',
-    icon: <HowToReg />,
+    segment: 'board',
+    title: 'Board',
+    icon: <EditRoad />,
   },
 ];
 
@@ -35,7 +46,7 @@ export default function App() {
   const { user } = useAppSelector((state) => state.account);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   const initApp = useCallback(async () => {
     try {

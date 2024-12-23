@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(WMSContext))]
-    partial class WMSContextModelSnapshot : ModelSnapshot
+    [Migration("20241218085239_ADDCABMigration")]
+    partial class ADDCABMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -55,29 +58,26 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ChangeRef")
+                    b.Property<int?>("ChangeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("MemberId")
+                    b.Property<int>("MemberRef")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("MemberRef")
+                    b.Property<int?>("ProjectId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ProjectRef")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("RequestId")
+                    b.Property<int>("RequestId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("RequestName")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("RequestRef")
+                    b.Property<int>("RequestRef")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Votes")
@@ -88,13 +88,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("CABId");
 
-                    b.HasIndex("ChangeRef")
-                        .IsUnique();
-
-                    b.HasIndex("MemberId");
-
-                    b.HasIndex("ProjectRef")
-                        .IsUnique();
+                    b.HasIndex("MemberRef");
 
                     b.HasIndex("RequestId");
 
@@ -197,6 +191,9 @@ namespace Persistence.Migrations
                     b.HasKey("ChangeId");
 
                     b.HasIndex("ApprovalStatusId");
+
+                    b.HasIndex("CABRef")
+                        .IsUnique();
 
                     b.HasIndex("CategoryId");
 
@@ -480,6 +477,9 @@ namespace Persistence.Migrations
                     b.HasKey("ProjectId");
 
                     b.HasIndex("ApprovalStatusId");
+
+                    b.HasIndex("CABRef")
+                        .IsUnique();
 
                     b.HasIndex("CategoryId");
 
@@ -982,27 +982,19 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.CAB", b =>
                 {
-                    b.HasOne("Domain.Change", "Change")
-                        .WithOne("CAB")
-                        .HasForeignKey("Domain.CAB", "ChangeRef");
-
                     b.HasOne("Domain.Identity.Employee", "Member")
                         .WithMany("CABs")
-                        .HasForeignKey("MemberId");
-
-                    b.HasOne("Domain.Project", "Project")
-                        .WithOne("CAB")
-                        .HasForeignKey("Domain.CAB", "ProjectRef");
+                        .HasForeignKey("MemberRef")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Request", "Request")
                         .WithMany()
-                        .HasForeignKey("RequestId");
-
-                    b.Navigation("Change");
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Member");
-
-                    b.Navigation("Project");
 
                     b.Navigation("Request");
                 });
@@ -1012,6 +1004,10 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.ApprovalStatus", "ApprovalStatus")
                         .WithMany()
                         .HasForeignKey("ApprovalStatusId");
+
+                    b.HasOne("Domain.CAB", "CAB")
+                        .WithOne("Change")
+                        .HasForeignKey("Domain.Change", "CABRef");
 
                     b.HasOne("Domain.Category", "Category")
                         .WithMany()
@@ -1034,6 +1030,8 @@ namespace Persistence.Migrations
                         .HasForeignKey("StatusId");
 
                     b.Navigation("ApprovalStatus");
+
+                    b.Navigation("CAB");
 
                     b.Navigation("Category");
 
@@ -1071,6 +1069,10 @@ namespace Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("ApprovalStatusId");
 
+                    b.HasOne("Domain.CAB", "CAB")
+                        .WithOne("Project")
+                        .HasForeignKey("Domain.Project", "CABRef");
+
                     b.HasOne("Domain.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId");
@@ -1092,6 +1094,8 @@ namespace Persistence.Migrations
                         .HasForeignKey("StatusId");
 
                     b.Navigation("ApprovalStatus");
+
+                    b.Navigation("CAB");
 
                     b.Navigation("Category");
 
@@ -1262,10 +1266,15 @@ namespace Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.CAB", b =>
+                {
+                    b.Navigation("Change");
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("Domain.Change", b =>
                 {
-                    b.Navigation("CAB");
-
                     b.Navigation("ChangeManagers");
 
                     b.Navigation("Works");
@@ -1299,8 +1308,6 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Project", b =>
                 {
-                    b.Navigation("CAB");
-
                     b.Navigation("ProjectManagers");
 
                     b.Navigation("Works");

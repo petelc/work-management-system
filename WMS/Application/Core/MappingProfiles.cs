@@ -1,4 +1,5 @@
 using Application.Requests;
+using Application.CABs;
 using Domain;
 
 namespace Application.Core
@@ -21,6 +22,13 @@ namespace Application.Core
                 .ForMember(d => d.Change, o => o.MapFrom(s => s.Change))
                 .ForMember(d => d.Project, o => o.MapFrom(s => s.Project))
                 .ForMember(d => d.Requestor, o => o.MapFrom(s => s.Requestor));
+            CreateMap<CAB, CAB>();
+            CreateMap<CABDto, CAB>();
+            CreateMap<CAB, CABDto>()
+                .ForMember(d => d.Request, o => o.MapFrom(s => s.Request))
+                .ForMember(d => d.Member, o => o.MapFrom(s => s.Member))
+                .ForMember(d => d.Change, o => o.MapFrom(s => s.Change))
+                .ForMember(d => d.Project, o => o.MapFrom(s => s.Project));
                 
         }
     }

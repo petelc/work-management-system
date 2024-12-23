@@ -164,11 +164,15 @@ export default function RequestDetails() {
   const handleCABClick = (e) => {
     e.preventDefault();
     // dispatch(sendToCAB());
+    // TODO: Implement sendToCAB
+    // TODO: Navigate to Requests page
   };
 
   const handleCMClick = (e) => {
     e.preventDefault();
     // dispatch(sendToChangeManager());
+    // TODO: Implement sendToChangeManager
+    // TODO: Navigate to Requests page
   };
 
   if (status.includes('pending'))
@@ -192,7 +196,7 @@ export default function RequestDetails() {
                 <Typography variant='h6'>Request Details</Typography>
               </Section>
             </Grid>
-            RequestDetails
+
             <Grid size={12}>
               <Section>
                 <Stack

@@ -116,6 +116,13 @@ const Account = {
   fetchAddress: () => requests.get('account/savedAddress'),
 };
 
+const CABRequest = {
+  list: (params: URLSearchParams) => requests.get('cab', params),
+  create: (values: any) => requests.post('cab/create', values),
+  //approve: (values: any) => requests.put('cabrequests/approve', values),
+  //details: (id: number) => requests.get(`cabrequest/${id}`),
+};
+
 const Type = {
   fetchTypes: () => requestTypes.get('requests/types'),
 };
@@ -131,6 +138,7 @@ const Requestor = {
 const agent = {
   UserRequest,
   Account,
+  CABRequest,
   Type,
   RequestCounts,
   Requestor,

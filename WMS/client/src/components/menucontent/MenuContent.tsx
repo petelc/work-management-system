@@ -27,6 +27,7 @@ const secondaryListItems = [
 ];
 
 export default function MenuContent() {
+  console.log('MenuContent', mainListItems);
   return (
     <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
       <List dense>

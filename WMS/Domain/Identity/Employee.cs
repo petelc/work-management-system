@@ -33,6 +33,9 @@ namespace Domain.Identity
         public ICollection<ChangesToChangeManager>? Changes { get; set; }
         public ICollection<ProjectToProjectManager>? Projects { get; set; }
 
+        // NOTE: Requests submitted to CAB board (ITGG)
+        public ICollection<CAB>? CABs { get; set; }
+
         // NOTE: IDENTITY relationships
         public virtual ICollection<EmployeeClaim>? Claims { get; set; }
         public virtual ICollection<EmployeeLogin>? Logins { get; set; }

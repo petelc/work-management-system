@@ -7,6 +7,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { requestSlice } from '../pages/request/requestSlice';
 import { accountSlice } from '../pages/account/accountSlice';
 import { dashboardSlice } from '../pages/dashboard/dashboardSlice';
+import { boardSlice } from '../pages/board/boardSlice';
 
 // const rootReducer = combineReducers({
 //   request: requestSlice.reducer,
@@ -26,6 +27,7 @@ export const store = configureStore({
     request: requestSlice.reducer,
     account: accountSlice.reducer,
     dashboard: dashboardSlice.reducer,
+    board: boardSlice.reducer,
   },
 });
 

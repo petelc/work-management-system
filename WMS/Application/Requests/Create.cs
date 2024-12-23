@@ -44,17 +44,19 @@ namespace Application.Requests
             {
                 var p = request.Request;
                 
-
+                // NOTE: This gets the user from the UserManager and assigns it to the Requestor property
                 var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == p.Requestor.Id);
                 request.Request.Requestor = user;
 
-
+                // NOTE: This gets the request type from the context and assigns it to the RequestType property
                 var type = await _context.RequestTypes.FirstOrDefaultAsync(x => x.RequestTypeId == request.Request.RequestType.RequestTypeId);
                 request.Request.RequestType = type;
 
+                // NOTE: This gets the status from the context and assigns it to the Status property
                 var status = await _context.Statuses.FirstOrDefaultAsync(x => x.StatusId == request.Request.Status.StatusId);
                 request.Request.Status = status;
 
+                // NOTE: This gets the approval status from the context and assigns it to the ApprovalStatus property
                 var approvalStatus = await _context.ApprovalStatuses.FirstOrDefaultAsync(x => x.ApprovalStatusId == request.Request.ApprovalStatus.ApprovalStatusId);
                 request.Request.ApprovalStatus = approvalStatus;
 
