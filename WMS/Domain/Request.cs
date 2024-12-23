@@ -22,7 +22,6 @@ namespace Domain
         public Project? Project { get; set; }
         public int? EmployeeId { get; set; }
         public Employee? Requestor { get; set; }
-        //public ICollection<Employee>? Requestors { get; set; } = new List<Employee>();
-        //public ICollection<RequestToRequestors>? Requestors { get; set; } = new List<RequestToRequestors>();
+        
     }
 }

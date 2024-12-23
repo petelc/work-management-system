@@ -21,6 +21,8 @@ namespace Domain
         public Category? Category { get; set; }
         public int? PriorityRef { get; set; }
         public Priority? Priority { get; set; }
+        public int? CABRef { get; set; }
+        public CAB? CAB { get; set; }
         public ICollection<ProjectToProjectManager>? ProjectManagers { get; set; } = new List<ProjectToProjectManager>();
         public ICollection<Work>? Works { get; set; }
     }

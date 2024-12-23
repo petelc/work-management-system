@@ -13,6 +13,13 @@ namespace Persistence
     {
         public WMSContext(DbContextOptions<WMSContext> options) : base(options)
         {
+            
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.EnableSensitiveDataLogging(); // Enables sensitive data logging [1, 2, 5]
         }
 
         //public DbSet<Employee> Employees { get; set; } = null!;
@@ -20,6 +27,7 @@ namespace Persistence
         public DbSet<Category> Categories { get; set; } = null!;
         public DbSet<Project> Projects { get; set; } = null!;
         public DbSet<Change> Changes { get; set; } = null!;
+        public DbSet<CAB> CABs { get; set; } = null!;
         public DbSet<Priority> Priorities { get; set; } = null!;
         public DbSet<Status> Statuses { get; set; } = null!;
         public DbSet<ApprovalStatus> ApprovalStatuses { get; set; } = null!;
@@ -30,6 +38,7 @@ namespace Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            
 
             builder.Entity<IdentityUser>(b => { b.ToTable("Employee"); });
             builder.Entity<IdentityRole>(b => { b.ToTable("EmployeeRole"); });
@@ -116,6 +125,17 @@ namespace Persistence
                 .WithMany(m => m.Changes)
                 .HasForeignKey(rr => rr.Id);
 
+            // NOTE: CAB
+            builder.Entity<CAB>()
+                .HasOne(a => a.Project)
+                .WithOne(b => b.CAB)
+                .HasForeignKey<CAB>(b => b.ProjectRef);
+
+            builder.Entity<CAB>()
+                .HasOne(a => a.Change)
+                .WithOne(b => b.CAB)
+                .HasForeignKey<CAB>(b => b.ChangeRef);
+
 
             // ! defines a 1 to many relationship between Change and Work
             builder.Entity<Work>()
@@ -145,8 +165,8 @@ namespace Persistence
                 .WithMany(b => b.WorkItems)
                 .HasForeignKey(rr => rr.WorkId);
 
-
-
+            
+ 
             builder.Entity<ApprovalStatus>()
                 .HasData(
                     new ApprovalStatus { ApprovalStatusId = 1, ApprovalStatusName = "Pending" },

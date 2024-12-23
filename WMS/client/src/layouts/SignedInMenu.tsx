@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Menu, Fade, MenuItem } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { signOut } from '../pages/account/accountSlice';
-import { useAppDispatch, useAppSelector } from '../store/configureStore';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 export default function SignedInMenu() {
   const dispatch = useAppDispatch();

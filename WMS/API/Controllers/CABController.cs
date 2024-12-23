@@ -1,11 +1,15 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Persistence;
+using Domain;
+using Application.CABs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [AllowAnonymous]
     public class CABController : BaseApiController
     {
         // todo: Get all submitted requests sent to the CAB
@@ -27,6 +31,29 @@ namespace API.Controllers
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        /// <summary>
+        /// Gets all of the submitted requests
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetRequests([FromQuery] BoardParams param)
+        {
+            return HandlePagedResult(await Mediator.Send(new List.Query { Params = param }));
+        }
+        
+
+        /// <summary>
+        /// Creates a project or change from submitted request
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateRequest(CAB cab)
+        {
+            return HandleResult(await Mediator.Send(new CreateCABRequest.Command { cab = cab }));
         }
     }
 }

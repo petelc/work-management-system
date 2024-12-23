@@ -21,6 +21,8 @@ namespace Domain
         public Request? Request { get; set; }
         public int? CategoryRef { get; set; }
         public Category? Category { get; set; }
+        public int? CABRef { get; set; }
+        public CAB? CAB { get; set; }
         public ICollection<ChangesToChangeManager>? ChangeManagers { get; set; } = new List<ChangesToChangeManager>();
         public ICollection<Work>? Works { get; set; } = new List<Work>();
     }

@@ -12,6 +12,7 @@ import RequestDetails from '../../components/requests/RequestDetails';
 import Dashboard from '../../layouts/Dashboard';
 import MainGrid from '../../pages/dashboard/MainGrid';
 import RequireAuth from './RequiredAuth';
+import Board from '../../pages/board/Board';
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ export const router = createBrowserRouter([
               { path: 'request', element: <RequestPage /> },
               { path: 'requests', element: <Request /> },
               { path: 'requests/:id', element: <RequestDetails /> },
+              { path: 'board', element: <Board /> },
             ],
           },
         ],
