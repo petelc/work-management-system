@@ -18,7 +18,7 @@ interface BoardState {
 }
 
 const boardAdapter = createEntityAdapter({
-  selectId: (e: any) => e.id,
+  selectId: (e: any) => e.cabId,
 });
 
 function getAxiosParams(boardParams: BoardParams) {
