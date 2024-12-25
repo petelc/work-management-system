@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid2';
 import useBoards from '../../hooks/useBoards';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import BoardTable from '../../components/board/BoardTable';
+import BoardSearch from '../../components/board/BoardSearch';
 
 export default function Board() {
   const { boards, boardsLoaded } = useBoards();
@@ -13,7 +14,9 @@ export default function Board() {
     <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
       <Grid container columnSpacing={3}>
         <Grid size={{ xs: 12 }}>
-          <Paper sx={{ mb: 2 }}>Search</Paper>
+          <Paper sx={{ mb: 2 }}>
+            <BoardSearch />
+          </Paper>
         </Grid>
         <Grid size={{ xs: 12 }}>
           <BoardTable boards={boards} />
