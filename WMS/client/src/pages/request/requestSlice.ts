@@ -43,7 +43,7 @@ function getAxiosParams(requestParams: RequestParams) {
   return params;
 }
 
-// ! Fetch all requests
+// ? Fetch all requests
 export const fetchRequestsAsync = createAsyncThunk<
   Request[],
   void,
@@ -59,6 +59,7 @@ export const fetchRequestsAsync = createAsyncThunk<
   }
 });
 
+// ? Fetch a single request
 export const fetchRequestAsync = createAsyncThunk<Request, number>(
   'request/fetchRequestAsync',
   async (requestId, thunkAPI) => {
@@ -71,7 +72,7 @@ export const fetchRequestAsync = createAsyncThunk<Request, number>(
   }
 );
 
-// ! Fetch requests based on a filter
+// ? Fetch requests based on a filter
 export const fetchFilters = createAsyncThunk(
   'request/fetchFilters',
   async (_, thunkAPI) => {
@@ -181,6 +182,7 @@ export const requestSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // ? All Requests
     builder.addCase(fetchRequestsAsync.pending, (state) => {
       state.status = 'pendingFetchRequests';
     });
@@ -192,6 +194,7 @@ export const requestSlice = createSlice({
       console.log(action.payload);
       state.status = 'idle';
     });
+    // ? Single Request
     builder.addCase(fetchRequestAsync.pending, (state) => {
       state.status = 'pendingFetchRequest';
     });
@@ -203,6 +206,7 @@ export const requestSlice = createSlice({
       console.log(action);
       state.status = 'idle';
     });
+    // ? Filters
     builder.addCase(fetchFilters.pending, (state) => {
       state.status = 'pendingFetchFilters';
     });
@@ -216,6 +220,7 @@ export const requestSlice = createSlice({
     builder.addCase(fetchFilters.rejected, (state) => {
       state.status = 'idle';
     });
+    // ? Request Types
     builder.addCase(fetchTypes.pending, (state) => {
       state.status = 'pendingFetchTypes';
     });
@@ -226,6 +231,7 @@ export const requestSlice = createSlice({
     builder.addCase(fetchTypes.rejected, (state) => {
       state.status = 'idle';
     });
+    // ? Approve Request
     builder.addCase(addApprovalStatus.pending, (state) => {
       state.status = 'pendingApprove';
     });
@@ -237,6 +243,7 @@ export const requestSlice = createSlice({
     builder.addCase(addApprovalStatus.rejected, (state) => {
       state.status = 'idle';
     });
+    // ? Set Request Type
     builder.addCase(setRequestType.pending, (state) => {
       state.status = 'pendingSetType';
     });

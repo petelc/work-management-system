@@ -120,7 +120,7 @@ const CABRequest = {
   list: (params: URLSearchParams) => requests.get('cab', params),
   create: (values: any) => requests.post('cab/create', values),
   //approve: (values: any) => requests.put('cabrequests/approve', values),
-  //details: (id: number) => requests.get(`cabrequest/${id}`),
+  details: (id: number) => requests.get(`cab/${id}`),
 };
 
 const Type = {

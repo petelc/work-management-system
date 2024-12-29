@@ -11,16 +11,21 @@ import { Board } from '../../models/board';
 import LoadingComponent from '../loading/LoadingComponent';
 import BoardTableHead from './BoardTableHead';
 import BoardTableToolbar from './BoardTableToolbar';
+import BoardDrawer from './drawer/BoardDrawer';
 
 interface Props {
   boards: Board[];
 }
+
+type Anchor = 'right';
 
 export default function BoardTable({ boards }: Props) {
   const [selected, setSelected] = useState<number[]>([]);
   const [selectedRequest, setSelectedRequest] = useState<number | null>(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [state, setState] = useState({ right: false });
+
   const { boardsLoaded } = useAppSelector((state) => state.board);
 
   useEffect(() => {
@@ -31,33 +36,33 @@ export default function BoardTable({ boards }: Props) {
     }
   }, [selected]);
 
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelected = boards.map((n) => n.cabId);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
+  // const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (event.target.checked) {
+  //     const newSelected = boards.map((n) => n.cabId);
+  //     setSelected(newSelected);
+  //     return;
+  //   }
+  //   setSelected([]);
+  // };
 
-  const handleClick = (id: number) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: number[] = [];
+  // const handleClick = (id: number) => {
+  //   const selectedIndex = selected.indexOf(id);
+  //   let newSelected: number[] = [];
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-    setSelected(newSelected);
-  };
+  //   if (selectedIndex === -1) {
+  //     newSelected = newSelected.concat(selected, id);
+  //   } else if (selectedIndex === 0) {
+  //     newSelected = newSelected.concat(selected.slice(1));
+  //   } else if (selectedIndex === selected.length - 1) {
+  //     newSelected = newSelected.concat(selected.slice(0, -1));
+  //   } else if (selectedIndex > 0) {
+  //     newSelected = newSelected.concat(
+  //       selected.slice(0, selectedIndex),
+  //       selected.slice(selectedIndex + 1)
+  //     );
+  //   }
+  //   setSelected(newSelected);
+  // };
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -86,6 +91,37 @@ export default function BoardTable({ boards }: Props) {
 
   if (!boardsLoaded) return <LoadingComponent message='Loading boards...' />;
 
+  const toggleDrawer =
+    (anchor: Anchor, open: boolean, id: number) =>
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event &&
+        event.type === 'keydown' &&
+        ((event as React.KeyboardEvent).key === 'Tab' ||
+          (event as React.KeyboardEvent).key === 'Shift')
+      ) {
+        return;
+      }
+
+      const selectedIndex = selected.indexOf(id);
+      let newSelected: number[] = [];
+
+      if (selectedIndex === -1) {
+        newSelected = newSelected.concat(selected, id);
+      } else if (selectedIndex === 0) {
+        newSelected = newSelected.concat(selected.slice(1));
+      } else if (selectedIndex === selected.length - 1) {
+        newSelected = newSelected.concat(selected.slice(0, -1));
+      } else if (selectedIndex > 0) {
+        newSelected = newSelected.concat(
+          selected.slice(0, selectedIndex),
+          selected.slice(selectedIndex + 1)
+        );
+      }
+      setState({ ...state, [anchor]: open });
+      setSelected(newSelected);
+    };
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -109,7 +145,8 @@ export default function BoardTable({ boards }: Props) {
                 return (
                   <TableRow
                     hover
-                    onClick={() => handleClick(board.cabId)}
+                    // onClick={() => handleClick(board.cabId)}
+                    onClick={toggleDrawer('right', true, board.cabId)}
                     role='checkbox'
                     aria-checked={isItemSelected}
                     tabIndex={-1}
@@ -133,9 +170,11 @@ export default function BoardTable({ boards }: Props) {
                       {board.requestName}
                     </TableCell>
                     <TableCell>
-                      {board.request.requestType.requestTypeName}
+                      {board.request?.requestType.requestTypeName}
                     </TableCell>
-                    <TableCell>{board.request.requestor.displayName}</TableCell>
+                    <TableCell>
+                      {board.request?.requestor.displayName}
+                    </TableCell>
                     <TableCell align='center'>{board.votes}</TableCell>
                     <TableCell align='left'>
                       {new Date(board.createDate).toLocaleDateString()}
@@ -163,6 +202,11 @@ export default function BoardTable({ boards }: Props) {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+        <BoardDrawer
+          toggleDrawer={toggleDrawer}
+          state={state}
+          selected={selectedRequest!}
         />
       </Paper>
     </Box>

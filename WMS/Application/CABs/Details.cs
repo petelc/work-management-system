@@ -6,16 +6,16 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Requests
+namespace Application.CABs
 {
     public class Details
     {
-        public class Query : IRequest<Result<RequestDto>>
+        public class Query : IRequest<Result<CABDto>>
         {
-            public int RequestId { get; set; }
+            public int CABId { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<RequestDto>>
+        public class Handler : IRequestHandler<Query, Result<CABDto>>
         {
             private readonly WMSContext _context;
             private readonly IMapper _mapper;
@@ -27,14 +27,15 @@ namespace Application.Requests
                 _userAccessor = userAccessor;
             }
 
-            public async Task<Result<RequestDto>> Handle(Query request, CancellationToken cancellationToken)
-            {
-                var req = await _context.Requests
-                    .ProjectTo<RequestDto>(_mapper.ConfigurationProvider,
-                        new { currentUsername = _userAccessor.GetUserName() })
-                    .FirstOrDefaultAsync(x => x.RequestId == request.RequestId);
 
-                return Result<RequestDto>.Success(req);
+            public async Task<Result<CABDto>> Handle(Query request, CancellationToken cancellationToken)
+            {
+                var board = await _context.CABs
+                    .ProjectTo<CABDto>(_mapper.ConfigurationProvider,
+                        new { currentUsername = _userAccessor.GetUserName() })
+                    .FirstOrDefaultAsync(x => x.CABId == request.CABId);
+                    
+                return Result<CABDto>.Success(board);
             }
         }
     }
