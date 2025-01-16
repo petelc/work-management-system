@@ -43,10 +43,20 @@ namespace API.Controllers
         {
             return HandlePagedResult(await Mediator.Send(new List.Query { Params = param }));
         }
-        
 
         /// <summary>
-        /// Creates a project or change from submitted request
+        /// Gets a specific request based on ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetRequest(int id)
+        {
+            return HandleResult(await Mediator.Send(new Details.Query { CABId = id }));
+        }
+        
+        /// <summary>
+        /// Creates a board entry from submitted request
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>

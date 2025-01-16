@@ -32,7 +32,7 @@ function getAxiosParams(boardParams: BoardParams) {
   return params;
 }
 
-// NOTE: Fetch all submitted boards
+// ? Fetch all submitted boards
 export const fetchBoardsAsync = createAsyncThunk<
   Board[],
   void,
@@ -48,6 +48,19 @@ export const fetchBoardsAsync = createAsyncThunk<
   }
 });
 
+// ? Fetch a single board
+export const fetchBoardAsync = createAsyncThunk<Board, number>(
+  'board/fetchBoardAsync',
+  async (cabId, thunkAPI) => {
+    try {
+      const board = await agent.CABRequest.details(cabId);
+      return board;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+
 function initParams(): BoardParams {
   return {
     orderBy: 'createDate desc',
@@ -55,7 +68,7 @@ function initParams(): BoardParams {
     pageSize: 10,
   };
 }
-
+// TODO: set Page Number
 export const boardSlice = createSlice({
   name: 'board',
   initialState: boardAdapter.getInitialState<BoardState>({
@@ -83,6 +96,7 @@ export const boardSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // ? All Boards
     builder.addCase(fetchBoardsAsync.pending, (state) => {
       state.status = 'pendingBoardRequests';
     });
@@ -91,6 +105,18 @@ export const boardSlice = createSlice({
       (state.status = 'idle'), (state.boardsLoaded = true);
     });
     builder.addCase(fetchBoardsAsync.rejected, (state, action) => {
+      console.log(action.payload);
+      state.status = 'idle';
+    });
+    // ? Single Board
+    builder.addCase(fetchBoardAsync.pending, (state) => {
+      state.status = 'pendingBoardRequest';
+    });
+    builder.addCase(fetchBoardAsync.fulfilled, (state, action) => {
+      boardAdapter.upsertOne(state, action.payload);
+      state.status = 'idle';
+    });
+    builder.addCase(fetchBoardAsync.rejected, (state, action) => {
       console.log(action.payload);
       state.status = 'idle';
     });
